@@ -33,8 +33,9 @@ x_0 = [-1.2, 1]';
 L = 20; i_max = 20; i = 0;
 
 while i++ < i_max
-  g_k = g(x_0); g_k = g_k/norm(g_k);
-  G_k = G(x_0); G_k = G_k/norm(G_k);
+  x_0
+  g_k = g(x_0); g_k = g_k/norm(g_k)
+  G_k = G(x_0); G_k = G_k/norm(G_k)
   alpha = 1;
   p = phi(L, G_k, g_k);
   x = x_0 + p;
@@ -42,5 +43,5 @@ while i++ < i_max
     alpha /= 3;
     x = x_0 + alpha*p;
   endwhile
-  x_0 = x
+  x_0 = x;
 endwhile
