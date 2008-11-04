@@ -3,7 +3,8 @@
 (require srfi/43)
 
 (provide vector-sum
-         vectors-add vector-*-number)
+         vectors-add vector-*-number vector-/-number
+         vector-norm)
 
 (define (vector-sum vec)
   (vector-fold (lambda (i sum x) (+ sum x)) 0 vec))
@@ -17,3 +18,16 @@
 
 (define (vector-*-number v s)
   (vector-map (lambda (i x) (* x s)) v))
+
+(define (vector-/-number v s)
+  (vector-*-number v (/ 1 s)))
+
+(define (absmax-vector-element v)
+  (vector-fold (lambda (i max e) (if (> (abs e) max) (abs e) max))
+               (vector-ref v 0) v))
+
+(define (vector-norm v)
+  (absmax-vector-element v))
+
+(define (normalize-vector v)
+  (vector-/-number v (vector-norm v)))

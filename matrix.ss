@@ -37,10 +37,19 @@
                  row))
               matrix))
 
+(define (rows-map proc matrix)
+  (vector-map
+   (lambda (row-index row)
+     (proc row-index row))
+   matrix))
+
 (define (build-matrix proc rows columns)
   (matrix-map (lambda (i j e) (proc i j))
               (make-vector rows (make-vector columns))))
 
+(define (identity-matrix n)
+  (define (kronecker i j) (if (= i j) 1 0))
+  (build-matrix kronecker n n))
 
 (define (matrix-*-vector m v)
   (build-vector (matrix-size m)
@@ -59,3 +68,17 @@
 
 (define (matrix-*-number m x)
   (matrix-map (lambda (i j e) (* e x)) m))
+
+(define (matrix-/-number m x)
+  (matrix-*-number m (/ 1 x)))
+
+(define (absmax-matrix-element m)
+  (vector-norm
+   (rows-map
+    (lambda (i row) (vector-norm row)) m)))
+
+(define (matrix-norm m)
+  (absmax-matrix-element m))
+
+(define (normalize-matrix m)
+  (matrix-/-number m (matrix-norm m)))
