@@ -10,6 +10,7 @@
          matrix-map
          build-matrix identity-matrix
          matrix-*-vector matrix-+-matrix
+         matrix-*-number matrix-/-number
          matrix-norm normalize-matrix)
 
 (define matrix vector)
