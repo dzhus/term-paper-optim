@@ -3,7 +3,8 @@
 (require srfi/43
          "matrix.ss")
 
-(provide deriv gradient hessian)
+(provide deriv gradient hessian
+         at-vector)
 
 (define dx 1e-6)
 
