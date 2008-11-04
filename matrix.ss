@@ -24,7 +24,9 @@
 (define row-length vector-length)
 (define column-length vector-length)
 
+;; Square matrix only
 (define matrix-size vector-length)
+
 (define matrix-rows vector-length)
 (define (matrix-columns m)
   (row-length (matrix-row m 0)))
