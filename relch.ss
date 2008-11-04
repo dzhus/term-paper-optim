@@ -26,23 +26,20 @@
                   g
                   (- (/ (* 4 (sub1 L)) L))))))))
 
-(define critical-regulation-step 10)
-
 (define (optimize f x [iterations 20] [L 20])
   (define @ at-vector)
   (define (better-solution? x-new)
     (< (@ f x-new) (@ f x)))
-  (define (regulate-shift-factor shift [alpha 1] [step 0])
-    (if (>= step critical-regulation-step)
-        (error "I WAS SENT TO OUTER SPACE")
-        (let ((x-new (vectors-add x (vector-*-number shift alpha))))
-          (if (better-solution? x-new)
-              (optimize f x-new (sub1 iterations))
-              (regulate-shift-factor shift (/ alpha 2))))))
+  (define (choose-shift-factor shift [alpha 1])
+    (let ((x-new (vectors-add x (vector-*-number shift alpha))))
+      (if (better-solution? x-new)
+          alpha
+          (choose-shift-factor shift (/ alpha 2)))))
   (if (<= iterations 1)
       x
       (let* ((g (normalize-vector (@ (gradient f) x)))
              (G (normalize-matrix (@ (hessian f) x)))
-             (shift (shift L G g)))
-        (printf "x: ~a\ng: ~a\nG: ~a\n\n" x g G)
-        (regulate-shift-factor shift))))
+             (shift (shift L G g))
+             (alpha (choose-shift-factor shift)))
+        (let ((x-new (vectors-add x (vector-*-number shift alpha))))
+          (optimize f x-new (sub1 iterations))))))
