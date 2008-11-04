@@ -8,8 +8,9 @@
          matrix-size row-length column-length
          matrix-rows matrix-columns
          matrix-map
-         build-matrix
-         matrix-*-vector matrix-+-matrix)
+         build-matrix identity-matrix
+         matrix-*-vector matrix-+-matrix
+         matrix-norm normalize-matrix)
 
 (define matrix vector)
 (define row vector)
@@ -39,11 +40,13 @@
                  row))
               matrix))
 
+;; List-style maps for matrices
 (define (rows-map proc matrix)
-  (vector-map
-   (lambda (row-index row)
-     (proc row-index row))
-   matrix))
+  (vector-map (lambda (row-index row) (proc row)) matrix))
+(define (row-map proc row)
+  (vector-map (lambda (i e) (proc e)) row))
+(define (column-map proc column)
+  (vector-map (lambda (i e) (proc e)) column))
 
 (define (build-matrix proc rows columns)
   (matrix-map (lambda (i j e) (proc i j))
@@ -74,13 +77,17 @@
 (define (matrix-/-number m x)
   (matrix-*-number m (/ 1 x)))
 
-(define (absmax-matrix-element m)
-  (vector-norm
-   (rows-map
-    (lambda (i row) (vector-norm row)) m)))
+(define (euclidean-norm m)
+  (sqrt
+   (vector-sum
+    (rows-map
+     (lambda (row)
+       (vector-sum
+        (row-map (lambda (e) (sqr e)) row)))
+     m))))
 
 (define (matrix-norm m)
-  (absmax-matrix-element m))
+  (euclidean-norm m))
 
 (define (normalize-matrix m)
   (matrix-/-number m (matrix-norm m)))
