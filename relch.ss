@@ -4,6 +4,7 @@
 
 (require "shared.ss"
          "scheme-lib/matrix.ss"
+         "scheme-lib/vector.ss"
          "scheme-lib/generic-ops.ss")
 
 (define (shift L G g)
