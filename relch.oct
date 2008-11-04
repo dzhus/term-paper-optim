@@ -40,7 +40,7 @@ while i++ < i_max
   p = phi(L, G_k, g_k);
   x = x_0 + p;
   while f(x) > f(x_0)
-    alpha /= 3;
+    alpha /= 2;
     x = x_0 + alpha*p;
   endwhile
   x_0 = x;
