@@ -2,7 +2,8 @@
 
 (require srfi/43)
 
-(provide vector-sum)
+(provide vector-sum
+         vectors-add vector-*-number)
 
 (define (vector-sum vec)
   (vector-fold (lambda (i sum x) (+ sum x)) 0 vec))
