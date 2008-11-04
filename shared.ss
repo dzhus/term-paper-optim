@@ -1,10 +1,13 @@
 #lang scheme
 
 (require srfi/43
-         "matrix.ss")
+         "scheme-lib/vector.ss"
+         "scheme-lib/matrix.ss")
 
 (provide deriv gradient hessian
-         at-vector)
+         at-vector
+         normalize-vector
+         normalize-matrix)
 
 (define dx 1e-6)
 
@@ -49,3 +52,9 @@
 ;; `(at-vector f '#(a b))` is `(f a b)`
 (define (at-vector f v)
   (apply f (vector->list v)))
+
+(define (normalize-vector v)
+  (/ v (p-vector-norm v)))
+
+(define (normalize-matrix m)
+  (/ m (euclidean-norm m)))
