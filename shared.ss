@@ -2,7 +2,8 @@
 
 (require srfi/43
          "scheme-lib/vector.ss"
-         "scheme-lib/matrix.ss")
+         "scheme-lib/matrix.ss"
+         "scheme-lib/generic-ops.ss")
 
 (provide deriv gradient hessian
          at-vector
