@@ -1,6 +1,7 @@
 #lang scheme
 
-(require srfi/43)
+(require srfi/43
+         "vectors.ss")
 
 (provide matrix row column
          matrix-row row-item column-item matrix-item
@@ -42,8 +43,6 @@
 
 
 (define (matrix-*-vector m v)
-  (define (vector-sum vec)
-    (vector-fold (lambda (i sum x) (+ sum x)) 0 vec))
   (build-vector (matrix-size m)
                 (lambda (i) (vector-sum
                         (vector-map (lambda (i e1 e2) (* e1 e2))
