@@ -44,3 +44,7 @@
                               (deriv f (add1 i) dx) (add1 j) dx)
                              args))
                     n n))))
+
+;; `(at-vector f '#(a b))` is `(f a b)`
+(define (at-vector f v)
+  (apply f (vector->list v)))
