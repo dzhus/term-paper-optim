@@ -7,6 +7,8 @@
          "scheme-lib/vector.ss"
          "scheme-lib/generic-ops.ss")
 
+(provide optimize)
+
 (define (shift L G g)
   (define (sub2 x) (sub1 (sub1 x)))
   (let ((n (matrix-size G)))
