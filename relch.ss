@@ -26,7 +26,7 @@
 (define (optimize f x
                   #:eps [eps 1e-3]
                   #:iterations [iterations 20]
-                  #:L [L 10]
+                  #:degree [L 10]
                   #:listener [listen-proc #f])
   (define @ at-vector)
   (define (better-solution? x-new)
@@ -47,5 +47,5 @@
             (optimize f x-new
                       #:eps eps
                       #:iterations (sub1 iterations)
-                      #:L L
+                      #:degree L
                       #:listener listen-proc))))))
