@@ -1,9 +1,9 @@
 #lang scheme
 
 (require srfi/43
-         "scheme-lib/vector.ss"
-         "scheme-lib/matrix.ss"
-         "scheme-lib/generic-ops.ss")
+         pyani-lib/vector
+         pyani-lib/matrix
+         pyani-lib/generic-ops)
 
 (provide deriv gradient hessian
          at-vector

@@ -3,9 +3,9 @@
 ;;; Multiparametric optimization with Chebyshev relaxation
 
 (require "shared.ss"
-         "scheme-lib/matrix.ss"
-         "scheme-lib/vector.ss"
-         "scheme-lib/generic-ops.ss")
+         pyani-lib/matrix
+         pyani-lib/vector
+         pyani-lib/generic-ops)
 
 (provide optimize)
 
