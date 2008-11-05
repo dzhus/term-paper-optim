@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amsmath,amssymb}
+
+\usepackage{titling}
+
+% Russian traditions
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\newcommand{\intl}{\int\limits}
+\usepackage{misccorr}
+
+% Bib in TOC
+\usepackage[numbib,nottoc]{tocbibind}
+
+\usepackage{tocbibind}
+
+% Custom commands
+\providecommand{\program}[1]{{\tt #1}}
+
+\begin{document}
+\author{Дмитрий Джус}
+\title{Курсовая работа по теме \\
+  \Huge{«Методы оптимизации»}}
+\pretitle{\begin{center}\LARGE}
+\posttitle{\par\end{center}\vskip 3pc}
+\date{}
+\maketitle
+\thispagestyle{empty}
+
+\clearpage
+\tableofcontents
+
+\end{document}
