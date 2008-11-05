@@ -13,10 +13,31 @@
   (new text-field%
        [label "Протокол работы:"] [parent frame] [style '(multiple vertical-label)]))
 
+(define control-pane
+  (new vertical-pane%
+       [parent frame]
+       [stretchable-height #f]
+       [stretchable-width #t]))
+
 (define choice
   (new choice%
        [label "Тестовая функция:"]
-       [parent frame] [choices (map test-function-name test-functions)]))
+       [parent control-pane]
+       [choices (map test-function-name test-functions)]))
+
+(define eps
+  (new slider%
+       [label "Точность"]
+       [parent control-pane]
+       [min-value 1]
+       [max-value 10]))
+
+(define iterations
+  (new slider%
+       [label "Максимум итераций"]
+       [parent control-pane]
+       [min-value 10]
+       [max-value 10000]))
 
 (define (log-poster msg [nl #t])
   (let ((insert (lambda (msg) (send
@@ -34,13 +55,15 @@
     (log-poster "Протокол работы:")
     (let ((x (optimize (test-function-def f)
                        (test-function-x-start f)
+                       #:eps (expt 10 (- (send eps get-value)))
+                       #:iterations (send iterations get-value)
                        #:listener log-poster)))
       (log-poster (format "Ответ: ~a; известное значение минимума: ~a\n"
                           x (test-function-target-x f))))))
 
 (define start
   (new button%
-       [label "Пшла!"] [parent frame]
+       [label "Пшла!"] [parent control-pane]
        [callback (lambda (i e)
                    (run-optimization (send choice get-selection)))]
        [stretchable-width #t]))
