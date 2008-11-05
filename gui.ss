@@ -18,8 +18,11 @@
        [label "Тестовая функция:"]
        [parent frame] [choices (map test-function-name test-functions)]))
 
-(define (log-poster msg)
-  (send (send log get-editor) insert msg))
+(define (log-poster msg [nl #t])
+  (let ((insert (lambda (msg) (send
+                          (send log get-editor) insert msg))))
+    (insert msg)
+    (when nl (insert "\n"))))
 
 (define (start-optimization choice)
   (let ((f (list-ref test-functions choice)))
