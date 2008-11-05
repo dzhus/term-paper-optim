@@ -23,7 +23,11 @@
                   (* -1 (/ (sub2 L) L)))
                  (* g (/ (* -4 (sub1 L)) L)))))))
 
-(define (optimize f x [eps 1e-3] [iterations 1000] [L 10])
+(define (optimize f x
+                  #:eps [eps 1e-3]
+                  #:iterations [iterations 20]
+                  #:L [L 10]
+                  #:listener [listen-proc #f])
   (define @ at-vector)
   (define (better-solution? x-new)
     (< (@ f x-new) (@ f x)))
@@ -32,12 +36,16 @@
       (if (better-solution? x-new)
           x-new
           (make-good-shifted shift (/ alpha 2)))))
-  (let ((g (@ (gradient f) x))
-        (G (@ (hessian f) x)))
+  (let ((g (@ (gradient f) x)))
+    (listen-proc (format "~a" x))
     (if (or (<= iterations 1) (< (p-vector-norm g) eps))
         x
         (let* ((g (normalize-vector g))
-               (G (normalize-matrix G))
+               (G (normalize-matrix (@ (hessian f) x)))
                (shift (shift L G g)))
           (let ((x-new (make-good-shifted shift)))
-            (optimize f x-new eps (sub1 iterations)))))))
+            (optimize f x-new
+                      #:eps eps
+                      #:iterations (sub1 iterations)
+                      #:L L
+                      #:listener listen-proc))))))
