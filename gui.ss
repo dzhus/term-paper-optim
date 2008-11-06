@@ -48,7 +48,8 @@
 
 (define (log-poster msg [nl #t])
   (let ((insert (lambda (msg) (send
-                          (send log get-editor) insert msg))))
+                          (send log get-editor) insert msg)))
+        (msg (if (string? msg) msg (format "~a" msg))))
     (insert msg)
     (when nl (insert "\n"))))
 
