@@ -25,9 +25,9 @@
                       target-x target-value
                       comment))
 
-;; Rosenbrock function
 (define test-functions
   (list
+   ;; Rosenbrock function
    (d:make-test-function
     "100(x₂ - x₁²)² + (1 - x₁)²"
     (lambda (x1 x2)
@@ -51,6 +51,24 @@
          (* 100 (sqr (- 1 x1)))))
     '#(-1.2 1)
     '#(1 1) 0)
+
+   (d:make-test-function
+    "(x₂ - x₁³)² + 100(1 - x₁)²"
+    (lambda (x1 x2)
+      (+ (sqr (- x2 (expt x1 3)))
+         (* 100 (sqr (- 1 x1)))))
+    '#(-1.2 1)
+    '#(1 1) 0)
+
+   (d:make-test-function
+    "(x₁ + 10x₂)² + 5(x₃ - x₄)² + (x₂-2x₃)⁴+10(x₁-x₄)⁴"
+    (lambda (x1 x2 x3 x4)
+      (+ (sqr (+ x1 (* 10 x2)))
+         (* 5 (sqr (- x3 x4)))
+         (expt (- x2 (* 2 x3)) 4)
+         (* 10 (expt (- x1 x4) 4))))
+    '#(-3 -1 0 1)
+    '#(0 0 0 0) 0 "Сингулярная матрица Гессе в точке минимума")
    
    (d:make-test-function
     "(x₁² + x₂ - 11)² + (x₁ + x₂² - 7)²"
