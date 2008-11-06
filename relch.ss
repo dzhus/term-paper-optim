@@ -32,6 +32,7 @@
                     #:iterations iterations
                     #:listener [listen-proc #f])
     (let ((g (@ (gradient function) x-start)))
+      (when listen-proc (listen-proc x-start))
       (if (or (<= iterations 1) (< (p-vector-norm g) eps))
           x-start
           (let* ((G (normalize-matrix (@ (hessian function) x-start)))
