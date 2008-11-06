@@ -24,8 +24,12 @@
               (take args (sub1 arg))
               (list (+ (list-ref args (sub1 arg)) dx))
               (drop args arg)))
-      (apply f args))
-     dx))
+      (apply f
+             (append
+              (take args (sub1 arg))
+              (list (- (list-ref args (sub1 arg)) dx))
+              (drop args arg))))
+     (* 2 dx)))
   der)
 
 ;; Gradient of a function (still a vector for unary function)
