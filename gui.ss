@@ -39,6 +39,13 @@
        [min-value 10]
        [max-value 10000]))
 
+(define degree
+  (new slider%
+       [label "Степень функции релакации L"]
+       [parent control-pane]
+       [min-value 5]
+       [max-value 20]))
+
 (define (log-poster msg [nl #t])
   (let ((insert (lambda (msg) (send
                           (send log get-editor) insert msg))))
@@ -53,11 +60,12 @@
     (when comment
       (log-poster (format "Комментарий: ~a" comment)))
     (log-poster "Протокол работы:")
-    (let ((x (optimize (test-function-def f)
-                       (test-function-x-start f)
-                       #:eps (expt 10 (- (send eps get-value)))
-                       #:iterations (send iterations get-value)
-                       #:listener log-poster)))
+    (let ((x (relch-optimize (test-function-def f)
+                             (test-function-x-start f)
+                             #:eps (expt 10 (- (send eps get-value)))
+                             #:iterations (send iterations get-value)
+                             #:degree (send degree get-value)
+                             #:listener log-poster)))
       (log-poster (format "Ответ: ~a; известное значение минимума: ~a\n"
                           x (test-function-target-x f))))))
 
