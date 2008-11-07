@@ -24,6 +24,7 @@
 
 % Custom commands
 \providecommand{\program}[1]{{\tt #1}}
+\DeclareMathOperator{\extr}{extr}
 
 \numberwithin{equation}{section}
 
@@ -190,6 +191,28 @@
     x_3 = 0\\
     x_4 = 2\\
     x_5 = 1
+  \end{cases}
+\end{equation}
+
+\section{Условная оптимизация}
+
+Рассматривается следующая задача:
+\begin{equation*}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    2x_1 - x_2 \leq 2 \\
+    x_1 \geq 0 \\
+    x_2 \geq 0
+  \end{cases}
+\end{equation*}
+
+После приведения к каноническому виду она примет вид
+\begin{equation}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    2x_1 - x_2 - 2 \leq 0 \\
+    -x_1 \leq 0 \\
+    -x_2 \leq 0
   \end{cases}
 \end{equation}
 
