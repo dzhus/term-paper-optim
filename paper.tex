@@ -17,6 +17,10 @@
 \newcommand{\intl}{\int\limits}
 \usepackage{misccorr}
 
+% Enumerations
+\renewcommand{\labelenumi}{\Roman{enumi})}
+\renewcommand{\labelenumiii}{\arabic{enumiii})}
+
 % Bib in TOC
 \usepackage[numbib,nottoc]{tocbibind}
 
@@ -24,7 +28,10 @@
 
 % Custom commands
 \providecommand{\program}[1]{{\tt #1}}
+\providecommand{\La}{\mathcal{L}}
+\providecommand{\pardiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
 \DeclareMathOperator{\extr}{extr}
+\DeclareMathOperator{\sgn}{sgn}
 
 \numberwithin{equation}{section}
 
@@ -210,12 +217,148 @@
 \begin{equation}
   \begin{cases}
     f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
-    2x_1 - x_2 - 2 \leq 0 \\
-    -x_1 \leq 0 \\
-    -x_2 \leq 0
+    g_1(x) = 2x_1 - x_2 - 2 \leq 0 \\
+    g_2(x) = -x_1 \leq 0 \\
+    g_3(x) = -x_2 \leq 0
   \end{cases}
 \end{equation}
+Здесь $x$ — вектор $x_1, x_2, x_3$.
 
+Составим функцию Лагранжа:
+\begin{multline}
+  \label{eq:lagrange}
+  \La(x, \lambda) = (x_1+4)^2 + (x_2-4)^2 +\\
+  + \lambda_1(2x_1-x_2-2)+\lambda_2(-x_1)+\lambda_3(-x_2)
+\end{multline}
+Где $\lambda$ — вектор $\lambda_1, \lambda_2, \lambda_3$.
+
+Запишем необходимые условия стационарности точки $x^*$ при
+соответствующем векторе $\lambda$:
+\begin{subequations}
+  \renewcommand{\theequation}{\theparentequation\asbuk{equation}}
+  \label{eq:kkt-conditions}
+  \begin{equation}
+    \label{eq:cond-stationary}
+    \begin{cases}
+      \pardiff{\La}{x_1} = 2(x^*_1+4)+2\lambda_1-\lambda_2=0\\
+      \pardiff{\La}{x_2} = 2(x^*_2-4)-\lambda_1-\lambda_3=0
+    \end{cases}
+  \end{equation}
+  \begin{equation}
+    \label{eq:cond-sign}
+    \sgn(\lambda_1) = \sgn(\lambda_2) = \sgn(\lambda_3)
+  \end{equation}
+  \begin{equation}
+    \label{eq:cond-slackness}
+    \begin{cases}
+      \lambda_1\cdot g_1(x^*) = \lambda_1\cdot (2x^*_1-x^*_2-2) = 0\\
+      \lambda_2\cdot g_2(x^*) = \lambda_2\cdot (-x^*_1) = 0\\
+      \lambda_3\cdot g_3(x^*) = \lambda_3\cdot (-x^*_2) = 0
+    \end{cases}
+  \end{equation}
+  \begin{equation}
+    \begin{cases}
+      \label{eq:cond-feasible}
+      g_1(x^*) = 2x^*_1 - x^*_2 - 2 \leq 0 \\
+      g_2(x^*) = -x^*_1 \leq 0 \\
+      g_3(x^*) = -x^*_2 \leq 0
+    \end{cases}
+  \end{equation}
+\end{subequations}
+
+Рассмотрим $2³=8$ вариантов удовлетворения условий дополняющей
+нежёсткости \eqref{eq:cond-slackness}.
+
+\begin{enumerate}
+\item $\lambda_1 = 0$
+  
+  В этом случае уравнения \eqref{eq:cond-stationary} принимают вид:
+  \begin{equation}
+    \label{eq:cond-stationary-l1=0}
+    \begin{cases}
+      2x^*_1+8-\lambda_2=0\\
+      2x^*_2-8-\lambda_3=0
+    \end{cases}
+  \end{equation}
+  \begin{enumerate}
+  \item $\lambda_2 = 0$
+
+    Из \eqref{eq:cond-stationary-l1=0} имеем $2x^*_1+8=0 \iff
+    x^*_1=-4$, что не удовлетворяет условию $g_2(x^*) = -x^*_1 \leq 0$
+    из \eqref{eq:cond-feasible}.
+  \item $\lambda_2 ≠ 0$
+    
+    В этом случае из \eqref{eq:cond-slackness} следует, что
+    $g_2(x^*)=0 \iff x^*_1 = 0$, откуда согласно
+    \eqref{eq:cond-stationary-l1=0} получаем $\lambda_2=8$.
+    \begin{enumerate}
+    \item $\lambda_3 = 0$
+      
+      Из \eqref{eq:cond-stationary-l1=0} следует $x^*_2=4$. Получаем
+      точку $A = (0, 4)$.
+    \item $\lambda_3 ≠ 0$
+
+      В данном случае согласно \eqref{eq:cond-slackness} находим
+      $x^*_2=0$, поэтому из \eqref{eq:cond-stationary-l1=0} следует, что
+      $\lambda_3=-8$. С учётом $\lambda_2=8$ заметим, что не
+      выполняются условия \eqref{eq:cond-sign}.
+    \end{enumerate}
+  \end{enumerate}
+\item $\lambda_1 ≠ 0$ 
+
+  Согласно условию \eqref{eq:cond-slackness}, в
+  данном случае
+  \begin{equation}
+    \label{eq:cond-slackness-l1n=0}
+    2x^*_1-x^*_2-2=0
+  \end{equation}
+  \begin{enumerate}
+  \item $\lambda_2 = 0$
+
+    Из \eqref{eq:cond-stationary} получим
+    \begin{equation}
+      \label{eq:cond-stationary-l2=0}
+      2x^*_1+8+2\lambda_1=0
+    \end{equation}
+    \begin{enumerate}
+    \item $\lambda_3 = 0$
+
+      Второе уравнение системы \eqref{eq:cond-stationary} даёт
+      $2x^*_2-8-\lambda_1=0$. Сложим это уравнение с
+      \eqref{eq:cond-stationary-l2=0} и рассмотрим его вместе с
+      \eqref{eq:cond-slackness-l1n=0}, получив
+      \begin{equation}
+        \begin{cases}
+          2x^*_1+4x^*_2-8=0\\
+          2x^*_1-x^*_2-2=0
+        \end{cases}
+      \end{equation}
+      
+      Таким образом получим $4x^*_2-8=-x^*_2-2 \iff x^*_2=\frac{6}{5}$.
+
+      Значение $x^*_1=\frac{8}{5}$ определяется из
+      \eqref{eq:cond-slackness-l1n=0}. Итак, получена ещё одна точка
+      $B = \left(\frac{8}{5}, \frac{6}{5}\right)$. При этом из
+      уравнения \eqref{eq:cond-stationary-l2=0} найдём значение
+      $\lambda_1 = -\frac{28}{5}$.
+    \item $\lambda_3 ≠ 0$
+
+      Согласно \eqref{eq:cond-slackness}, в данном случае $x^*_2=0$,
+      поэтому из \eqref{eq:cond-slackness-l1n=0} следует $x^*_1=1$.
+      Тогда из \eqref{eq:cond-stationary-l2=0} определим $\lambda_1 =
+      -5$. Подставив найденные значения $x_2*$ и $\lambda_1$ в
+      \eqref{eq:cond-stationary}, получим $\lambda_3 = -3$. Найдена
+      очередная точка $C=(1, 0)$.
+    \end{enumerate}
+  \item $\lambda_2 ≠ 0$
+
+    Из \eqref{eq:cond-slackness} получаем $x^*_1=0$, откуда с учётом
+    \eqref{eq:cond-slackness-l1n=0} следует значение $x^*_2=-2$, не
+    удовлетворяющее условию $g_3(x^*) = -x^*_2 \leq 0$ из
+    \eqref{eq:cond-feasible}.
+  \end{enumerate}
+\end{enumerate}
+  
 \section{Многопараметрическая оптимизация\\
   с чебышёвскими функциями релаксации}
 
