@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8x]{inputenc}
 \usepackage[english,russian]{babel}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amsthm,amssymb}
 
 % Rich title
 \usepackage{titling}
@@ -17,10 +17,6 @@
 \newcommand{\intl}{\int\limits}
 \usepackage{misccorr}
 
-% Enumerations
-\renewcommand{\labelenumi}{\Roman{enumi})}
-\renewcommand{\labelenumiii}{\arabic{enumiii})}
-
 % Bib in TOC
 \usepackage[numbib,nottoc]{tocbibind}
 
@@ -30,8 +26,12 @@
 \providecommand{\program}[1]{{\tt #1}}
 \providecommand{\La}{\mathcal{L}}
 \providecommand{\pardiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\providecommand{\norm}[1]{\left \lVert{#1}\right \rVert}
 \DeclareMathOperator{\extr}{extr}
 \DeclareMathOperator{\sgn}{sgn}
+
+\newtheorem{thm}{Теорема}
+\newtheorem{rem}{Замечание}
 
 \numberwithin{equation}{section}
 
@@ -204,9 +204,62 @@
 \clearpage
 \section{Условная оптимизация}
 
-Для решения задач условной оптимизации нелинейных функционалов
-используется метод, построенный на основе \emph{необходимых} условий
-Куна—Таккера (см. \cite{taha05}).
+\subsection{Теоретические сведения}
+
+Сформулируем без доказательства ряд условий, которые используются при
+решении задач условной оптимизации нелинейных функционалов. 
+
+
+\begin{thm}[Куна—Таккера]
+  \label{th:kuhn-tucker}
+
+  Пусть рассматривается следующая задача:
+  \begin{equation*}
+    \begin{cases}
+      f(x) \to \extr \\
+      g_j(x) \leq 0,\, j=\overline{1,m}
+    \end{cases}
+  \end{equation*}
+  Здесь $x$ — вектор $x_1, \dotsc x_n$.
+
+  Составляется \emph{функция Лагранжа}:
+  \begin{equation*}
+    \La(x, \lambda_0, \lambda) = \lambda_0 f(x) + \sum_{j=1}^m {\lambda_j g_j(x)}
+  \end{equation*}
+  Здесь $\lambda$ — вектор $\lambda_1, \dotsc \lambda_m$.
+    
+  Пусть точка $x^*$ — точка экстремума. Тогда выполнены следующие условия:
+  \begin{enumerate}
+    \renewcommand{\labelenumi}{\emph{\asbuk{enumi})}}
+  \item $\pardiff{\La}{x_i}=0,\, i=\overline{1,n}$ (условие
+    стационарности функции Лагранжа)
+  \item $\lambda_j \geq 0,\, j=\overline{1,m}$, если $x^*$ — точка
+    минимума, и $\lambda_j \leq 0$, если это точка максимума.
+  \item $\lambda_j \cdot g_j(x^*) = 0,\, j=\overline{1,m}$ (условие
+    дополняющей нежёсткости)
+  \item $g_j(x^*) \leq 0,\, j=\overline{1,m}$
+  \item $\lambda_0^2 + \norm{\lambda}^2 > 0$ (условие нетривиальности решения)
+  \end{enumerate}
+\end{thm}
+
+\begin{thm}[Условие Слейтера]
+  Для $\lambda_0 \neq 0$ достаточно существования такой точки
+  $\hat{x}$, в которой все неравенства ограничений выполняются строго:
+  $g_j(\hat{x})<0,\, j=\overline{1,m}$. В таком случае без ограничения
+  общности полагают $\lambda_0=1$.
+\end{thm}
+
+\begin{rem}
+  Для точек минимума необходимые условия Куна—Таккера становятся
+  достаточными в случае, когда целевая функция $f(x)$ и ограниченное
+  неравенствами $g_j(x)$ множество \emph{выпуклы}.
+
+  В случае точек максимума достаточность достигается при
+  \emph{вогнутости} функции $f(x)$ и \emph{выпуклости} множества
+  допустимых решений задачи.
+\end{rem}
+
+\subsection{Практический пример}
 
 Рассматривается следующая задача:
 \begin{equation*}
@@ -227,7 +280,6 @@
     g_3(x) = -x_2 \leq 0
   \end{cases}
 \end{equation}
-Здесь $x$ — вектор $x_1, x_2, x_3$.
 
 Составим функцию Лагранжа:
 \begin{multline}
@@ -235,7 +287,6 @@
   \La(x, \lambda) = (x_1+4)^2 + (x_2-4)^2 +\\
   + \lambda_1(2x_1-x_2-2)+\lambda_2(-x_1)+\lambda_3(-x_2)
 \end{multline}
-Где $\lambda$ — вектор $\lambda_1, \lambda_2, \lambda_3$.
 
 Запишем необходимые условия стационарности точки $x^*$ при
 соответствующем векторе $\lambda$:
@@ -275,6 +326,9 @@
 нежёсткости \eqref{eq:cond-slackness}.
 
 \begin{enumerate}
+\renewcommand{\labelenumi}{\Roman{enumi})}
+\renewcommand{\labelenumiii}{\arabic{enumiii})}
+
 \item $\lambda_1 = 0$
   
   В этом случае уравнения \eqref{eq:cond-stationary} принимают вид:
