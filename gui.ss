@@ -23,7 +23,7 @@
   (new choice%
        [label "Тестовая функция:"]
        [parent control-pane]
-       [choices (map test-function-name test-functions)]))
+       [choices (map (lambda (e) (test-function-name (cdr e))) test-functions)]))
 
 (define eps
   (new slider%
@@ -53,13 +53,12 @@
     (insert msg)
     (when nl (insert "\n"))))
 
-(define (run-optimization choice)
-  (let* ((f (list-ref test-functions choice))
+(define (run-optimization function-idx)
+  (let* ((f (cdr (list-ref test-functions function-idx)))
          (name (test-function-name f))
          (comment (test-function-comment f)))
     (log-poster (format "Оптимизируется ~a" name))
-    (when comment
-      (log-poster (format "Комментарий: ~a" comment)))
+    (when comment (log-poster (format "Комментарий: ~a" comment)))
     (log-poster "Протокол работы:")
     (let ((x (relch-optimize (test-function-def f)
                              (test-function-x-start f)
