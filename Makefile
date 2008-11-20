@@ -5,12 +5,20 @@ MZSCHEME := mzscheme
 
 DOCNAME := paper
 
-define get-target-function
-$(shell echo $1 | cut -d- -f 1)
+define get-field
+$(shell echo $1 | cut -d- -f $2)
 endef
 
-define get-target-method
-$(shell echo $1 | cut -d- -f 2)
+define get-function
+$(call get-field,$1,1)
+endef
+
+define get-method
+$(call get-field,$1,2)
+endef
+
+define get-start-point
+$(call get-field,$1,3)
 endef
 
 .SECONDEXPANSION:
@@ -50,7 +58,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 %-trace.tkz.tex: %-trace \
                  plot-trace.sh \
                  trace-path.tpl.tkz.tex
-	${SHELL} plot-trace.sh $(call get-target-function,$*) > $@
+	${SHELL} plot-trace.sh $(call get-function,$*) > $@
 
 doc: ${DOCNAME}.pdf
 
