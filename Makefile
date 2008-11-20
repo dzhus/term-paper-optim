@@ -34,9 +34,14 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 
 %.tkz: %.tkz.tex
 
-%-contours.tkz.tex: %.gp \
-                plot-contours.sh \
-                contour-path.tpl.tkz.tex
+%-contours.gp: %-contours.setup \
+               make-contours-gp.sh \
+               contours.tpl.gp contour-level.tpl.gp
+	${SHELL} make-contours-gp.sh $*-contours.setup > $@
+
+%-contours.tkz.tex: %-contours.gp \
+                    plot-contours.sh \
+                    contour-path.tpl.tkz.tex
 	${SHELL} plot-contours.sh $* > $@
 
 %-trace: test-functions.ss runner.ss
