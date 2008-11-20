@@ -1,15 +1,16 @@
 PDFLATEX := pdflatex -shell-escape
 BIBTEX := bibtex8 -B
 GNUPLOT := gnuplot
+MZSCHEME := mzscheme
 
 DOCNAME := paper
 
-define get-target-method
-$(shell echo $1 | sed -e "s/\-.*//")
+define get-target-function
+$(shell echo $1 | cut -d- -f 1)
 endef
 
-define get-target-function
-$(shell echo $1 | sed -e "s/.*\-//")
+define get-target-method
+$(shell echo $1 | cut -d- -f 2)
 endef
 
 .SECONDEXPANSION:
@@ -31,13 +32,18 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 
 %.tkz: %.tkz.tex
 
-%-plot.tkz.tex: $$(call get-target-function,$$*).gp \
-                plot-method.sh \
-                plot-method.tpl.tkz.tex \
+%-contours.tkz.tex: %.gp \
+                plot-contours.sh \
                 contour-path.tpl.tkz.tex
-	@rm -fr $*-contours-*.out
-	${GNUPLOT} $<
-	${SHELL} plot-method.sh $(call get-target-function,$*) > $@
+	${SHELL} plot-contours.sh $* > $@
+
+%-trace: test-functions.ss runner.ss
+	${MZSCHEME} runner.ss $* > $@
+
+%-trace.tkz.tex: %-trace \
+                 plot-trace.sh \
+                 trace-path.tpl.tkz.tex
+	${SHELL} plot-trace.sh $(call get-target-function,$*) > $@
 
 doc: ${DOCNAME}.pdf
 
