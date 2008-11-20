@@ -13,7 +13,7 @@ FUNCTION=$1
 
 rm -fr ${FUNCTION}-contours-*
 
-gnuplot ${FUNCTION}.gp
+gnuplot ${FUNCTION}-contours.gp
 
 for contour in ${FUNCTION}-contours-*
 do
