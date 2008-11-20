@@ -29,6 +29,8 @@ endef
 
 include ${DOCNAME}-deps.mk
 
+doc: ${DOCNAME}.pdf
+
 ${DOCNAME}-deps.mk: ${DOCNAME}.tex
 	texdepend -o $@ -print=if $<
 
@@ -59,8 +61,6 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                  plot-trace.sh \
                  trace-path.tpl.tkz.tex
 	${SHELL} plot-trace.sh $(call get-function,$*) > $@
-
-doc: ${DOCNAME}.pdf
 
 clean:
 	@rm -frv `hg status --unknown --no-status`
