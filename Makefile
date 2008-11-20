@@ -17,6 +17,8 @@ endef
 
 .PHONY: doc clean
 
+.PRECIOUS: %-trace
+
 include ${DOCNAME}-deps.mk
 
 ${DOCNAME}-deps.mk: ${DOCNAME}.tex
