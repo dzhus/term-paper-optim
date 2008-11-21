@@ -8,7 +8,7 @@
 ;;
 ;; Usage:
 ;;
-;;     mzscheme runner.ss -p 3 -i 100 -L 10 rosenbrock
+;;     mzscheme runner.ss -s -1,5.7 -p 3 -i 100 -L 10 rosenbrock
 
 (require srfi/43
          srfi/48
@@ -26,6 +26,7 @@
 (define prec (make-parameter 3))
 (define iter (make-parameter 100))
 (define deg (make-parameter 8))
+(define start-point (make-parameter '#(0 0)))
 
 (command-line
  #:program "runner"
@@ -33,11 +34,13 @@
  ["-i" i "Maximum iterations count (default 100)" (iter (string->number i))]
  ["-p" p "Precision (default 3)" (prec (string->number p))]
  ["-L" L "Chebyshev polynomial degree (default 8)" (deg (string->number L))]
+ ["-s" s "Starting point (default 0.0,0.0)"
+  (start-point (list->vector (map string->number (regexp-split #rx"," s))))]
  #:args (f) (function-id f))
 
 (let ((function (cdr (assoc (function-id) test-functions))))
   (exit (relch-optimize (test-function-def function)
-                        (test-function-x-start function)
+                        (start-point)
                         #:eps (expt 10 (- (prec)))
                         #:iterations (iter)
                         #:degree (deg)
