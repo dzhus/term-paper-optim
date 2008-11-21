@@ -62,10 +62,10 @@
     (log-poster "Протокол работы:")
     (let ((x (relch-optimize (test-function-def f)
                              (test-function-x-start f)
-                             #:eps (expt 10 (- (send eps get-value)))
-                             #:iterations (send iterations get-value)
-                             #:degree (send degree get-value)
-                             #:listener log-poster)))
+                             (expt 10 (- (send eps get-value)))
+                             (send iterations get-value)
+                             (send degree get-value)
+                             log-poster)))
       (log-poster (format "Ответ: ~a; известное значение минимума: ~a\n"
                           x (test-function-target-x f))))))
 

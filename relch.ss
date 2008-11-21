@@ -31,10 +31,7 @@
       (if (better-solution? x-new x)
           x-new
           (make-shifted x (improve-shift shift)))))
-  (define (optimize function start-point
-                    #:eps [eps 1e-2]
-                    #:iterations iterations
-                    #:listener [listen-proc #f])
+  (define (optimize function start-point eps iterations [listen-proc #f])
     (let ((g (@ (gradient function) start-point)))
       (when listen-proc (listen-proc start-point))
       (if (or (<= iterations 1) (< (p-vector-norm g) eps))
@@ -44,21 +41,21 @@
                  (shift (choose-shift start-point G g))
                  (x-new (make-shifted start-point shift)))
             (optimize function x-new
-                      #:eps eps
-                      #:iterations (sub1 iterations)
-                      #:listener listen-proc)))))
+                      eps
+                      (sub1 iterations)
+                      listen-proc)))))
   optimize)
 
 (define (relch-optimize f start-point
-                        #:eps eps
-                        #:iterations iterations
-                        #:degree L
-                        #:listener [listen-proc #f])
+                        eps
+                        iterations
+                        degree
+                        [listen-proc #f])
   (define (choose-shift start-point G g)
-    (relch-shift L G g))
+    (relch-shift degree G g))
   (define (better-solution? x-new x)
     (< (@ f x-new) (@ f x)))
   (define (improve-shift shift)
     (/ shift 2))
   ((gradient-method choose-shift better-solution? improve-shift)
-   f start-point #:eps eps #:iterations iterations #:listener listen-proc))
+   f start-point eps iterations listen-proc))

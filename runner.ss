@@ -28,6 +28,7 @@
 (define deg (make-parameter 8))
 (define start-point (make-parameter '#(0 0)))
 
+;; TODO: Use macros here
 (command-line
  #:program "runner"
  #:once-each
@@ -41,7 +42,7 @@
 (let ((function (cdr (assoc (function-id) test-functions))))
   (exit (relch-optimize (test-function-def function)
                         (start-point)
-                        #:eps (expt 10 (- (prec)))
-                        #:iterations (iter)
-                        #:degree (deg)
-                        #:listener point-poster)))
+                        (expt 10 (- (prec)))
+                        (iter)
+                        (deg)
+                        point-poster)))
