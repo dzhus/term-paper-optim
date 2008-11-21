@@ -15,10 +15,13 @@
 
 source $1
 
+NAME=$(echo $1 | cut -d- -f 1)
+
 for l in ${LEVELS}
 do
     CONTOURS="${CONTOURS}
 "$(m4 --define="__LEVEL"="${l}" \
+    --define="__NAME"="${NAME}" \
     --define="__X_MIN"="${X_MIN}" \
     --define="__X_MAX"="${X_MAX}" \
     --define="__Y_MIN"="${Y_MIN}" \
