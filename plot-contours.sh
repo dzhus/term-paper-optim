@@ -11,14 +11,26 @@
 
 FUNCTION=$1
 
-rm -fr ${FUNCTION}-contours-*
+# Remove old contours (possibly splitted)
+rm -fr ${FUNCTION}-contour-*
 
 gnuplot ${FUNCTION}-contours.gp
 
-for contour in ${FUNCTION}-contours-*
+for contour in ${FUNCTION}-contour-*
 do
+    # Split every contour
     level=$(echo "${contour}" | cut -d- -f 3)
-    m4 --define="__LEVEL"=${level} \
-        --define="__FILE"=${contour} \
-        contour-path.tpl.tkz.tex
+    
+    # Remove comments
+    tmp=$(mktemp /tmp/docXXXXXX)
+    grep -v '#.*' "${contour}" > ${tmp}
+
+    # Split contour to connected subparts
+    csplit -f ${contour} -b '-%02d' -qz ${tmp} "/^$/" "{*}"
+    for part in ${contour}-*
+    do
+        m4 --define="__LEVEL"=${level} \
+            --define="__FILE"=${part} \
+            contour-path.tpl.tkz.tex
+    done
 done
