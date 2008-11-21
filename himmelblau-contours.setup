@@ -1,0 +1,10 @@
+F="(x**2+y-11)**2+(x+y**2-7)**2"
+
+X_MIN=-6
+Y_MIN=-5
+X_MAX=6
+Y_MAX=5
+
+LEVELS="1 25 50 100 200"
+
+ISOSAMPLES=100
