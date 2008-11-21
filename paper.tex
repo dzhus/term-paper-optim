@@ -9,6 +9,10 @@
 % Matrix operations
 \usepackage{gauss}
 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{calc}
+
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\phi}{\varphi}
@@ -52,6 +56,7 @@
 
 \clearpage
 \section{Введение}
+
 Настоящая курсовая работа посвящена методам оптимизации и
 экстремальным задачам.
 
@@ -502,6 +507,80 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 чебышёвскими функциями релаксации, предложенный в
 \cite{chernorutsky04}.
 
+
+\subsection{Примеры работы}
+
+Одним из классических тестов для различных алгоритмов оптимизации
+является тест Розенброка, заключающийся в минимизации следующей
+функции:
+\begin{equation}
+  \label{eq:rosenbrock}
+  f(x, y) = 100(y - x²)² + (1 - x)²
+\end{equation}
+Функция Розенброка имеет глубокую впадину вдоль кривой $y=x^2$, что
+обуславливает плохую сходимость простых методов.
+
+\pgfplotsset{every axis grid/.append style={densely dashed}}
+\pgfplotsset{every axis plot post/.append style={black,solid,mark=none}}
+\begin{figure}[hb]
+  \centering
+  \begin{tikzpicture}[scale=1]
+    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+      \input{rosenbrock-contours.tkz.tex}
+      \input{rosenbrock-trace.tkz.tex}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Работа алгоритма с функцией Розенброка
+    \eqref{eq:rosenbrock}}
+\end{figure}
+
+Теперь рассмотрим функцию
+\begin{equation}
+  \label{eq:exptest}
+  f(x, y) = \sum\limits_{a=\overline{0.1, 1.0}}\left [
+    e^{-xa}-e^{-ya}-(e^{-a}-e^{-10a})\right ]^2
+\end{equation}
+Здесь суммирование происходит по значениям $a = 0.1, 0.2, \dotsc 1$.
+
+\begin{figure}[hb]
+  \centering
+  \begin{tikzpicture}[scale=1]
+    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+      \input{exptest-contours.tkz.tex}
+      \input{exptest-trace.tkz.tex}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Линии уровня и трассировка процесса минимизации функции
+    \eqref{eq:exptest}}
+\end{figure}
+
+В следующем примере рассмотрим функцию Химмельблау, которая задаётся
+следующим образом:
+\begin{equation}
+  \label{eq:himmelblau}
+  f(x, y) = (x² + y - 11)² + (x + y² - 7)²
+\end{equation}
+Известно, что локальные минимумы функции \eqref{eq:himmelblau}
+расположены в точках $A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58,
+-1.85)$, $D=(3.00, 2.00)$, и в каждой из них достигается значение $0$.
+Этим обусловлена следующая особенность работы алгоритма — результат
+значительно зависит от выбора начального приближения, что
+продемонстрировано на \ref{fig:himmelblau}.
+
+\begin{figure}[hb]
+  \label{fig:himmelblau}
+  \centering
+  \begin{tikzpicture}[scale=1]
+    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+      \input{himmelblau-contours.tkz.tex}
+      \input{himmelblau-trace.tkz.tex}
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Результаты работы алгоритма с функцией Химмельблау в
+    зависимости от выбора начальной точки}
+\end{figure}
+
+\clearpage
 \appendix
 \bibliographystyle{gost71s}
 \bibliography{paper}

@@ -1,0 +1,10 @@
+F="100*(y - x**2)**2 + (1 - x)**2"
+
+X_MIN=-3
+X_MAX=3
+Y_MIN=-1
+Y_MAX=3
+
+LEVELS="4 6 50 100"
+
+ISOSAMPLES=400
