@@ -1,4 +1,4 @@
-PDFLATEX := pdflatex -shell-escape
+PDFLATEX := pdflatex -shell-escape -halt-on-error -file-line-error
 BIBTEX := bibtex8 -B
 GNUPLOT := gnuplot
 MZSCHEME := mzscheme
