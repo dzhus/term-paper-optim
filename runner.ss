@@ -8,7 +8,10 @@
 ;;
 ;; Usage:
 ;;
-;;     mzscheme runner.ss -s -1,5.7 -p 3 -i 100 -L 10 rosenbrock
+;;     mzscheme runner.ss -m relch -s -1,5.7 -p 3 -i 100 -L 10 rosenbrock
+;;
+;; Typing `mzscheme runner.ss --help` will give a brief help on
+;; command line options.
 
 (require srfi/43
          srfi/48
@@ -27,6 +30,10 @@
 (define iter (make-parameter 100))
 (define deg (make-parameter 8))
 (define start-point (make-parameter '#(0 0)))
+(define method (make-parameter relch-optimize))
+
+;; We need this for `eval` to work in runtime
+(define ons (module->namespace '"relch.ss"))
 
 ;; TODO: Use macros here
 (command-line
@@ -35,14 +42,18 @@
  ["-i" i "Maximum iterations count (default 100)" (iter (string->number i))]
  ["-p" p "Precision (default 3)" (prec (string->number p))]
  ["-L" L "Chebyshev polynomial degree (default 8)" (deg (string->number L))]
+ ;; Vulnerability follows :-)
+ ["-m" m "Method (default relch)" (method
+                                   (eval (string->symbol
+                                          (string-append m "-optimize"))
+                                         ons))]
  ["-s" s "Starting point (default 0.0,0.0)"
   (start-point (list->vector (map string->number (regexp-split #rx"," s))))]
  #:args (f) (function-id f))
 
 (let ((function (cdr (assoc (function-id) test-functions))))
-  (exit (relch-optimize (test-function-def function)
-                        (start-point)
-                        (expt 10 (- (prec)))
-                        (iter)
-                        (deg)
-                        point-poster)))
+  (exit ((method)
+         (test-function-def function)
+         (start-point)
+         (expt 10 (- (prec))) (iter) (deg)
+         point-poster)))
