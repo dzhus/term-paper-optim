@@ -12,8 +12,8 @@ F="(exp(-0.1*x)-exp(-0.1*y)-(exp(-0.1)-exp(-1)))**2+ \
 X_MIN=-1
 X_MAX=5
 Y_MIN=0
-Y_MAX=14
+Y_MAX=12
 
-LEVELS="0.01 0.1 0.25 0.5 0.8"
+LEVELS=(0.01 0.1 0.25 0.5 0.8 1 2)
 
 ISOSAMPLES=30

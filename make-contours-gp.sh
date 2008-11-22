@@ -9,8 +9,8 @@
 #
 # `.setup` file is sourced by shell and must set the following
 # variables: `F` (gnuplot-compliant definition of binary function),
-# `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, `LEVELS` (a string containg a
-# set of space-separated numbers each corresponding to one surface
+# `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, `LEVELS` (an array containg a
+# set of numbers in ascending order each corresponding to one surface
 # level to be plotted), `ISOSAMPLES`.
 
 # Default values
@@ -22,7 +22,7 @@ source $1
 # extract `rosenbrock` from `rosenbrock-contours.setup`
 NAME=$(echo $1 | cut -d- -f 1)
 
-for l in ${LEVELS}
+for l in ${LEVELS[@]}
 do
     CONTOURS="${CONTOURS}
 "$(m4 --define="__LEVEL"="${l}" \

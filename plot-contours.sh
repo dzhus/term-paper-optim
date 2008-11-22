@@ -11,6 +11,10 @@
 
 FUNCTION=$1
 
+# Get maximum level to calculate color scale factor later
+source ${FUNCTION}-contours.setup
+max_level=${LEVELS[$(( ${#LEVELS[@]} - 1))]}
+
 # Remove old contours (possibly splitted)
 rm -fr ${FUNCTION}-contour-*
 
@@ -18,10 +22,14 @@ gnuplot ${FUNCTION}-contours.gp
 
 for contour in ${FUNCTION}-contour-*
 do
-    # Split every contour
+    # Get current level
     level=$(echo "${contour}" | cut -d- -f 3)
-    
-    # Remove comments
+
+    # Calculate scale of current level, avoiding too small scales
+    s_level=$(echo "if (${level} >= sqrt(${max_level})) ${level} else sqrt(${max_level})" | bc)
+    scale=$(echo "scale=3; l(${s_level}+1)/l(${max_level}+1)*100" | bc -l)
+
+    # Remove comments from point lists
     tmp=$(mktemp /tmp/docXXXXXX)
     grep -v '#.*' "${contour}" > ${tmp}
 
@@ -31,6 +39,7 @@ do
     do
         m4 --define="__LEVEL"=${level} \
             --define="__FILE"=${part} \
+            --define="__COLORSCALE"=${scale} \
             contour-path.tpl.tkz.tex
     done
 done
