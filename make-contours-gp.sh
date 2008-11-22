@@ -13,8 +13,13 @@
 # set of space-separated numbers each corresponding to one surface
 # level to be plotted), `ISOSAMPLES`.
 
+# Default values
+ISOSAMPLES=10
+SAMPLES=100
+
 source $1
 
+# extract `rosenbrock` from `rosenbrock-contours.setup`
 NAME=$(echo $1 | cut -d- -f 1)
 
 for l in ${LEVELS}
@@ -31,5 +36,6 @@ done
 
 m4 --define="__F"="${F}" \
     --define="__ISOSAMPLES"="${ISOSAMPLES}" \
+    --define="__SAMPLES"="${SAMPLES}" \
     --define="__CONTOURS"="${CONTOURS}" \
     contours.tpl.gp
