@@ -1,0 +1,49 @@
+\begin{figure}[!h]
+  \centering
+  \label{fig:relax-thm}
+  \begin{tikzpicture}
+    \begin{axis}[
+      xlabel=$\lambda$,xtick=\empty,
+      ylabel=$R$,ytick={-1,1},
+      y tick label style={anchor=north east},
+      y tick style={draw=none},
+      xmin=-3.2,xmax=3.2,ymin=-2.5,ymax=2.5,
+      axis x line=middle,
+      axis y line=middle,
+      axis on top,
+      pattern color=gray!50,
+      ]
+
+      % Forbidden areas
+      \addplot[draw=none,mark=none,pattern=north west lines] coordinates{
+        (-3,1) (0,1) (0,-1) (-3,-1)} \closedcycle;
+      \addplot[draw=none,mark=none,pattern=north west lines] coordinates{
+        (0,1) (3,1) (3,2) (0,2)} \closedcycle;
+      \addplot[draw=none,mark=none,pattern=north west lines] coordinates{
+        (0,-1) (3,-1) (3,-2) (0,-2)} \closedcycle;
+
+      % Function
+      \addplot[smooth] coordinates{
+        (-2.5, 2)
+        (-2.2, 1.1)
+        (-1.8, 1.6)
+        (-1.1, 1.3)
+        (-0.5, 1.4)
+        (0, 1)
+        (0.5, -0.8)
+        (1.7, 0.1)
+        (2.5, 0.2)};
+      
+      % Dashed lines at forbidden area boundaries
+      \addplot[dashed,mark=none] coordinates{
+        (-3,1)
+        (3,1)};
+      \addplot[dashed,mark=none] coordinates{
+        (-3,-1)
+        (3,-1)};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Функция релаксации $R(\lambda)$, удовлетворяющая условиям
+    теоремы \ref{thm:relax-thm}}
+  \label{fig:relax-thm}
+\end{figure}
