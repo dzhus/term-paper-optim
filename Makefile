@@ -5,8 +5,9 @@ MZSCHEME := mzscheme
 
 DOCNAME := paper
 
+# select fields 1, 2, 3 from 1_2_3-trace.tkz.tex
 define get-field
-$(shell echo $1 | cut -d- -f $2)
+$(shell echo $1 | sed -e 's/-\w\.tkz\.tex//' | cut -d_ -f $2)
 endef
 
 define get-function
@@ -55,12 +56,12 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 	${SHELL} plot-contours.sh $* > $@
 
 %-trace: test-functions.ss runner.ss
-	${MZSCHEME} runner.ss $* > $@
+	${MZSCHEME} runner.ss -s $(call get-start-point,$*) $(call get-function,$*) > $@
 
 %-trace.tkz.tex: %-trace \
                  plot-trace.sh \
                  trace-path.tpl.tkz.tex
-	${SHELL} plot-trace.sh $(call get-function,$*) > $@
+	${SHELL} plot-trace.sh $* > $@
 
 clean:
 	@rm -frv `hg status --unknown --no-status`
