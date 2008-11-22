@@ -5,7 +5,7 @@ MZSCHEME := mzscheme
 
 DOCNAME := paper
 
-# select fields 1, 2, 3 from 1_2_3-trace.tkz.tex
+# select fields 1, 2, 3 etc. from 1_2_3-trace.tkz.tex
 define get-field
 $(shell echo $1 | sed -e 's/-\w\.tkz\.tex//' | cut -d_ -f $2)
 endef
@@ -20,6 +20,10 @@ endef
 
 define get-start-point
 $(call get-field,$1,3)
+endef
+
+define get-max-iterations
+$(call get-field,$1,4)
 endef
 
 .SECONDEXPANSION:
@@ -56,7 +60,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 	${SHELL} plot-contours.sh $* > $@
 
 %-trace: test-functions.ss runner.ss
-	${MZSCHEME} runner.ss -s $(call get-start-point,$*) $(call get-function,$*) > $@
+	${MZSCHEME} runner.ss -s $(call get-start-point,$*) -i $(call get-max-iterations,$*) $(call get-function,$*) > $@
 
 %-trace.tkz.tex: %-trace \
                  plot-trace.sh \
