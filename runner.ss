@@ -10,8 +10,9 @@
 ;;
 ;;     mzscheme runner.ss -m relch -s -1,5.7 -p 3 -i 100 -L 10 rosenbrock
 ;;
-;; Typing `mzscheme runner.ss --help` will give a brief help on
-;; command line options.
+;; Specifying empty string as an option value, e. g. `-i ""`, is the
+;; same as specifying its default value. Typing `mzscheme runner.ss
+;; --help` will give a brief help on command line options.
 
 (require srfi/43
          srfi/48
@@ -25,12 +26,15 @@
    point)
   (when nl (display "\n")))
 
-(define function-id (make-parameter #f))
-(define prec (make-parameter 3))
-(define iter (make-parameter 100))
-(define deg (make-parameter 8))
-(define start-point (make-parameter '#(0 0)))
-(define method (make-parameter relch-optimize))
+(define (make-defaulting-parameter v)
+  (make-parameter v (lambda (x) (if x x v))))
+
+(define function-id (make-defaulting-parameter #f))
+(define prec (make-defaulting-parameter 3))
+(define iter (make-defaulting-parameter 100))
+(define deg (make-defaulting-parameter 8))
+(define start-point (make-defaulting-parameter '#(0 0)))
+(define method (make-defaulting-parameter relch-optimize))
 
 ;; We need this for `eval` to work in runtime
 (define ons (module->namespace '"relch.ss"))
