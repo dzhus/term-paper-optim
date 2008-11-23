@@ -39,12 +39,12 @@
 \DeclareMathOperator{\Sp}{Sp}
 
 \newtheorem{thm}{Теорема}[section]
-\newtheorem{rem}[thm]{Замечание}[section]
+\newtheorem{rem}{Замечание}[section]
 \newtheorem{dfn}{Определение}[section]
 
 \numberwithin{equation}{section}
 
-\usepackage[
+\usepackage[unicode,
 pdftex, colorlinks, linkcolor=blue, citecolor=teal,
 pdfauthor=Dmitry Dzhus]{hyperref}
 
@@ -62,7 +62,7 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 \tableofcontents
 
 \clearpage
-\section{Введение}
+\section{Предмет работы}
 
 Настоящая курсовая работа посвящена методам оптимизации и
 экстремальным задачам.
@@ -75,7 +75,9 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 метода на алгоритмическом языке и представлены результаты работы на
 тестовых функциях.
 
+\clearpage
 \section{Симплекс-метод}
+\label{sec:simplex}
 
 Симплекс-метод позволяет решать задачи линейного программирования,
 заключающиеся в минимизации целевого линейного функционала при
@@ -215,6 +217,7 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 
 \clearpage
 \section{Условная оптимизация}
+\label{sec:kuhn-tucker}
 
 \subsection{Теоретические сведения}
 
@@ -508,6 +511,7 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 \clearpage
 \section{Многопараметрическая оптимизация\\
   с чебышёвскими функциями релаксации}
+\label{sec:relch}
 
 В данном разделе представлена общая схема градиентных методов,
 рассмотрено понятие функции релаксации и описан метод оптимизации с
