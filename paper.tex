@@ -38,9 +38,9 @@
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\Sp}{Sp}
 
-\newtheorem{thm}{Теорема}
-\newtheorem{rem}[thm]{Замечание}
-\newtheorem{dfn}[thm]{Определение}
+\newtheorem{thm}{Теорема}[section]
+\newtheorem{rem}[thm]{Замечание}[section]
+\newtheorem{dfn}{Определение}[section]
 
 \numberwithin{equation}{section}
 
@@ -559,6 +559,8 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 область справедливости локальной квадратичной модели
 \eqref{eq:sqr-approx}.
 
+\subsubsection{Функция релаксации}
+
 \begin{dfn}
   \neword{Функцией релаксации} называется скалярная функция
   \begin{equation}
@@ -579,6 +581,7 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
     R_h(\lambda_i),\, \lambda_i \in \Sp{G_k}
   \end{equation}
 \end{dfn}
+
 Благодаря следующей теореме, функция релаксации используется для
 анализа различных градиентных методов.
 
@@ -615,6 +618,8 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 которых в положительной области значений $\lambda$ как можно
 \emph{меньше} уклоняется от нуля, а при отрицательных $\lambda$ —
 становится как можно большей по модулю.
+
+\subsubsection{Метод ПГС}
 
 В качестве примера рассмотрим метод \neword{простого градиентного
   спуска} (ПГС), рабочая формула которого имеет вид:
