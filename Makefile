@@ -26,6 +26,10 @@ define get-max-iterations
 $(call get-field,$1,4)
 endef
 
+define get-degree
+$(call get-field,$1,5)
+endef
+
 .SECONDEXPANSION:
 
 .PHONY: doc clean
@@ -60,7 +64,12 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 	${SHELL} plot-contours.sh $* > $@
 
 %-trace: test-functions.ss runner.ss
-	${MZSCHEME} runner.ss -s $(call get-start-point,$*) -i $(call get-max-iterations,$*) $(call get-function,$*) > $@
+	${MZSCHEME} runner.ss \
+		-m "$(call get-method,$*)" \
+		-s "$(call get-start-point,$*)" \
+		-i "$(call get-max-iterations,$*)" \
+		-L "$(call get-degree,$*)" \
+	 $(call get-function,$*) > $@
 
 %-trace.tkz.tex: %-trace \
                  plot-trace.sh \
