@@ -9,9 +9,8 @@
 % Matrix operations
 \usepackage{gauss}
 
-\usepackage{tikz}
 \usepackage{pgfplots}
-\usetikzlibrary{calc}
+\usetikzlibrary{patterns}
 
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
@@ -29,10 +28,15 @@
 % Custom commands
 \providecommand{\program}[1]{{\tt #1}}
 \providecommand{\La}{\mathcal{L}}
+\providecommand{\neword}{\emph}
 \providecommand{\pardiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\providecommand{\abs}[1]{\left \lvert{#1}\right \rvert}
 \providecommand{\norm}[1]{\left \lVert{#1}\right \rVert}
+\providecommand{\set}[1]{\mathbb{#1}}
+\newcommand{\scalmult}[1]{{\left \langle #1 \right \rangle}}
 \DeclareMathOperator{\extr}{extr}
 \DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Sp}{Sp}
 
 \newtheorem{thm}{Теорема}
 \newtheorem{rem}{Замечание}
@@ -507,9 +511,121 @@ $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 чебышёвскими функциями релаксации, предложенный в
 \cite{chernorutsky04}.
 
+\subsection{Теоретические сведения}
+
+\subsubsection{Общая схема градиентных методов}
+
+Рассмотрим задачу безусловной минимизации:
+\begin{equation*}
+  f(x) \to \min,\quad x \in \set{R}^n,\, J \in C^2(\set{R}^n)
+\end{equation*}
+
+\neword{Градиентными} называются итерационные методы оптимизации со
+следующей рабочей формулой, которая определяет способ перехода к
+новому приближению $x^{k+1}$ на очередном шаге итерации:
+\begin{equation}
+  \label{eq:grad-methods}
+  x^{k+1} = x^k - H_k\left(G_k, h_k\right) g_k
+\end{equation}
+здесь $H_k$ — некоторая функция от матрицы Гессе $G_k = G(x^k) =
+f''(x^k)$ и параметра $h_k$, а $g_k = g(x^k) = f'(x^k)$ — градиент
+функции в точке $x_k$. При постоянных значениях параметров на
+различных шагах итерации соответствующие индексы $k$ опускаются.
+
+Предполагается, что в некоторой $\epsilon_k$-окрестности $\{x \in
+\set{R}^n | \norm{x-x^k} < \epsilon_k\}$ точки $x^k$ функция $f(x)$
+приближается гиперболоидом:
+\begin{equation}
+  \label{eq:sqr-approx}
+  f(x) \approx \frac{1}{2}\scalmult{G_k x, x} - \scalmult{a_k,x} + b_k \approx \frac{1}{2}\scalmult{G_k x, x}
+\end{equation}
+
+Ставится задача построения таких матричных функций $H_k$, при которых
+выполняется условие релаксации процесса
+\begin{equation}
+  \label{eq:relax-cond}
+  f(x^{k+1}) < f(x^k)
+\end{equation}
+При этом требуется, чтобы величина нормы $\norm{x^{k+1}-x^{k}}$ была
+ограничена сверху лишь параметром $\epsilon_k$, который характеризует
+область справедливости локальной квадратичной модели
+\eqref{eq:sqr-approx}.
+
+\neword{Функцией релаксации} называется скалярная функция
+\begin{equation}
+  \label{eq:relax-fun}
+  R_h(\lambda) = 1 - H(\lambda, h)\lambda,\quad \lambda,h \in \set{R}
+\end{equation}
+где $H(\lambda, h)$ — скалярный аналог матричной функции $H(G, h)$ из
+формулы \eqref{eq:grad-methods}.
+
+В дальнейшем индекс $h$ у функции релаксации $R_h(\lambda)$ иногда
+будем опускать.
+
+\neword{Множителями релаксации} для точки $x^k$ называются значения
+функции релаксации на спектре матрицы Гессе:
+\begin{equation}
+  \label{eq:relax-fac}
+  R_h(\lambda_i),\, \lambda_i \in \Sp{G_k}
+\end{equation}
+
+Благодаря следующей теореме, функция релаксации используется для
+анализа различных градиентных методов.
+
+\begin{thm}
+  \label{thm:relax-thm}
+  При любых $x^k$ для выполнения условия релаксации
+  \eqref{eq:relax-cond} необходимо и достаточно, чтобы
+  \begin{equation}
+    \label{eq:relax-thm}
+    \begin{aligned}
+      & \abs{R(\lambda_i)} \geq 1 & \lambda_i& < 0 \\
+      & \abs{R(\lambda_i)} \leq 1 & \lambda_i& > 0\\
+      &&i& = \overline{1, n}
+    \end{aligned}
+  \end{equation}
+\end{thm}
+
+\input{relax-thm.tkz}
+
+
+Скорость релаксации может быть оценена с использованием следующего
+соотношения:
+\begin{equation}
+  \label{eq:relax-speed}
+  2\abs{f(x^{k+1})-f(x^k)}=\sum_{\lambda_i^+>0} \left\{\xi_{i,k}^2
+    \lambda_i^+ [1-R^2(\lambda_i^+)]\right\} + \sum_{\lambda_i^-<0} \left\{\xi_{i,k}^2
+    \abs{\lambda_i^-} [R^2(\lambda_i^-)-1]\right\}
+\end{equation}
+здесь $\lambda_i^+$ и $\lambda_i^-$ — положительные и отрицательные
+собственные значения матрицы $G_k$. Коэффициенты $\xi_{i,k}$
+происходят из разложения $x^k=\sum_i{\xi_{i,k}u^i}$ по собственным
+векторам $u^i$ матрицы Гессе.
+
+Таким образом, эффективными оказываются методы, функция релаксации
+которых в положительной области значений $\lambda$ как можно
+\emph{меньше} уклоняется от нуля, а при отрицательных $\lambda$ —
+становится как можно большей по модулю.
+
+В качестве примера рассмотрим метод \neword{простого градиентного
+  спуска} (ПГС), рабочая формула которого имеет вид:
+\begin{equation*}
+  x^{k+1}=x^k-hg_k,\, h\in\set{R}
+\end{equation*}
+Рассмотрим функцию релаксации метода ПГС:
+\begin{equation*}
+  R(\lambda) = 1 - \lambda h
+\end{equation*}
+
+\input{gd-relax.tkz}
+
+Из её графика на рисунке \ref{fig:relax-thm} видно, что метод применим
+лишь в том случае, когда собственные значения матрицы Гессе
+оптимизируемой функции не превосходят некоторого критического значения
+$M*=\frac{2}{h}$. Кроме того, в области малых значений $\lambda$
+согласно \eqref{eq:relax-speed} скорость релаксации сильно снижается.
 
 \subsection{Примеры работы}
-
 Одним из классических тестов для различных алгоритмов оптимизации
 является тест Розенброка, заключающийся в минимизации следующей
 функции:
