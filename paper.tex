@@ -636,13 +636,14 @@ $M*=\frac{2}{h}$. Кроме того, в области малых значен
 Функция Розенброка имеет глубокую впадину вдоль кривой $y=x^2$, что
 обуславливает плохую сходимость простых методов.
 
+\pgfplotsset{every axis/.append style={xlabel=$x$, ylabel=$y$,grid}}
 \pgfplotsset{every axis grid/.append style={densely dashed}}
-\begin{figure}[hb]
+\begin{figure}[!thb]
   \centering
   \begin{tikzpicture}[scale=1]
-    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+    \begin{axis}
       \input{rosenbrock-contours.tkz.tex}
-      \input{rosenbrock_relch_-1.2,1_50-trace.tkz.tex}
+      \input{rosenbrock_relch_-1.2,1_40_14-trace.tkz.tex}
     \end{axis}
   \end{tikzpicture}
   \caption{Работа алгоритма с функцией Розенброка
@@ -657,10 +658,10 @@ $M*=\frac{2}{h}$. Кроме того, в области малых значен
 \end{equation}
 Здесь суммирование происходит по значениям $a = 0.1, 0.2, \dotsc 1$.
 
-\begin{figure}[hb]
+\begin{figure}[thb]
   \centering
   \begin{tikzpicture}[scale=1]
-    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+    \begin{axis}
       \input{exptest-contours.tkz.tex}
       \input{exptest_relch_-0.5,1.5_20-trace.tkz.tex}
       \input{exptest_relch_5,5_20-trace.tkz.tex}
@@ -684,11 +685,11 @@ $M*=\frac{2}{h}$. Кроме того, в области малых значен
 значительно зависит от выбора начального приближения, что
 продемонстрировано на \ref{fig:himmelblau}.
 
-\begin{figure}[hb]
+\begin{figure}[thb]
   \label{fig:himmelblau}
   \centering
   \begin{tikzpicture}[scale=1]
-    \begin{axis}[xlabel=$x$, ylabel=$y$,grid]
+    \begin{axis}
       \input{himmelblau-contours.tkz.tex}
       \input{himmelblau_relch_0.1,0.1_10-trace.tkz.tex}
       \input{himmelblau_relch_0.5,-0.5_10-trace.tkz.tex}
