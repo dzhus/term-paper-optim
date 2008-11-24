@@ -10,7 +10,7 @@
 \usepackage{gauss}
 
 \usepackage{pgfplots}
-\usetikzlibrary{patterns}
+\usetikzlibrary{patterns,arrows}
 
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
@@ -568,7 +568,7 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   \centering
   \begin{tikzpicture}
     \begin{axis}[
-      x=2 cm, y=1 cm,
+      x=2.4 cm, y=1.3 cm,
       xmin=0, ymin=0, xmax=2.5,
       xlabel=$x_1$, ylabel=$x_2$,
       enlargelimits=0.05]
@@ -593,10 +593,12 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 рассматриваемое множество (см. рис. \ref{fig:cond-optim}) обладают
 свойством выпуклости, для точки $A$ условия Куна—Таккера являются
 \emph{достаточными}, и она является точкой \emph{локального минимума}.
-В то же время, для $B$ и $C$ условия Куна—Таккера не являются
-достаточными.
+Линии уровня функции $f(x)$, сходящиеся к $A$ на рисунке
+\ref{fig:cond-optim}, служат дополнительным подтверждением этому.
 
-Проверим для точек $B$ и $C$ условия высших порядков.
+В то же время, для $B$ и $C$ условия Куна—Таккера не являются
+достаточными. Воспользуемся для их исследования условиями высших
+порядков.
 
 Второй дифференциал $d^2\La$ во всех точках одинаковый и имеет вид
 \begin{equation}
@@ -624,8 +626,8 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   
   Полученная форма очевидно больше нуля. Поскольку в $B$ значения
   $\lambda < 0$, необходимое условие второго порядка теоремы
-  \ref{th:if-extr-2} не выполняется, а $B$ \emph{не} является точкой
-  экстремума.
+  \ref{th:if-extr-2} не выполняется, так что $B$ \emph{не} является
+  точкой экстремума.
 
 \item $C = (1, 0)$
 
@@ -634,24 +636,33 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   \ref{th:then-extr-1} выполняется достаточное условие экстремума
   первого порядка, и $C$ есть точка \emph{локального максимума}.
 
-  Действительно, из иллюстрации \ref{fig:cond-optim} видно, что любое
-  сколь угодно малое допустимое перемещение из точки $C$ приводит к
-  переходу с линии уровня $f(C)=41$ на линии меньших уровней.
+  Действительно, из рисунка \ref{fig:cond-optim-zoom} видно, что любое
+  допустимое перемещение из точки $C$ приводит к переходу с линии
+  уровня $f(C)=41$ на линии меньших уровней. Вектор градиента $f'(C) =
+  \left(\begin{smallmatrix}\phantom{-}5\\-4\end{smallmatrix}\right)$ в
+  данной точке образует с границами области тупые углы, так что
+  возможные направления, вдоль которых функция растёт быстрее всего,
+  будут направлениями убывания.
   
   \begin{figure}[!h]
     \centering
     \begin{tikzpicture}
-      \begin{axis}[
+      \begin{axis}[grid=both,x=15cm,y=15cm,
         xlabel=$x_1$, ylabel=$x_2$,
         enlargelimits=0.05]
         \input{condextr_zoom-contours.tkz.tex}
-        \addplot[very thick, red!50!black] coordinates{(0.85,0) (1,0) (1.15,0.3)};
-        \node[circle,fill=black,scale=0.5,label=right:$C$] at (axis cs:1,0) {};
+        
+        \coordinate (C) at (axis cs:1,0);
+
+        \draw[blue,thick,arrows=-triangle 45] (C) -- (axis cs:1.09375,-0.075);
+        \addplot[very thick, red!50!black] coordinates{(0.85,0) (1,0) (1.1,0.2)};
+        \node[circle,fill=black,scale=0.5,label=below:$C$] at (C) {};
       \end{axis}
     \end{tikzpicture}
-    \caption{Линии уровня функции $f(x) = (x_1+4)^2+(x_2-4)^2$ вблизи
+    \caption{Направление вектора градиента $f'(C)$, линии уровня
+      функции $f(x) = (x_1+4)^2+(x_2-4)^2$ и границы $g_j(x)=0$ вблизи
       точки $C$}
-    \label{fig:cond-optim}
+    \label{fig:cond-optim-zoom}
   \end{figure}
 \end{itemize}
   
