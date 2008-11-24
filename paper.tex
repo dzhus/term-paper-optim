@@ -336,24 +336,6 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   \end{cases}
 \end{equation}
 
-\begin{figure}[thb]
-  \label{fig:cond-optim}
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[
-      x=2 cm, y=1 cm,
-      xmin=0, ymin=0,
-      xlabel=$x_1$, ylabel=$x_2$,
-      enlargelimits=0.05]
-      \input{condextr-contours.tkz.tex}
-      \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2,2)};
-      \label{plot:boundaries}
-    \end{axis}
-  \end{tikzpicture}
-  \caption{Ограничения \ref{plot:boundaries} и линии уровня целевой
-    функции задачи \eqref{eq:cond-optim-problem}}
-\end{figure}
-
 Составим функцию Лагранжа:
 \begin{multline}
   \label{eq:lagrange}
@@ -501,11 +483,29 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 \item $C = (1, 0),\, \lambda=(-5, 0, -3)$, максимум
 \end{itemize}
 
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      x=2 cm, y=1 cm,
+      xmin=0, ymin=0,
+      xlabel=$x_1$, ylabel=$x_2$,
+      enlargelimits=0.05]
+      \input{condextr-contours.tkz.tex}
+      \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2,2)};
+      \label{plot:boundaries}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Ограничения \ref{plot:boundaries} и линии уровня целевой
+    функции задачи \eqref{eq:cond-optim-problem}}
+  \label{fig:cond-optim}
+\end{figure}
+
 И целевая функция (поскольку её матрица Гессе
 $\left( \begin{smallmatrix}2 & 0 \\ 0 & 2\end{smallmatrix} \right)$
 положительно определена), и рассматриваемое множество (см. рис.
-\ref{fig:cond-extr}) обладают свойством \emph{выпуклости}, поэтому для
-точки $A$ условия Куна—Таккера являются \emph{достаточными}, и она
+\ref{fig:cond-optim}) обладают свойством \emph{выпуклости}, поэтому
+для точки $A$ условия Куна—Таккера являются \emph{достаточными}, и она
 является точкой локального минимума.
 
 Для $B$ и $C$ условия Куна—Таккера были бы достаточными в случае
