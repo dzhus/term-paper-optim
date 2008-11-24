@@ -249,7 +249,7 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 \end{dfn}
 
 \begin{dfn}
-  Точка $x^*$, являющаяся решением задачи
+  Точка $\hat{x}$, являющаяся решением задачи
   \eqref{eq:cond-optim-problem-form} с функцией Лагранжа
   \eqref{eq:lagrange-form} при $\lambda_0 \neq 0$, называется
   \emph{регулярным экстремумом}, а при $\lambda_0 = 0$ —
@@ -258,25 +258,25 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 
 \begin{thm}[Куна—Таккера]
   \label{th:kuhn-tucker}
-  Пусть точка $x^*$ является решением задачи
-  \eqref{eq:cond-optim-problem-form} Тогда выполнены следующие
+  Пусть точка $\hat{x}$ является решением задачи
+  \eqref{eq:cond-optim-problem-form}. Тогда выполнены следующие
   условия:
   \begin{enumerate}
     \renewcommand{\labelenumi}{\emph{\asbuk{enumi})}}
   \item $\pardiff{\La}{x_i}=0,\, i=\overline{1,n}$ (условие
     стационарности функции Лагранжа)
-  \item $\lambda_j \geq 0,\, j=\overline{1,m}$, если $x^*$ — точка
+  \item $\lambda_j \geq 0,\, j=\overline{1,m}$, если $\hat{x}$ — точка
     минимума, и $\lambda_j \leq 0$, если это точка максимума.
-  \item $\lambda_j \cdot g_j(x^*) = 0,\, j=\overline{1,m}$ (условие
+  \item $\lambda_j \cdot g_j(x) = 0,\, j=\overline{1,m}$ (условие
     дополняющей нежёсткости)
-  \item $g_j(x^*) \leq 0,\, j=\overline{1,m}$
+  \item $g_j(x) \leq 0,\, j=\overline{1,m}$
   \item $\lambda_0^2 + \norm{\lambda}^2 > 0$ (условие нетривиальности решения)
   \end{enumerate}
 \end{thm}
 
 \begin{dfn}
-  Точки $\hat{x}$, удовлетворяющие условиям теоремы
-  \ref{th:kuhn-tucker}, называют \emph{условно-стационарными}.
+  Точка $x^*$, удовлетворяющая условиям теоремы \ref{th:kuhn-tucker},
+  называется \emph{условно-стационарной}.
 \end{dfn}
 
 При использовании условий \ref{th:kuhn-tucker} для поиска
@@ -286,10 +286,10 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 1$.
 
 \begin{thm}[Условие регулярности]
-  Для выполнения неравенства $\lambda_0 \neq 0$ в условно-стационарной
-  точке $\hat{x}$ достаточно линейной независимости градиентов
-  активных в этой точке ограничений $g_k'(x), g_{k+1}'(x), \dotsc,
-  g_{k+l}'(x)$.
+  Для того, чтобы в условно-стационарной точке $x^*$ выполнялось
+  неравенство $\lambda_0 \neq 0$, достаточно линейной независимости
+  градиентов активных в этой точке ограничений $g_k'(x^*),
+  g_{k+1}'(x^*), \dotsc, g_{k+l}'(x^*)$.
 \end{thm}
 
 Если удаётся показать, что во \emph{всех} допустимых точках задачи
@@ -300,9 +300,8 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 \begin{thm}[Условие Слейтера]
   \label{th:slater}
   Для $\lambda_0 \neq 0$ в условиях \ref{th:kuhn-tucker} достаточно
-  существования такой точки $\hat{x}$, в которой все неравенства
-  ограничений выполняются строго: $g_j(\hat{x})<0,\,
-  j=\overline{1,m}$.
+  существования такой точки $x_s$, в которой все неравенства
+  ограничений выполняются строго: $g_j(x_s)<0, \, j=\overline{1,m}$.
 \end{thm}
 
 \begin{rem}
