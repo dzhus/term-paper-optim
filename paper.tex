@@ -474,8 +474,8 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 \end{enumerate}
 
 Итак, найдены три точки, для которых выполнены необходимые условия
-стационарности. Тип возможного экстремума определяется согласно знаку
-компонент $\lambda$.
+теоремы \ref{th:kuhn-tucker}. Тип возможного экстремума определяется
+согласно знаку компонент $\lambda$.
 \begin{itemize}
 \item $A = (0, 4),\, \lambda=(0, 8, 0)$, минимум
 \item $B = (\frac{8}{5}, \frac{6}{5}),\, \lambda=(-\frac{28}{5}, 0,
@@ -494,10 +494,15 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
       \input{condextr-contours.tkz.tex}
       \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2,2)};
       \label{plot:boundaries}
+      
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
+      \node[circle,fill=black,scale=0.5,label=below right:$B$] at (axis cs:1.6,1.2) {};
+      \node[circle,fill=black,scale=0.5,label=above:$C$] at (axis cs:1,0) {};
     \end{axis}
   \end{tikzpicture}
-  \caption{Ограничения \ref{plot:boundaries} и линии уровня целевой
-    функции задачи \eqref{eq:cond-optim-problem}}
+  \caption{Ограничения \ref{plot:boundaries}, линии уровня целевой
+    функции и условные экстремумы задачи
+    \eqref{eq:cond-optim-problem}}
   \label{fig:cond-optim}
 \end{figure}
 
