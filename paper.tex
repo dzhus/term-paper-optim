@@ -30,6 +30,7 @@
 \providecommand{\La}{\mathcal{L}}
 \providecommand{\neword}{\emph}
 \providecommand{\pardiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\providecommand{\dpardiff}[3]{\frac{\partial^2{#1}}{\partial{#2}\partial{#3}}}
 \providecommand{\abs}[1]{\left \lvert{#1}\right \rvert}
 \providecommand{\norm}[1]{\left \lVert{#1}\right \rVert}
 \providecommand{\set}[1]{\mathbb{#1}}
@@ -249,6 +250,7 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 \end{dfn}
 
 \begin{dfn}
+  \label{dfn:regular}
   Точка $\hat{x}$, являющаяся решением задачи
   \eqref{eq:cond-optim-problem-form} с функцией Лагранжа
   \eqref{eq:lagrange-form} при $\lambda_0 \neq 0$, называется
@@ -280,6 +282,15 @@ pdfauthor=Dmitry Dzhus]{hyperref}
   называется \emph{условно-стационарной}.
 \end{dfn}
 
+Аналогично определению \ref{dfn:regular} введём схожее и для
+условно-стационарных точек.
+\begin{dfn}
+  Условно-стационарную точку $x^*$, для которой условия
+  \ref{th:kuhn-tucker} выполнены при $\lambda ≠ 0$, будем называть
+  \neword{регулярной} условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}.
+\end{dfn}
+
 При использовании условий \ref{th:kuhn-tucker} для поиска
 условно-стационарных точек рассматривают два варианта значений
 $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \neq 0$. В
@@ -296,7 +307,7 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 Если удаётся показать, что во \emph{всех} допустимых точках задачи
 \eqref{eq:cond-optim-problem-form} выполнено условие регулярности,
 случай $\lambda_0=0$ можно исключить из рассмотрения. Для этого также
-удобно использовать следующую теорему.
+удобно использовать следующее условие.
 
 \begin{thm}[Условие Слейтера]
   \label{th:slater}
@@ -314,6 +325,56 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   \emph{вогнутости} функции $f(x)$ и \emph{выпуклости} множества
   допустимых решений задачи.
 \end{rem}
+
+В следующих теоремах используются полные дифференциалы функции
+Лагранжа $d^2\La$ и ограничений $dg_j$, определяемые следующим
+образом:
+\begin{align*}
+  d^2\La &= \sum_{p=1}^n\sum_{r=1}^n{\dpardiff{\La}{x_p}{x_r}\,dx_pdx_r} \\
+  dg_j &= \sum_{p=1}^n{\pardiff{g_j}{x_p}\,dx_p}
+\end{align*}
+
+\begin{thm}[Необходимое условие экстремума второго порядка]
+  Пусть точка $\hat{x}$ — регулярный экстремум в задаче
+  \eqref{eq:cond-optim-problem-form}, удовлетворяющий условиям теоремы
+  \ref{th:kuhn-tucker} при соответствующем $\lambda$. Тогда
+  \begin{align*}
+    d^2\La(\hat{x}) &\geq 0 \qquad \text{для минимума} \\
+    d^2\La(\hat{x}) &\leq 0 \qquad \text{для максимума}
+  \end{align*}
+  при $dx ≠ 0$ таких, что
+  \begin{align*}
+    dg_j(\hat{x}) &= 0 \qquad \forall j: \lambda_j ≠ 0\\
+    dg_j(\hat{x}) &\leq 0 \qquad \forall j: \lambda_j=0
+  \end{align*}
+\end{thm}
+
+\begin{thm}[Достаточное условие экстремума первого порядка]
+  Пусть $x^*$ является регулярной условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}, а число активных в $x^*$
+  ограничений равно числу переменных $n$. Тогда для наличия в $x^*$
+  регулярного экстремума достаточно выполнения одного из следующих
+  неравенств при $\forall j: g_j(\hat{x}) = 0$:
+  \begin{align*}
+    \lambda_j &> 0 \qquad \text{для минимума} \\
+    \lambda_j &< 0 \qquad \text{для максимума}
+  \end{align*}
+\end{thm}
+
+\begin{thm}[Достаточное условие экстремума второго порядка]
+  Пусть $x^*$ является регулярной условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}. Если при $dx ≠ 0$ таких, что
+    \begin{align*}
+    dg_j(x^*) &= 0 \qquad \forall j: \lambda_j ≠ 0\\
+    dg_j(x^*) &\leq 0 \qquad \forall j: \lambda_j=0
+  \end{align*}
+  выполняется неравенство $d^2\La(x^*) ≠ 0$, то $x^*$ — точка
+  регулярного экстремума, причём
+  \begin{align*}
+    d^2\La(x^*) &> 0 \qquad \text{для минимума} \\
+    d^2\La(x^*) &< 0 \qquad \text{для максимума}
+  \end{align*}
+\end{thm}
 
 \subsection{Практический пример}
 
