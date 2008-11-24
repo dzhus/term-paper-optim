@@ -233,10 +233,10 @@ pdfauthor=Dmitry Dzhus]{hyperref}
   \label{eq:cond-optim-problem-form}
   \begin{cases}
     f(x) \to \extr \\
-    g_j(x) \leq 0,\, j=\overline{1,m}
+    g_j(x) \leq 0,\, j=\overline{1,m} \\
+    x \in \set{R}^n
   \end{cases}
 \end{equation}
-гдесь $x$ — вектор $x_1, \dotsc, x_n$.
 
 \begin{dfn} \emph{Функцией Лагранжа} задачи
   \eqref{eq:cond-optim-problem-form} называют функцию
@@ -298,6 +298,7 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
 удобно использовать следующую теорему.
 
 \begin{thm}[Условие Слейтера]
+  \label{th:slater}
   Для $\lambda_0 \neq 0$ в условиях \ref{th:kuhn-tucker} достаточно
   существования такой точки $\hat{x}$, в которой все неравенства
   ограничений выполняются строго: $g_j(\hat{x})<0,\,
@@ -336,6 +337,9 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
     g_3(x) = -x_2 \leq 0
   \end{cases}
 \end{equation}
+
+Заметим, что выполняется условие Слейтера \ref{th:slater}, так что
+функция Лагранжа данной задачи классическая.
 
 Составим функцию Лагранжа:
 \begin{multline}
