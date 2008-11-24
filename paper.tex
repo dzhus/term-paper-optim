@@ -238,18 +238,28 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 \end{equation}
 гдесь $x$ — вектор $x_1, \dotsc x_n$.
 
-\begin{dfn} \emph{Функцией Лагранжа} задачи \eqref{eq:cond-problem-problem-form}
-  называют функцию
-  \begin{equation*}
+\begin{dfn} \emph{Функцией Лагранжа} задачи
+  \eqref{eq:cond-optim-problem-form} называют функцию
+  \begin{equation}
+    \label{eq:lagrange-form}
     \La(x, \lambda_0, \lambda) = \lambda_0 f(x) + \sum_{j=1}^m {\lambda_j g_j(x)}
-  \end{equation*}
+  \end{equation}
   где $\lambda$ — вектор $\lambda_1, \dotsc \lambda_m$.
+\end{dfn}
+
+\begin{dfn}
+  Точка $x^*$, являющаяся решением задачи
+  \eqref{eq:cond-optim-problem-form} с функцией Лагранжа
+  \eqref{eq:lagrange-form} при $\lambda_0 \neq 0$, называется
+  \emph{регулярным экстремумом}, а при $\lambda_0 = 0$ —
+  \emph{нерегулярным}.
 \end{dfn}
 
 \begin{thm}[Куна—Таккера]
   \label{th:kuhn-tucker}
-  Пусть точка $x^*$ является решением задачи \eqref{eq:cond-problem-problem-form}
-  Тогда выполнены следующие условия:
+  Пусть точка $x^*$ является решением задачи
+  \eqref{eq:cond-optim-problem-form} Тогда выполнены следующие
+  условия:
   \begin{enumerate}
     \renewcommand{\labelenumi}{\emph{\asbuk{enumi})}}
   \item $\pardiff{\La}{x_i}=0,\, i=\overline{1,n}$ (условие
@@ -263,11 +273,34 @@ pdfauthor=Dmitry Dzhus]{hyperref}
   \end{enumerate}
 \end{thm}
 
+\begin{dfn}
+  Точки $\hat{x}$, удовлетворяющие условиям теоремы
+  \ref{th:kuhn-tucker}, называют \emph{условно-стационарными}.
+\end{dfn}
+
+При использовании условий \ref{th:kuhn-tucker} для поиска
+условно-стационарных точек рассматривают два варианта значений
+$\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \neq 0$. В
+последнем случае без ограничения общности обычно полагают $\lambda_0 =
+1$.
+
+\begin{thm}[Условие регулярности]
+  Для выполнения неравенства $\lambda_0 \neq 0$ в условно-стационарной
+  точке $\hat{x}$ достаточно линейной независимости градиентов
+  активных в этой точке ограничений $g_k'(x), g_{k+1}'(x), \dotsc,
+  g_{k+l}'(x)$.
+\end{thm}
+
+Если удаётся показать, что во \emph{всех} допустимых точках задачи
+\eqref{eq:cond-optim-problem-form} выполнено условие регулярности,
+случай $\lambda_0=0$ можно исключить из рассмотрения. Для этого также
+удобно использовать следующую теорему.
+
 \begin{thm}[Условие Слейтера]
-  Для $\lambda_0 \neq 0$ достаточно существования такой точки
-  $\hat{x}$, в которой все неравенства ограничений выполняются строго:
-  $g_j(\hat{x})<0,\, j=\overline{1,m}$. В таком случае без ограничения
-  общности полагают $\lambda_0=1$.
+  Для $\lambda_0 \neq 0$ в условиях \ref{th:kuhn-tucker} достаточно
+  существования такой точки $\hat{x}$, в которой все неравенства
+  ограничений выполняются строго: $g_j(\hat{x})<0,\,
+  j=\overline{1,m}$.
 \end{thm}
 
 \begin{rem}
