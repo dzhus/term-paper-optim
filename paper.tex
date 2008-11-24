@@ -568,11 +568,11 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
   \begin{tikzpicture}
     \begin{axis}[
       x=2 cm, y=1 cm,
-      xmin=0, ymin=0,
+      xmin=0, ymin=0, xmax=2.5
       xlabel=$x_1$, ylabel=$x_2$,
       enlargelimits=0.05]
       \input{condextr-contours.tkz.tex}
-      \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2,2)};
+      \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
       \label{plot:boundaries}
       
       \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
@@ -580,8 +580,8 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
       \node[circle,fill=black,scale=0.5,label=above:$C$] at (axis cs:1,0) {};
     \end{axis}
   \end{tikzpicture}
-  \caption{Ограничения \ref{plot:boundaries}, линии уровня целевой
-    функции и условные экстремумы задачи
+  \caption{Границы $g_j(x)=0$ (\ref{plot:boundaries}), линии уровня
+    целевой функции $f(x)$ и условно-стационарные точки задачи
     \eqref{eq:cond-optim-problem}}
   \label{fig:cond-optim}
 \end{figure}
