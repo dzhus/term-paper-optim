@@ -11,7 +11,8 @@
 # variables: `F` (gnuplot-compliant definition of binary function),
 # `X_MIN`, `X_MAX`, `Y_MIN`, `Y_MAX`, `LEVELS` (an array containg a
 # set of numbers in ascending order each corresponding to one surface
-# level to be plotted), `ISOSAMPLES`.
+# level to be plotted), `ISOSAMPLES`. It may optionally set `PREAMBLE`
+# (gnuplot commands to be executed first) and `SAMPLES` variables.
 
 # Default values
 ISOSAMPLES=10
@@ -26,6 +27,7 @@ for l in ${LEVELS[@]}
 do
     CONTOURS="${CONTOURS}
 "$(m4 --define="__LEVEL"="${l}" \
+    --define="__PREAMBLE"="${PREAMBLE}" \
     --define="__NAME"="${NAME}" \
     --define="__X_MIN"="${X_MIN}" \
     --define="__X_MAX"="${X_MAX}" \
