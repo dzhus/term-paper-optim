@@ -27,7 +27,6 @@ for l in ${LEVELS[@]}
 do
     CONTOURS="${CONTOURS}
 "$(m4 --define="__LEVEL"="${l}" \
-    --define="__PREAMBLE"="${PREAMBLE}" \
     --define="__NAME"="${NAME}" \
     --define="__X_MIN"="${X_MIN}" \
     --define="__X_MAX"="${X_MAX}" \
@@ -37,6 +36,7 @@ do
 done
 
 m4 --define="__F"="${F}" \
+    --define="__PREAMBLE"="${PREAMBLE}" \
     --define="__ISOSAMPLES"="${ISOSAMPLES}" \
     --define="__SAMPLES"="${SAMPLES}" \
     --define="__CONTOURS"="${CONTOURS}" \
