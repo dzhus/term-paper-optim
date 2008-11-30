@@ -1,0 +1,16 @@
+PREAMBLE="
+h(x) = (sgn(x) + 1)/2
+g1(x,y) = 2*x-y-2
+g2(x,y) = -x
+g3(x,y) = -y
+t(x,y)=(x+4)**2+(y-4)**2"
+
+F="50*(g1(x,y)**2*h(g1(x,y))+g2(x,y)**2*h(g2(x,y))+g3(x,y)**2*h(g3(x,y)))+t(x,y)"
+
+X_MIN=-5
+X_MAX=5
+Y_MIN=-5
+Y_MAX=5
+
+LEVELS=(16 17 20 25 30 35 40 50 75 100 200 250 500 750 1000)
+ISOSAMPLES=50

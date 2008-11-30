@@ -8,7 +8,8 @@
 (provide deriv gradient hessian
          at-vector
          normalize-vector
-         normalize-matrix)
+         normalize-matrix
+         max-slice)
 
 (define dx 1e-6)
 
@@ -63,3 +64,6 @@
 
 (define (normalize-matrix m)
   (/ m (euclidean-norm m)))
+
+(define (max-slice g)
+  (lambda (h . x) (max 0 (apply g (append (list h) x)))))

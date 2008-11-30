@@ -3,7 +3,8 @@
 ;;; Test functions from «Applied Nonlinear Programming» by
 ;;; D. Himmelblau
 
-(require srfi/1)
+(require srfi/1
+         "shared.ss")
 
 (provide (rename-out [d:make-test-function make-test-function])
          test-function-name
@@ -93,4 +94,19 @@
        (+ (sqr (- (+ (sqr x1) x2) 11))
           (sqr (- (+ x1 (sqr x2)) 7))))
      '#(1 1)
-     '(#(3 2) #(3.58 -1.84) #(-3.78 -3.28) #(-2.81 3.13)) 0))))
+     '(#(3 2) #(3.58 -1.84) #(-3.78 -3.28) #(-2.81 3.13)) 0))
+   
+   (cons
+    "penalty"
+    (d:make-test-function
+     "(x₁+4)² + (x₂ - 4)² → min"
+     (let ((f (lambda (x1 x2) (+ (sqr (+ x1 4)) (sqr (- x2 4)))))
+           (g1 (lambda (x1 x2) (- (- (* 2 x1) x2) 2)))
+           (g2 (lambda (x1 x2) (- x1)))
+           (g3 (lambda (x1 x2) (- x2))))
+       (lambda (x y)
+         (+ (f x y) (* 50 (+ (sqr ((max-slice g1) x y))
+                             (sqr ((max-slice g2) x y))
+                             (sqr ((max-slice g3) x y)))))))
+     '#(-1 -1)
+     #(0 4) 16))))
