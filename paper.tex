@@ -19,6 +19,8 @@
 \renewcommand{\phi}{\varphi}
 \renewcommand{\leq}{\leqslant}
 \renewcommand{\geq}{\geqslant}
+\renewcommand{\nleq}{\nleqslant}
+\renewcommand{\ngeq}{\ngeqslant}
 \newcommand{\intl}{\int\limits}
 \newcommand{\suml}{\sum\limits}
 \usepackage{misccorr}
@@ -452,7 +454,6 @@ $M*=\frac{2}{h}$. Кроме того, в области значений $\lamb
     зависимости от выбора начальной точки}
   \label{fig:himmelblau}
 \end{figure}
-
 
 \clearpage
 \section{Условная оптимизация}
@@ -953,27 +954,27 @@ $g_j(x)$ линейны или линеаризованы (с помощью р�
   ограничений вида $x_i \geq 0$ и $J^k$ — для ограничений вида
   $\scalmult{a^j,x} \leq b_j$.
 \item Если $I^k=J^k = \varnothing$, то $d^k=-f'(x^k)$. В противном
-  случае для нахождения \emph{направления} шага в векторе $d^k$ каждую
-  $i$-ю координату представлют как $d^k_i$ для $i \in I^k$ и
-  $d^k_{i+}-d^k_{i-}$ для $i \notin I^k$, после чего решают следующую
-  задачу линейного программирования:
+  случае в векторе $d^k$ каждую $i$-ю координату
+  представляют\footnote{Верхние индексы опущены для компактности} как
+  $d_i$ для $i \in I^k$ и $d_{i+}-d_{i-}$ для $i \notin I^k$, после
+  чего решают следующую задачу линейного программирования:
   \begin{equation}
     \label{eq:zoutendijk-linprog}
     \begin{cases}
       \scalmult{f'(x^k), d^k} = 
-      \suml_{i\in I^k}{\pardiff{f(x^k)}{x_i}d_i^k} + 
-      \suml_{i \notin I^k}{\pardiff{f(x^k)}{x_i}(d^k_{i+}-d^k_{i-})}
+      \suml_{i\in I^k}{\pardiff{f(x^k)}{x_i}d_i} + 
+      \suml_{i \notin I^k}{\pardiff{f(x^k)}{x_i}(d_{i+}-d_{i-})}
       \to \min\\
       
       \scalmult{a^j, d^k} = 
-      \suml_{i\in I^k}{a^j_id_i^k} +
-      \suml_{i \notin I^k}{a^j_i(d^k_{i+}-d^k_{i-})} \leq 0,
+      \suml_{i\in I^k}{a^j_id_i} +
+      \suml_{i \notin I^k}{a^j_i(d_{i+}-d_{i-})} \leq 0,
       \, i\in J^k \\
       
-      \suml_{i=1}^n\abs{d_i^k} = \suml_{i\in I^k}{d_i^k}+\suml_{i
-        \notin I^k}{\left( d^k_{i+} + d^k_{i-}\right)} \leq 1\\
+      \suml_{i=1}^n\abs{d_i^k} = \suml_{i\in I^k}{d_i}+
+      \suml_{i \notin I^k}{\left( d_{i+} + d_{i-}\right)} \leq 1\\
       
-      d^k_{i+} \geq 0,\, d^k_{i-} \geq 0,\,d^k_{i+}\cdot d^k_{i-}=0,\, i\notin I^k
+      d_{i+} \geq 0,\, d_{i-} \geq 0,\,d_{i+}\cdot d_{i-}=0,\, i\notin I^k
     \end{cases}
   \end{equation}
 \item Если вектор $d^k$ — нулевой, то найдено точное решение (процесс
@@ -1008,7 +1009,7 @@ $g_j(x)$ линейны или линеаризованы (с помощью р�
     \begin{equation*}
       \scalmult{a^j, x^k+\bar{s}_j d^k} \leq b_j
     \end{equation*}
-    остаётся выполненным. Если $\scalmult{a^j, d^k} >0$, то
+    остаётся выполненным. Если $\scalmult{a^j, d^k} \leq 0$, то
     ограничение будет удовлетворено при любом шаге, поэтому $\bar{s}_j
     = +\infty$. В противном случае, $\bar{s}_j$ определяется как
     \begin{equation*}
