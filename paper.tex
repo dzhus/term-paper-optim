@@ -20,6 +20,7 @@
 \renewcommand{\leq}{\leqslant}
 \renewcommand{\geq}{\geqslant}
 \newcommand{\intl}{\int\limits}
+\newcommand{\suml}{\sum\limits}
 \usepackage{misccorr}
 
 % Bib in TOC
@@ -904,6 +905,125 @@ $\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \n
     \label{fig:cond-optim-zoom}
   \end{figure}
 \end{itemize}
+
+\clearpage
+\subsection{Метод возможных направлений Зойтендейка}
+\label{sec:zoutendijk}
+
+Метод возможных направлений представляет собой итерационный метод
+решения задачи \eqref{eq:cond-optim-problem-form} при линеаризации
+входящих в неё функций. Поиск начинается в допустимой точке
+пространства решений и продолжается по траектории, обеспечивающей
+улучшение значения целевой функции, но не выходящей за границы
+допустимой области.
+
+Пусть в \eqref{eq:cond-optim-problem-form} целевая функция $f(x)$ и
+функции ограничений $g_j(x)$ линеаризованы (с помощью разложения в ряд
+Тейлора) так, что получена следующая задача (рассматривается случай
+минимаизации):
+\begin{equation}
+  \label{eq:zoutendijk-problem-form}
+  \begin{cases}
+    f(x) \to \min \\
+    \scalmult{a^j,x} \leq b_j,\, j=\overline{1,m} \\
+    x_i \geq 0,\, i=\overline{1,n} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation}
+
+Теперь сформулируем алгоритм метода возможных направлений.
+
+Прежде всего отметим, что на каждом шаге очередное приближение к точке
+минимума находится по формуле
+\begin{equation}
+  \label{eq:zoutendijk-iter}
+  x^{k+1} = x^k + s_k \cdot d^k
+\end{equation}
+причём начальное приближение $x^0$ выбирается из числа точек,
+удовлетворяющих условиям \eqref{eq:zoutendijk-problem-form}.
+
+Кроме того, в начале каждого шага проверяется условие останова
+\begin{equation*}
+  \norm{f'(x^k)} < \epsilon
+\end{equation*}
+при удовлетворении которого процесс минимаизации прерывается.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{Шаг \arabic{enumi}.}}
+\item Определяются множества номеров активных ограничений $I^k$ — для
+  ограничений вида $x_i \geq 0$ и $J^k$ — для ограничений вида
+  $\scalmult{a^j,x} \leq b_j$.
+\item Если $I^k=J^k = \varnothing$, то $d^k=-f'(x^k)$. В противном
+  случае для нахождения \emph{направления} шага в векторе $d^k$ каждую
+  $i$-ю координату представлют как $d^k_i$ для $i \in I^k$ и
+  $d^k_{i+}-d^k_{i-}$ для $i \notin I^k$, после чего решают следующую
+  задачу линейного программирования:
+  \begin{equation}
+    \label{eq:zoutendijk-linprog}
+    \begin{cases}
+      \scalmult{f'(x^k), d^k} = 
+      \suml_{i\in I^k}{\pardiff{f(x^k)}{x_i}d_i^k} + 
+      \suml_{i \notin I^k}{\pardiff{f(x^k)}{x_i}(d^k_{i+}-d^k_{i-})}
+      \to \min\\
+      
+      \scalmult{a^j, d^k} = 
+      \suml_{i\in I^k}{a^j_id_i^k} +
+      \suml_{i \notin I^k}{a^j_i(d^k_{i+}-d^k_{i-})} \leq 0,
+      \, i\in J^k \\
+      
+      \suml_{i=1}^n\abs{d_i^k} = \suml_{i\in I^k}{d_i^k}+\suml_{i
+        \notin I^k}{\left( d^k_{i+} + d^k_{i-}\right)} \leq 1\\
+      
+      d^k_{i+} \geq 0,\, d^k_{i-} \geq 0,\,d^k_{i+}\cdot d^k_{i-}=0,\, i\notin I^k
+    \end{cases}
+  \end{equation}
+\item Если вектор $d^k$ — нулевой, то найдено точное решение (процесс
+  прерывается). В противном случае определяют величину шага 
+  \begin{equation}
+    \label{eq:zoutendijk-step}
+    s_k =
+    \min\{s_*,\hat{s}_1,\dotsc,\hat{s}_n,\bar{s}_1,\dotsc,\bar{s}_m\}
+  \end{equation}
+  где компоненты под $\min$ находятся по следующим правилам:
+  \begin{itemize}
+  \item $s_*$ — решение задачи безусловной одномерной оптимизации
+    \begin{equation*} 
+      f(x^k+s_* \cdot d^k) \to \min
+    \end{equation*}
+
+  \item $\hat{s}_i$ — наибольший шаг, при котором ограничение
+    \begin{equation*}
+      x^k+\hat{s}_i d^k_i \geq 0
+    \end{equation*}
+    остаётся удовлетворённым. Если компонента найденного вектора
+    направления $d^k_i \geq 0$, то $\hat{s}_i = +\infty$ (так что
+    соответствующая компонента $\hat{s}_j$ согласно
+    \eqref{eq:zoutendijk-step} никак не ограничивает выбор $s_k$),
+    иначе
+    \begin{equation*}
+      \hat{s}_i = -\frac{x^k_i}{d^k_i}
+    \end{equation*}
+
+  \item $\bar{s}_j$ — наибольший шаг, при котором при движении из
+    $x^k$ по направлению $d_k$ ограничение
+    \begin{equation*}
+      \scalmult{a^j, x^k+\bar{s}_j d^k} \leq b_j
+    \end{equation*}
+    остаётся выполненным. Если $\scalmult{a^j, d^k} >0$, то
+    ограничение будет удовлетворено при любом шаге, поэтому $\bar{s}_j
+    = +\infty$. В противном случае, $\bar{s}_j$ определяется как
+    \begin{equation*}
+      \bar{s}_j = \frac{b_j-\scalmult{a^j, x^k}}{\scalmult{a^j, d^k}}
+    \end{equation*}
+  \end{itemize}
+  Отметим, что $s_k>0$.
+\item С учётом шага $s_k$ и направления $d^k$ согласно
+  \eqref{eq:zoutendijk-iter} полагают новое приближение равным
+  \begin{equation*}
+    x^{k+1} = x^k + s_k \cdot d^k
+  \end{equation*}
+  и переходят к следующей итерации.
+\end{enumerate}
 
 \clearpage
 \subsection{Метод штрафных функций}
