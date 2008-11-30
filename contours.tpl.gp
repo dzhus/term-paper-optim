@@ -1,3 +1,4 @@
+__PREAMBLE
 f(x, y) = __F
 
 set contour
