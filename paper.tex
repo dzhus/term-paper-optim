@@ -242,9 +242,10 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 \subsubsection{Общая схема градиентных методов}
 
 Рассмотрим задачу безусловной минимизации:
-\begin{equation*}
+\begin{equation}
+  \eqref{eq:optim-problem-form}
   f(x) \to \min,\quad x \in \set{R}^n,\, J \in C^2(\set{R}^n)
-\end{equation*}
+\end{equation}
 
 \begin{dfn}
   \neword{Градиентными} называются итерационные методы оптимизации со
@@ -363,6 +364,91 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 $M*=\frac{2}{h}$. Кроме того, в области значений $\lambda$, близких к
 нулю или $M*$, согласно \eqref{eq:relax-speed} скорость релаксации
 сильно снижается.
+
+\subsection{Описание метода}
+
+\subsubsection{Использование полиномов Чебышёва\\
+  в функции релаксации}
+
+Рассмотрим смещённые полиномы Чебышёва второго рода, которые
+определяются согласно рекуррентному соотношению:
+\begin{align*}
+  \label{eq:chebyshev}
+  P_0(\lambda) &= 0 \\
+  P_1(\lambda) &= 1 \\
+  P_k(\lambda) &= 2(1-2\lambda)P_{k-1}(\lambda) - P_{k-2}(\lambda),\, k
+  \geq 2
+\end{align*}
+
+Функциональная последовательность таких полиномов обладает важным
+свойством, а именно: при $s\to\infty$, $\frac{P_s(\lambda)}{s}$
+равномерно стремится к нулю на $(0;1)$.
+
+Предположим, что собственные числа матрицы Гессе целевой функции
+$f(x)$ задачи \eqref{eq:optim-problem-form} в положительной области
+спектра не превосходят 1 (для этого достаточно в рассмотрении считать
+градиент и матрицу Гессе нормированными). Тогда использование
+следующей функции в качестве релаксационной:
+\begin{equation}
+  \label{eq:cheb-relax}
+  R_s(\lambda) = \frac{P_s(\lambda)}{s}
+\end{equation}
+позволяет обеспечить, согласно \eqref{eq:relax-speed}, сколь угодно
+быструю релаксацию. На иллюстрации \ref{fig:cheb-relax} приведены
+графики функции $R_s(\lambda)$ вблизи $[0;1]$ для нескольких значений
+$s$.
+
+\input{cheb-relax.tkz}
+
+Уже при $s=8$ значение $R_s(\lambda)$ не превосходит по модулю $0.23$
+на отрезке $[0.025; 0.975]$, обеспечивая хорошее подавление слагаемых
+\eqref{eq:relax-speed}, соответствующих большому диапазону
+положительных собственных чисел.
+
+При этом стремление $R_s(\lambda)$ к $+\infty$ в
+отрицательной части спектра также соответствует требованиям к хорошей
+функции релаксации.
+
+\subsubsection{Реализация метода}
+Согласно \eqref{eq:relax-fun}, выбранной функции релаксации
+соответствует зависимость
+\begin{equation*}
+  H(\lambda) = \frac{1-\frac{P_s(\lambda)}{s}}{\lambda}
+\end{equation*}
+откуда с учётом \eqref{eq:chebyshev} получим следующие рекуррентные
+соотношения уже для функции $H(\lambda)$:
+\begin{equation}
+  \label{eq:cheb-scalarfun}
+  \begin{aligned}
+    H_1 &= 0 \\
+    H_2 &= 2 \\
+    H_{s+1} \mul (s+1) &= 2s\mul(1-2\lambda)\mul H_s-(s-1)\mul
+    H_{s-1}+4s
+  \end{aligned}
+\end{equation}
+где $s$ — параметр метода, равный степени используемых полиномов
+Чебышёва. Соображения по выбору $s$ приведены ниже.
+
+Подстановка полученного соотношения \eqref{eq:cheb-scalarfun}
+в \eqref{eq:grad-methods} даёт следующую рабочую форумулу
+\begin{multline}
+  x^{k+1} = x^k - H_{s+1}g_k =\\=
+  x^k-\frac{2s}{s+1}(E-2G_k)H_sg_k+\frac{s-1}{s+1}H_{s-1}g_k-\frac{4s}{s+1}g_k
+\end{multline}
+
+Таким образом, вектор смещения $d_{s+1} = x^{k+1} - x^k$ при выбранном
+значении параметра $s$ на каждом шаге $k$ вычисляется по следующей
+рекуррентной формуле:
+\begin{equation}
+  \label{eq:cheb-workhorse}
+  \begin{aligned}
+    d_1 &= 0\\
+    d_2 &= -2g_k \\
+    d_{s+1} &=
+    \frac{2s}{s+1}(E-2G_k)d_{s}-\frac{s-1}{s+1}d_{s-1}-\frac{4s}{s+1}g_k
+  \end{aligned}
+\end{equation}
+
 
 \clearpage
 \subsection{Примеры работы}
@@ -1421,7 +1507,6 @@ $p_0$ использование итерационного процесса \eq
     $p=50$ и различном выборе начальной точки}
   \label{fig:penalty}
 \end{figure}
-\pgfplotsset{every axis/.style={enlargelimits=0.05}}
 
 \clearpage
 \appendix
