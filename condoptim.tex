@@ -1,0 +1,962 @@
+\section{Условная оптимизация}
+
+\subsection{Использование теоремы Куна—Таккера}
+\label{sec:kuhn-tucker}
+
+\subsubsection{Теоретические сведения}
+
+Сформулируем без доказательства ряд условий, которые используются при
+решении задач условной оптимизации нелинейных функционалов. 
+
+Рассмотрим следующую задачу на поиск экстремума целевой функции $f(x)$
+в области $D$, заданной ограничениями типа неравенств:
+\begin{equation}
+  \label{eq:cond-optim-problem-form}
+  \begin{cases}
+    f(x) \to \extr \\
+    g_j(x) \leq 0,\, j=\overline{1,m} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation}
+
+\begin{dfn} \neword{Функцией Лагранжа} задачи
+  \eqref{eq:cond-optim-problem-form} называют функцию
+  \begin{equation}
+    \label{eq:lagrange-form}
+    \La(x, \lambda_0, \lambda) = \lambda_0 f(x) + \sum_{j=1}^m {\lambda_j g_j(x)}
+  \end{equation}
+  где $\lambda$ — вектор $\lambda_1, \dotsc, \lambda_m$. При
+  $\lambda_0=1$ функция Лагранжа называется \neword{классической}.
+\end{dfn}
+
+\begin{dfn}
+  \label{dfn:regular}
+  Точка $\hat{x}$, являющаяся решением задачи
+  \eqref{eq:cond-optim-problem-form} с функцией Лагранжа
+  \eqref{eq:lagrange-form} при $\lambda_0 \neq 0$, называется
+  \neword{регулярным экстремумом}, а при $\lambda_0 = 0$ —
+  \neword{нерегулярным}.
+\end{dfn}
+
+\begin{thm}[Куна—Таккера]
+  \label{th:kuhn-tucker}
+  Пусть точка $\hat{x}$ является решением задачи
+  \eqref{eq:cond-optim-problem-form} с функцией Лагранжа
+  \eqref{eq:lagrange-form} при соответствующих $\lambda_0$ и
+  $\lambda$. Тогда выполнены следующие условия:
+  \begin{enumerate}
+    \renewcommand{\labelenumi}{\emph{\asbuk{enumi})}}
+  \item $\pardiff{\La}{x_i}=0,\, i=\overline{1,n}$ (условие
+    стационарности функции Лагранжа)
+  \item $\lambda_j \geq 0,\, j=\overline{1,m}$, если $\hat{x}$ — точка
+    минимума, и $\lambda_j \leq 0$, если это точка максимума.
+  \item $\lambda_j \mul g_j(x) = 0,\, j=\overline{1,m}$ (условие
+    дополняющей нежёсткости)
+  \item $g_j(x) \leq 0,\, j=\overline{1,m}$
+  \item $\lambda_0^2 + \norm{\lambda}^2 > 0$ (условие нетривиальности решения)
+  \end{enumerate}
+\end{thm}
+
+\begin{dfn}
+  Точка $x^*$, удовлетворяющая условиям теоремы \ref{th:kuhn-tucker},
+  называется \neword{условно-стационарной}.
+\end{dfn}
+
+Аналогично определению \ref{dfn:regular} введём схожее и для
+условно-стационарных точек.
+\begin{dfn}
+  Условно-стационарную точку $x^*$, для которой условия
+  \ref{th:kuhn-tucker} выполнены при $\lambda ≠ 0$, будем называть
+  \neword{регулярной} условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}.
+\end{dfn}
+
+При использовании условий \ref{th:kuhn-tucker} для поиска
+условно-стационарных точек рассматривают два варианта значений
+$\lambda_0$ в функции Лагранажа: $\lambda_0=0$ и $\lambda_0 \neq 0$. В
+последнем случае без ограничения общности обычно полагают $\lambda_0 =
+1$.
+
+\begin{thm}[Условие регулярности]
+  Для того, чтобы в условно-стационарной точке $x^*$ выполнялось
+  неравенство $\lambda_0 \neq 0$, достаточно линейной независимости
+  градиентов активных в этой точке ограничений $g_k'(x^*),
+  g_{k+1}'(x^*), \dotsc, g_{k+l}'(x^*)$.
+\end{thm}
+
+Если удаётся показать, что во \emph{всех} допустимых точках задачи
+\eqref{eq:cond-optim-problem-form} выполнено условие регулярности,
+случай $\lambda_0=0$ можно исключить из рассмотрения. Для этого также
+удобно использовать следующее условие.
+
+\begin{thm}[Условие Слейтера]
+  \label{th:slater}
+  Для $\lambda_0 \neq 0$ в условиях \ref{th:kuhn-tucker} достаточно
+  существования такой точки $x_s$, в которой все неравенства
+  ограничений выполняются строго: $g_j(x_s)<0, \, j=\overline{1,m}$.
+\end{thm}
+
+Приведём замечание, которое говорит об условиях \emph{достаточности}
+условий теоремы \ref{th:kuhn-tucker}.
+
+\begin{rem}
+  \label{rem:kt-cond}
+  Для точек минимума необходимые условия Куна—Таккера становятся
+  достаточными в случае, когда целевая функция $f(x)$ и ограниченное
+  неравенствами $g_j(x)$ множество \emph{выпуклы}.
+
+  В случае точек максимума достаточность достигается при
+  \emph{вогнутости} функции $f(x)$ и \emph{выпуклости} множества
+  допустимых решений задачи.
+\end{rem}
+
+Может оказаться, что наличие в определённой точке экстремума не
+удаётся доказать, опираясь лишь на теорему \ref{th:kuhn-tucker} и
+замечание \ref{rem:kt-cond}. В таком случае задачу исследуют с
+применением условий высших порядков, которые приведены далее.
+
+В следующих теоремах используются полные дифференциалы функции
+Лагранжа $d^2\La$ и ограничений $dg_j$, определяемые следующим
+образом:
+\begin{align*}
+  d^2\La &= \sum_{p=1}^n\sum_{r=1}^n{\dpardiff{\La}{x_p}{x_r}\,dx_pdx_r} \\
+  dg_j &= \sum_{p=1}^n{\pardiff{g_j}{x_p}\,dx_p}
+\end{align*}
+
+\begin{thm}[Необходимое условие экстремума второго порядка]
+  \label{th:if-extr-2}
+  Пусть точка $\hat{x}$ — регулярный экстремум в задаче
+  \eqref{eq:cond-optim-problem-form}, удовлетворяющий условиям теоремы
+  \ref{th:kuhn-tucker} при соответствующем $\lambda$. Тогда
+  \begin{align*}
+    d^2\La(\hat{x}) &\geq 0 \qquad \text{для минимума} \\
+    d^2\La(\hat{x}) &\leq 0 \qquad \text{для максимума}
+  \end{align*}
+  при $dx ≠ 0$ таких, что
+  \begin{align*}
+    dg_j(\hat{x}) &= 0 \qquad \forall j: \lambda_j ≠ 0\\
+    dg_j(\hat{x}) &\leq 0 \qquad \forall j: \lambda_j=0
+  \end{align*}
+\end{thm}
+
+\begin{thm}[Достаточное условие экстремума первого порядка]
+  \label{th:then-extr-1}
+  Пусть $x^*$ является регулярной условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}, а число активных в $x^*$
+  ограничений равно числу переменных $n$. Тогда для наличия в $x^*$
+  регулярного экстремума достаточно выполнения одного из следующих
+  наборов неравенств при $\forall j: g_j(\hat{x}) = 0$:
+  \begin{align*}
+    \lambda_j &> 0 \qquad \text{для минимума} \\
+    \lambda_j &< 0 \qquad \text{для максимума}
+  \end{align*}
+\end{thm}
+
+\begin{thm}[Достаточное условие экстремума второго порядка]
+  \label{th:then-extr-2}
+  Пусть $x^*$ является регулярной условно-стационарной точкой задачи
+  \eqref{eq:cond-optim-problem-form}. Если при $dx ≠ 0$ таких, что
+    \begin{align*}
+    dg_j(x^*) &= 0 \qquad \forall j: \lambda_j ≠ 0\\
+    dg_j(x^*) &\leq 0 \qquad \forall j: \lambda_j=0
+  \end{align*}
+  выполняется неравенство $d^2\La(x^*) ≠ 0$, то $x^*$ — точка
+  регулярного экстремума, причём
+  \begin{align*}
+    d^2\La(x^*) &> 0 \qquad \text{для минимума} \\
+    d^2\La(x^*) &< 0 \qquad \text{для максимума}
+  \end{align*}
+\end{thm}
+
+\clearpage
+\subsubsection{Нахождение точного аналитического решения}
+
+Рассмотрим методику применения изложенных в предыдущем разделе
+теоретических соображений на практическом примере.
+
+Требуется решить следующую задачу:
+\begin{equation}
+  \label{eq:cond-optim-problem-raw}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    2x_1 - x_2 \leq 2 \\
+    x_1 \geq 0 \\
+    x_2 \geq 0
+  \end{cases}
+\end{equation}
+
+После приведения к каноническому виду она примет вид
+\begin{equation}
+  \label{eq:cond-optim-problem}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    g_1(x) = 2x_1 - x_2 - 2 \leq 0 \\
+    g_2(x) = -x_1 \leq 0 \\
+    g_3(x) = -x_2 \leq 0
+  \end{cases}
+\end{equation}
+
+Заметим, что выполняется условие Слейтера \ref{th:slater}, так как в
+качестве соответствующей точки $x_s$ можно взять, например, точку $(1,
+1)$. Значит, в данной задаче достаточно рассмотреть лишь случай
+классической функции Лагранжа с $\lambda_0=1$.
+
+Составим функцию Лагранжа:
+\begin{multline}
+  \label{eq:lagrange}
+  \La(x, \lambda) = (x_1+4)^2 + (x_2-4)^2 +\\
+  + \lambda_1(2x_1-x_2-2)+\lambda_2(-x_1)+\lambda_3(-x_2)
+\end{multline}
+
+Запишем необходимые условия стационарности точки $x^*$ при
+соответствующем векторе $\lambda$:
+\begin{subequations}
+  \renewcommand{\theequation}{\theparentequation\asbuk{equation}}
+  \label{eq:kkt-conditions}
+  \begin{equation}
+    \label{eq:cond-stationary}
+    \begin{cases}
+      \pardiff{\La}{x_1} = 2(x^*_1+4)+2\lambda_1-\lambda_2=0\\
+      \pardiff{\La}{x_2} = 2(x^*_2-4)-\lambda_1-\lambda_3=0
+    \end{cases}
+  \end{equation}
+  \begin{equation}
+    \label{eq:cond-sign}
+    \sgn(\lambda_1) = \sgn(\lambda_2) = \sgn(\lambda_3)
+  \end{equation}
+  \begin{equation}
+    \label{eq:cond-slackness}
+    \begin{cases}
+      \lambda_1\mul g_1(x^*) = \lambda_1\mul (2x^*_1-x^*_2-2) = 0\\
+      \lambda_2\mul g_2(x^*) = \lambda_2\mul (-x^*_1) = 0\\
+      \lambda_3\mul g_3(x^*) = \lambda_3\mul (-x^*_2) = 0
+    \end{cases}
+  \end{equation}
+  \begin{equation}
+    \begin{cases}
+      \label{eq:cond-feasible}
+      g_1(x^*) = 2x^*_1 - x^*_2 - 2 \leq 0 \\
+      g_2(x^*) = -x^*_1 \leq 0 \\
+      g_3(x^*) = -x^*_2 \leq 0
+    \end{cases}
+  \end{equation}
+\end{subequations}
+
+Рассмотрим $2³=8$ вариантов удовлетворения условий дополняющей
+нежёсткости \eqref{eq:cond-slackness}.
+
+\begin{enumerate}
+\renewcommand{\labelenumi}{\Roman{enumi})}
+\renewcommand{\labelenumiii}{\arabic{enumiii})}
+
+\item $\lambda_1 = 0$
+  
+  В этом случае уравнения \eqref{eq:cond-stationary} принимают вид:
+  \begin{equation}
+    \label{eq:cond-stationary-l1=0}
+    \begin{cases}
+      2x^*_1+8-\lambda_2=0\\
+      2x^*_2-8-\lambda_3=0
+    \end{cases}
+  \end{equation}
+  \begin{enumerate}
+  \item $\lambda_2 = 0$
+
+    Из \eqref{eq:cond-stationary-l1=0} имеем $2x^*_1+8=0 \iff
+    x^*_1=-4$, что не удовлетворяет условию $g_2(x^*) = -x^*_1 \leq 0$
+    из \eqref{eq:cond-feasible}.
+  \item $\lambda_2 ≠ 0$
+    
+    В этом случае из \eqref{eq:cond-slackness} следует, что
+    $g_2(x^*)=0 \iff x^*_1 = 0$, откуда согласно
+    \eqref{eq:cond-stationary-l1=0} получаем $\lambda_2=8$.
+    \begin{enumerate}
+    \item $\lambda_3 = 0$
+      
+      Из \eqref{eq:cond-stationary-l1=0} следует $x^*_2=4$. Получаем
+      точку $A = (0, 4)$.
+    \item $\lambda_3 ≠ 0$
+
+      В данном случае согласно \eqref{eq:cond-slackness} находим
+      $x^*_2=0$, поэтому из \eqref{eq:cond-stationary-l1=0} следует, что
+      $\lambda_3=-8$. С учётом $\lambda_2=8$ заметим, что не
+      выполняются условия \eqref{eq:cond-sign}.
+    \end{enumerate}
+  \end{enumerate}
+\item $\lambda_1 ≠ 0$ 
+
+  Согласно условию \eqref{eq:cond-slackness}, в
+  данном случае
+  \begin{equation}
+    \label{eq:cond-slackness-l1n=0}
+    2x^*_1-x^*_2-2=0
+  \end{equation}
+  \begin{enumerate}
+  \item $\lambda_2 = 0$
+
+    Из \eqref{eq:cond-stationary} получим
+    \begin{equation}
+      \label{eq:cond-stationary-l2=0}
+      2x^*_1+8+2\lambda_1=0
+    \end{equation}
+    \begin{enumerate}
+    \item $\lambda_3 = 0$
+
+      Второе уравнение системы \eqref{eq:cond-stationary} даёт
+      $2x^*_2-8-\lambda_1=0$. Сложим это уравнение с
+      \eqref{eq:cond-stationary-l2=0} и рассмотрим его вместе с
+      \eqref{eq:cond-slackness-l1n=0}, получив
+      \begin{equation}
+        \begin{cases}
+          2x^*_1+4x^*_2-8=0\\
+          2x^*_1-x^*_2-2=0
+        \end{cases}
+      \end{equation}
+      
+      Таким образом получим $4x^*_2-8=-x^*_2-2 \iff x^*_2=\frac{6}{5}$.
+
+      Значение $x^*_1=\frac{8}{5}$ определяется из
+      \eqref{eq:cond-slackness-l1n=0}. После этого из уравнения
+      \eqref{eq:cond-stationary-l2=0} найдём значение $\lambda_1 =
+      -\frac{28}{5}$. Итак, получена ещё одна точка $B =
+      \left(\frac{8}{5}, \frac{6}{5}\right)$.
+    \item $\lambda_3 ≠ 0$
+
+      Согласно \eqref{eq:cond-slackness}, в данном случае $x^*_2=0$,
+      поэтому из \eqref{eq:cond-slackness-l1n=0} следует $x^*_1=1$.
+      Тогда из \eqref{eq:cond-stationary-l2=0} определим $\lambda_1 =
+      -5$. Подставив найденные значения $x_2*$ и $\lambda_1$ в
+      \eqref{eq:cond-stationary}, получим $\lambda_3 = -3$. Найдена
+      очередная точка $C=(1, 0)$.
+    \end{enumerate}
+  \item $\lambda_2 ≠ 0$
+
+    Из \eqref{eq:cond-slackness} получаем $x^*_1=0$, откуда с учётом
+    \eqref{eq:cond-slackness-l1n=0} следует значение $x^*_2=-2$, не
+    удовлетворяющее условию $g_3(x^*) = -x^*_2 \leq 0$ из
+    \eqref{eq:cond-feasible}.
+  \end{enumerate}
+\end{enumerate}
+
+Итак, найдены три точки, для которых выполнены необходимые условия
+теоремы \ref{th:kuhn-tucker}. Тип возможного экстремума определяется
+согласно знаку компонент $\lambda$.
+\begin{itemize}
+\item $A = (0, 4),\, \lambda=(0, 8, 0)$, минимум
+\item $B = (\frac{8}{5}, \frac{6}{5}),\, \lambda=(-\frac{28}{5}, 0,
+  0)$, максимум
+\item $C = (1, 0),\, \lambda=(-5, 0, -3)$, максимум
+\end{itemize}
+
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      x=2.4 cm, y=1.3 cm,
+      xmin=0, ymin=0, xmax=2.5,
+      xlabel=$x_1$, ylabel=$x_2$,
+      enlargelimits=0.05]
+      \input{condextr-contours.tkz.tex}
+      \addplot[very thick, red!50!black] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
+      \label{plot:boundaries}
+      
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
+      \node[circle,fill=black,scale=0.5,label=below right:$B$] at (axis cs:1.6,1.2) {};
+      \node[circle,fill=black,scale=0.5,label=right:$C$] at (axis cs:1,0) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Границы $g_j(x)=0$, линии уровня
+    целевой функции $f(x)$ и условно-стационарные точки задачи
+    \eqref{eq:cond-optim-problem}}
+  \label{fig:cond-optim}
+\end{figure}
+
+Согласно замечанию \ref{rem:kt-cond}, поскольку и целевая функция
+(поскольку её матрица Гессе $\left( \begin{smallmatrix}2 & 0 \\ 0 &
+    2\end{smallmatrix} \right)$ положительно определена), и
+рассматриваемое множество (см. рис. \ref{fig:cond-optim}) обладают
+свойством выпуклости, для точки $A$ условия Куна—Таккера являются
+\emph{достаточными}, и она является точкой \emph{локального минимума}.
+Линии уровня функции $f(x)$, сходящиеся к $A$ на рисунке
+\ref{fig:cond-optim}, служат дополнительным подтверждением этому.
+
+В то же время, для $B$ и $C$ условия Куна—Таккера не являются
+достаточными. Воспользуемся для их исследования условиями высших
+порядков.
+
+Второй дифференциал $d^2\La$ во всех точках одинаковый и имеет вид
+\begin{equation}
+  \label{eq:la-diff}
+  d^2\La = 2dx_1^2 + 2 dx_2^2
+\end{equation}
+
+\begin{itemize}
+\item $B = (\frac{8}{5}, \frac{6}{5})$
+
+  В данной точке активно лишь ограничение $g_1$, так что
+  воспользоваться достаточным условием первого порядка нельзя.
+  Проверим необходимое условие второго порядка. Приравнивая к нулю
+  дифференциал $dg_1$ активного ограничения и выбирая дифференциалы
+  неактивных ограничений неположительными, получим
+  \begin{align*}
+    dg_1 &= 2dx_1-dx_2 = 0 \iff dx_2 = 2dx_1 \\
+    dg_2 &= -dx_1 \leq 0 \\
+    dg_3 &= -dx_2 \leq 0
+  \end{align*}
+  и с учётом этого рассмотрим \eqref{eq:la-diff} при условии $dx≠0$:
+  \begin{equation*}
+    d^2\La = 2dx_1^2 + 8dx_1^2 = 10dx_1^2
+  \end{equation*}
+  
+  Полученная форма очевидно больше нуля. Поскольку в $B$ значения
+  $\lambda < 0$, необходимое условие второго порядка теоремы
+  \ref{th:if-extr-2} не выполняется, так что $B$ \emph{не} является
+  точкой экстремума.
+
+\item $C = (1, 0)$
+
+  Активными являются ограничения $g_1$ и $g_3$, их количество равно
+  числу переменных $n=2$, поэтому согласно теореме
+  \ref{th:then-extr-1} выполняется достаточное условие экстремума
+  первого порядка, и $C$ есть точка \emph{локального максимума}.
+
+  Действительно, из рисунка \ref{fig:cond-optim-zoom} видно, что любое
+  допустимое перемещение из точки $C$ приводит к переходу с линии
+  уровня $f(C)=41$ на линии меньших уровней. Вектор градиента $f'(C) =
+  \left(\begin{smallmatrix}\phantom{-}5\\-4\end{smallmatrix}\right)$ в
+  данной точке образует с границами области тупые углы, так что
+  возможные направления, вдоль которых функция растёт быстрее всего,
+  будут направлениями убывания.
+  
+  \begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[grid=both,x=15cm,y=15cm,
+        xlabel=$x_1$, ylabel=$x_2$,
+        enlargelimits=0.05]
+        \input{condextr_zoom-contours.tkz.tex}
+        
+        \coordinate (C) at (axis cs:1,0);
+
+        \draw[blue,thick,arrows=-triangle 45] (C) -- (axis cs:1.09375,-0.075);
+        \addplot[very thick, red!50!black] coordinates{(0.85,0) (1,0) (1.1,0.2)};
+        \node[circle,fill=black,scale=0.5,label=below:$C$] at (C) {};
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Направление вектора градиента $f'(C)$, линии уровня
+      функции $f(x) = (x_1+4)^2+(x_2-4)^2$ и границы $g_j(x)=0$ вблизи
+      точки $C$}
+    \label{fig:cond-optim-zoom}
+  \end{figure}
+\end{itemize}
+
+\clearpage
+\subsection{Метод возможных направлений Зойтендейка}
+\label{sec:zoutendijk}
+
+Метод возможных направлений представляет собой итерационный метод
+решения задачи \eqref{eq:cond-optim-problem-form} при линейных
+ограничений. Поиск начинается в допустимой точке пространства решений
+и продолжается по траектории, обеспечивающей улучшение значения
+целевой функции, но не выходящей за границы допустимой области.
+
+Пусть в \eqref{eq:cond-optim-problem-form} функции ограничений
+$g_j(x)$ линейны или линеаризованы (с помощью разложения в ряд
+Тейлора) так, что получена следующая задача (рассматривается случай
+минимаизации):
+\begin{equation}
+  \label{eq:zoutendijk-problem-form}
+  \begin{cases}
+    f(x) \to \min \\
+    \scalmult{a^j,x} \leq b_j,\, j=\overline{1,m} \\
+    x_i \geq 0,\, i=\overline{1,n} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation}
+
+Теперь сформулируем алгоритм метода возможных направлений.
+
+Прежде всего отметим, что на каждом шаге очередное приближение к точке
+минимума находится по формуле
+\begin{equation}
+  \label{eq:zoutendijk-iter}
+  x^{k+1} = x^k + s_k \mul d^k
+\end{equation}
+причём начальное приближение $x^1$ выбирается из числа точек,
+удовлетворяющих условиям \eqref{eq:zoutendijk-problem-form}.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{Шаг \arabic{enumi}.}}
+\item Определяются множества номеров активных ограничений $I^k$ — для
+  ограничений вида $x_i \geq 0$ и $J^k$ — для ограничений вида
+  $\scalmult{a^j,x} \leq b_j$.
+\item Если $I^k=J^k = \varnothing$, то $d^k=-f'(x^k)$. В противном
+  случае в векторе $d^k$ каждую $i$-ю координату
+  представляют\footnote{Верхние индексы опущены для компактности} как
+  $d_i$ для $i \in I^k$ и $d_{i+}-d_{i-}$ для $i \notin I^k$, после
+  чего решают следующую задачу линейного программирования:
+  \begin{equation}
+    \label{eq:zoutendijk-linprog}
+    \begin{cases}
+      \scalmult{f'(x^k), d^k} = 
+      \suml_{i\in I^k}{\pardiff{f(x^k)}{x_i}d_i} + 
+      \suml_{i \notin I^k}{\pardiff{f(x^k)}{x_i}(d_{i+}-d_{i-})}
+      \to \min\\
+      
+      \scalmult{a^j, d^k} = 
+      \suml_{i\in I^k}{a^j_id_i} +
+      \suml_{i \notin I^k}{a^j_i(d_{i+}-d_{i-})} \leq 0,
+      \, i\in J^k \\
+      
+      \suml_{i=1}^n\abs{d_i^k} = \suml_{i\in I^k}{d_i}+
+      \suml_{i \notin I^k}{\left( d_{i+} + d_{i-}\right)} \leq 1\\
+      
+      d_{i+} \geq 0,\, d_{i-} \geq 0,\,d_{i+}\mul d_{i-}=0,\, i\notin I^k
+    \end{cases}
+  \end{equation}
+\item Если выполняется условие
+  \begin{equation}
+    \label{eq:zoutendijk-halt}
+    \scalmult{f'(x^k), d^k} = 0
+  \end{equation}
+  то дальнейшее улучшение решения невозможно и процесс прерывается.
+
+  В противном случае определяют величину шага
+  \begin{equation}
+    \label{eq:zoutendijk-step}
+    s_k =
+    \min\{s_*,\hat{s}_1,\dotsc,\hat{s}_n,\bar{s}_1,\dotsc,\bar{s}_m\}
+  \end{equation}
+  где компоненты под $\min$ находятся по следующим правилам:
+  \begin{itemize}
+  \item $s_*$ — решение задачи безусловной одномерной оптимизации
+    \begin{equation*} 
+      f(x^k+s_* \mul d^k) \to \min
+    \end{equation*}
+
+  \item $\hat{s}_i$ — наибольший шаг, при котором ограничение
+    \begin{equation*}
+      x^k+\hat{s}_i d^k_i \geq 0
+    \end{equation*}
+    остаётся удовлетворённым. Если компонента найденного вектора
+    направления $d^k_i \geq 0$, то $\hat{s}_i = +\infty$ (так что
+    соответствующая компонента $\hat{s}_j$ согласно
+    \eqref{eq:zoutendijk-step} никак не ограничивает выбор $s_k$),
+    иначе
+    \begin{equation*}
+      \hat{s}_i = -\frac{x^k_i}{d^k_i}
+    \end{equation*}
+
+  \item $\bar{s}_j$ — наибольший шаг, при котором при движении из
+    $x^k$ по направлению $d_k$ ограничение
+    \begin{equation*}
+      \scalmult{a^j, x^k+\bar{s}_j d^k} \leq b_j
+    \end{equation*}
+    остаётся выполненным. Если $\scalmult{a^j, d^k} \leq 0$, то
+    ограничение будет удовлетворено при любом шаге, поэтому $\bar{s}_j
+    = +\infty$. В противном случае, $\bar{s}_j$ определяется как
+    \begin{equation*}
+      \bar{s}_j = \frac{b_j-\scalmult{a^j, x^k}}{\scalmult{a^j, d^k}}
+    \end{equation*}
+  \end{itemize}
+  Отметим, что $s_k>0$.
+\item С учётом шага $s_k$ и направления $d^k$ согласно
+  \eqref{eq:zoutendijk-iter} полагают новое приближение равным
+  \begin{equation*}
+    x^{k+1} = x^k + s_k \mul d^k
+  \end{equation*}
+  и переходят к следующей итерации.
+\end{enumerate}
+
+Таким образом, критерием останова процесса оптимизации $k$-й итерации
+является выполнение равенства \eqref{eq:zoutendijk-halt}, что
+равносильно невозможности дальнейшего уменьшения значения целевой
+функции при заданных ограничениях.
+
+\subsubsection{Применение метода Зойтендейка}
+
+Рассмотрим работу метода возможных направлений на примере задачи
+\eqref{eq:cond-optim-problem-raw}. Будем искать точку минимума.
+Ограничения уже линейны, поэтому дополнительная линеаризация не
+требуется. Задача уже приведена к виду
+\eqref{eq:zoutendijk-problem-form}:
+\begin{equation}
+  \label{eq:zoutendijk-problem}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \min \\
+    2x_1-x_2 \leq 2 \\
+    x_1 \geq 0 \\
+    x_2 \geq 0
+  \end{cases}
+\end{equation}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{Итерация \arabic{enumi}.}}
+  \renewcommand{\labelenumii}{\textbf{Шаг \arabic{enumii}.}}
+\item
+  В качестве первого приближения $x^1$ возьмём точку $(1, 1)$, очевидно
+  удовлетворяющую всем ограничениям.
+  \begin{enumerate}
+  \item Ни одно из ограничений не активно в данной точке, поэтому
+    множества $I^k = J^k = \varnothing$.
+  \item Направление движения определим как противоположное вектору
+    градиента:
+    \begin{equation*}
+      d^1 = -f(x^1) = \begin{pmatrix} -10 \\ \phantom{-}6 \end{pmatrix}
+    \end{equation*}
+  \item Определим коэффициенты $s_*, \hat{s}_1, \hat{s}_2, \bar{s}_1$.
+    \begin{itemize}
+    \item Минимум функции $f(x^1+s_*\mul d^1) = (5-10s_*)^2+(6s_*-3)^2$
+      достигается при $s_*=\frac{1}{2}$.
+    \item $d^1_1 = -10 \ngeq 0 \implies \hat{s}_1 =
+      -\frac{x^1_1}{d^1_1} = -\frac{1}{-10} = \frac{1}{10}$
+    \item $d^1_2 = 6 \geq 0 \implies \hat{s}_2 = +\infty$
+    \item $\scalmult{a^1, d^1} = -26 \leq
+      0 \implies \bar{s}_1 = +\infty$
+    \end{itemize}
+    Находим величину шага: $s_1 = \min\{\frac{1}{2}, \frac{1}{10}\} =
+    \frac{1}{10}$.
+  \item Вычисляем новое приближение $x^2$:
+    \begin{equation*}
+      x^2 = \begin{pmatrix} 1 \\ 1 \end{pmatrix} +
+      \frac{1}{10} \begin{pmatrix} -10 \\ \phantom{-}6 \end{pmatrix}
+      = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix}
+    \end{equation*}
+  \end{enumerate}
+\item Продолжим поиск минимума из точки
+  \begin{equation*}
+    x^2 = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix}
+  \end{equation*}
+  \begin{enumerate}
+  \item В $x^2$ активно лишь ограничение $x_1\geq 0$, поэтому $I^2 =
+    \varnothing, J^2 = \{1\}$.
+  \item Составим задачу линейного программирования:
+    \begin{equation*}
+      \begin{cases}
+        \scalmult{f'(x^2), d^2} = \tilde{f}_2 =
+        8d_1 - \frac{3}{5} (d_{2+}-d_{2-}) \to \min \\
+        d_1+(d_{2+}+d_{2-}) \leq 1 \\
+        d_1, d_{2+}, d_{2-} \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    Приведём её к каноническому виду, получив в первом ограничении
+    равенство путём добавления переменной $x_1$:
+    \begin{equation*}
+      \begin{cases}
+        \tilde{f}_2 = 8d_1-\frac{3}{5}(d_{2+}-d_{2-}) \to \min \\
+        d_1+(d_{2+}+d_{2-}) + x_1 = 1 \\
+        d_1, d_{2+}, d_{2-}, x_1 \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    Решим задачу симплекс-методом. Составим матрицу коэффициентов
+    ограничений и целевой функции, затем исключим $x_1$ из состава
+    базисных переменных:
+    \begin{equation}
+      \begin{gmatrix}[b]
+        \dagger & d_1 & d_{2+} & d_{2-} & x_1 & \diamond\\
+        x_1 & 1 & 1 & 1 & 1 & \mathbf{1} \\
+        \tilde{f}_2 & -8 & \mathbf{\frac{3}{5}} & -\frac{3}{5} & 0 & 0
+        \rowops \add[-\frac{3}{5}]{1}{2}
+      \end{gmatrix}
+    \end{equation}
+    Получим матрицу с одними отрицательными коэффициентами в нижнем
+    ряду:
+    \begin{equation*}
+      \begin{gmatrix}[b]
+        \dagger & d_1 & d_{2+} & d_{2-} & x_1 & \diamond\\
+        x_1 & 1 & 1 & 1 & 1 & 1 \\
+        \tilde{f}_2 & -\frac{43}{5} & 0 & -\frac{6}{5} & -\frac{3}{5}
+        & -\frac{3}{5}
+      \end{gmatrix}
+    \end{equation*}
+    При этом условие $d_{2+} \mul d_{2-} = 0$ выполнено. Итак, найдено
+    оптимальное решение задачи линейного программирования:
+    \begin{equation*}
+      \begin{cases}
+        d_{1\phantom{+}} = 0 \\
+        d_{2+} = 1 \\
+        d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    с учётом которого построим вектор $d^2$:
+    \begin{equation*}
+      d^2 = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+    \end{equation*}
+  \item Определим коэффициенты $s_*, \hat{s}_1, \hat{s}_2, \bar{s}_1$.
+    \begin{itemize}
+    \item Минимум $f(x^2+s_*\mul d^2) = 16+(s_*-\frac{32}{5})^2$
+      достигается при $s_* = \frac{32}{5}$.
+    \item $d^2_1 = 0 \geq 0 \implies \hat{s}_1 = +\infty$
+    \item $d^2_1 = 1 \geq 0 \implies \hat{s}_1 = +\infty$
+    \item $\scalmult{a^1, d^2} = -1 \leq 0 \implies \bar{s}_1 =
+      +\infty$ Итак, ограничения никак не влияют на величину шага,
+      поэтому $s_k = \frac{32}{5}$.
+    \end{itemize}
+  \item Найдём приближение $x^3$:
+    \begin{equation*}
+      x^3 = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix} +
+      \frac{32}{5} \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+      = \begin{pmatrix} 0 \\ 4 \end{pmatrix}
+    \end{equation*}
+  \end{enumerate}
+\item Как известно из точного аналитического решения (см. раздел
+  \ref{sec:kuhn-tucker}), точка $(0, 4)$ является точным решением
+  задачи \eqref{eq:zoutendijk-problem}. Значит, удовлетворение
+  \eqref{eq:zoutendijk-halt} на этой итерации должно сигнализировать
+  об этом. Выполним первые два шага алгоритма, что убедиться в этом.
+  \begin{enumerate}
+  \item Как и на прошлой итерации, $I^2 = \varnothing, J^2 = \{1\}$.
+  \item Для нахождения компонент вектора $d^k$ решим задачу линейного
+    программирования:
+    \begin{equation*}
+      \begin{cases}
+        \scalmult{f'(x^3), d^3} = \tilde{f}_3 =
+        8d_1 \to \min \\
+        d_1+(d_{2+}+d_{2-}) + x_1 = 1 \\
+        d_1, d_{2+}, d_{2-}, x_1 \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    оптимальным решением которой является тривиальный набор
+    \begin{equation*}
+      \begin{cases}
+        d_{1\phantom{+}} = 0 \\
+        d_{2+} = 0 \\
+        d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+
+    Таким образом,
+    \begin{equation*}
+      d^3 = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+    \end{equation*}
+
+    Очевидно, что выполняется критерий останова
+    \eqref{eq:zoutendijk-halt}. Значит, далее уменьшать значение
+    $f(x)$ в \eqref{eq:zoutendijk-problem} не представляется
+    возможным.
+  \end{enumerate}
+\end{enumerate}
+
+Итак, с помощью метода возможных направлений Зойтендейка найдено
+решением задачи условной минимизации \eqref{eq:zoutendijk-problem},
+которое согласуется с решением, найденным в \ref{sec:kuhn-tucker}.
+
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      x=2.4 cm, y=1.3 cm,
+      xmin=0, ymin=0, xmax=2.5,
+      xlabel=$x_1$, ylabel=$x_2$,
+      enlargelimits=0.05]
+      \input{condextr-contours.tkz.tex}
+      \addplot[very thick, dashed, red!50!black] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
+      
+      \addplot[mark=*, only marks,
+               mark options={fill=blue!70!black}] coordinates{(1,1)
+                 (0,1) (0, 4)};
+      
+      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(1,1) (0,1)};
+      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(0,1) (0,4)};      
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Ход решения задачи \eqref{eq:zoutendijk-problem} методом
+    Зойтендейка}
+  \label{fig:cond-optim}
+\end{figure}
+
+
+\clearpage
+\subsection{Метод штрафных функций}
+\label{sec:penalty}
+
+\subsubsection{Общие сведения}
+
+В разделе \ref{sec:kuhn-tucker} рассматривалась задача условной
+оптимизации \eqref{eq:cond-optim-problem-form}, были предложены
+соображения по её \emph{аналитическому} решению с использованием
+теоремы Куна—Таккера \ref{th:kuhn-tucker}. Реализация аналитических
+машинных алгоритмов традиционно не является простой задачей, и в
+большинстве случаев на практике оказывается более выгодным (во всех
+отношениях) использование численных методов.
+
+Методы, построенные на применении штрафных функций, позволяют решать
+задачи на поиск минимума при наличии ограничений \emph{численно}.
+
+Общая схема таких методов заключается в замене задачи условной
+минимизации в некоторой области $D$, заданной ограничениями типа
+неравенств
+\begin{equation*}
+  \begin{cases}
+    f(x) \to \min \\
+    g_j(x) \leq 0,\, j=\overline{1,m} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation*}
+на задачу безусловной минимизации
+\begin{equation}
+  \label{eq:penalty-problem-form}
+  P(x, r) = f(x) + \phi(x, p) \to \min
+\end{equation}
+где \neword{штраф} $\phi(x, p)$ удовлетворяет свойству
+\begin{align*}
+  \phi(x, p) &= 0 \quad x \in D\\
+  \phi(x, p) &\gg 0 \quad x \notin D
+\end{align*}
+Таким образом, штрафная часть значительно возрастает при выходе за
+пределы допустимого множества $D$.
+
+Один из общих подходов к использованию штрафных функций заключается в
+последовательном решении задач вида \ref{eq:penalty-problem-form},
+параметризованных номером итерации $k$:
+\begin{equation}
+  \label{eq:penalty-iter}
+  P_k(x, r) = f(x) + \phi(x, p_k) \to \min  
+\end{equation}
+где функция $\phi(x, p_k)$ масштабируется на каждой итерации в сторону
+увеличения или уменьшения.
+
+\subsubsection{Метод внешних штрафных функций}
+
+Методами внешних штрафных функций называют методы, использующие схему
+\eqref{eq:penalty-iter} таким образом, что $\phi(x, p_k)$ с каждой
+итерацией увеличивается, и положения вне допустимой области с ростом
+$k$ становятся всё менее «выгодными». При этом начальное приближение
+$x^1$ к точке минимума выбирается \emph{вне} $D$.
+
+Один из таких методов, изложенный в \cite{himmelblau75},
+предусматривает построение штрафной функции для задачи
+\eqref{eq:cond-optim-problem-form} в виде:
+\begin{equation}
+  \label{eq:weisman}
+  \phi(x, p_k) = p_k \sum_{j=1}^m{ \left [ g_j^+(x) \right ]^2}
+\end{equation}
+где $g_j^+(x) = \max\{0, g_j(x)\}$, так что штрафная часть отлична от
+нуля вне границ, заданных ограничениями $g_j(x)$, а
+$\lim\limits_{k\to\infty}{p_k} = +\infty$.
+
+В качестве критерия останова процесса \eqref{eq:penalty-iter} можно
+выбрать условие
+\begin{equation*}
+  \phi(x^k, p_k) < \epsilon
+\end{equation*}
+где $x^k$ — приближение к точке минимума на $k$-ом шаге.
+
+\subsubsection{Применение метода}
+\label{sec:penalty-usage}
+
+В разделе \ref{sec:kuhn-tucker} была решена задача условной
+оптимизации \eqref{eq:cond-optim-problem}:
+\begin{equation*}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    g_1(x) = 2x_1 - x_2 - 2 \leq 0 \\
+    g_2(x) = -x_1 \leq 0 \\
+    g_3(x) = -x_2 \leq 0
+  \end{cases}
+\end{equation*}
+Среди условных экстремумов функции был найден минимум в точке $A = (0,
+4)$. Найдём его с помощью штрафных функций. Преобразуем задачу к виду
+\label{eq:penalty-iter}, выбирая штрафную часть в виде
+\eqref{eq:weisman}:
+\begin{equation}
+  \label{eq:penalty-problem}
+  P(x) = f(x) + p \sum_{j=1}^3{ \left [ g_j^+(x) \right ]^2} \to \min
+\end{equation}
+
+На рисунках \ref{fig:pen-contours1}-\ref{fig:pen-contours4}
+представлены линии уровня функции $P(x)$ задачи
+\eqref{eq:penalty-problem} при различных значениях $p$ (при $p=0$
+получается исходная функция $f(x)$ задачи
+\eqref{eq:cond-optim-problem}). Видно, что с ростом $p$ влияние
+штрафной части вне $D$ (\ref{plot:pen-boundaries}) значительно
+возрастает, тогда как в допустимой области оптимизируемая функция не
+претерпевает никаких изменений.
+
+\pgfplotsset{every axis/.append style={xmin=-5,xmax=5,ymin=-5,ymax=5}}
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{condextr_full-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+      \label{plot:pen-boundaries}
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=0$}
+  \label{fig:pen-contours1}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty_mini-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=5$}
+    \label{fig:pen-contours2}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=50$}
+  \label{fig:pen-contours3}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty_maxi-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=150$}
+  \label{fig:pen-contours4}
+\end{figure}
+
+Для численного решения задачи \eqref{eq:penalty-problem} теперь уже
+безусловной минимизации воспользуемся описанным ранее градиентным
+методом с чебышёвскими функциями релаксации, выбирая в качестве
+начального приближения точку вне области $D$.
+
+Индекс $k$ в \eqref{eq:penalty-problem} опущен не случайно: опыт
+показывает, что при достаточно большом начальном значении параметра
+$p_0$ использование итерационного процесса \eqref{eq:penalty-iter}
+может и не понадобиться, поскольку точка минимума $A$ с достаточной
+точностью локализуется уже на первом шаге. Это проиллюстрировано на
+рисунке \ref{fig:penalty}.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$, x=1 cm, y=1 cm]
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+      \input{penalty-contours.tkz.tex}
+
+      \input{penalty_relch_-2,-3_20_14-trace.tkz.tex}
+      \input{penalty_relch_2,-4_20_10-trace.tkz.tex}
+
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Ход процесса минимизации \eqref{eq:penalty-problem} при
+    $p=50$ и различном выборе начальной точки}
+  \label{fig:penalty}
+\end{figure}

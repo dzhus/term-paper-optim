@@ -1,0 +1,315 @@
+\section{Многопараметрическая оптимизация\\
+  с чебышёвскими функциями релаксации}
+\label{sec:relch}
+
+В данном разделе представлена общая схема градиентных методов,
+рассмотрено понятие функции релаксации и описан метод оптимизации с
+чебышёвскими функциями релаксации, предложенный в
+\cite{chernorutsky04}.
+
+\subsection{Теоретические сведения}
+
+\subsubsection{Общая схема градиентных методов}
+
+Рассмотрим задачу безусловной минимизации:
+\begin{equation}
+  \eqref{eq:optim-problem-form}
+  f(x) \to \min,\quad x \in \set{R}^n,\, J \in C^2(\set{R}^n)
+\end{equation}
+
+\begin{dfn}
+  \neword{Градиентными} называются итерационные методы оптимизации со
+  следующей рабочей формулой, которая определяет способ перехода к
+  новому приближению $x^{k+1}$ на очередном шаге итерации:
+  \begin{equation}
+    \label{eq:grad-methods}
+    x^{k+1} = x^k - H_k\left(G_k, h_k\right) g_k
+  \end{equation}
+  здесь $H_k$ — некоторая функция от матрицы Гессе $G_k = G(x^k) =
+  f''(x^k)$ и параметра $h_k$, а $g_k = g(x^k) = f'(x^k)$ — градиент
+  функции в точке $x_k$.
+\end{dfn}
+
+При постоянных значениях параметров на различных шагах итерации
+соответствующие индексы $k$ в формуле \eqref{eq:grad-methods}
+опускаются.
+
+Предполагается, что в некоторой $\epsilon_k$-окрестности $\{x \in
+\set{R}^n | \norm{x-x^k} < \epsilon_k\}$ точки $x^k$ функция $f(x)$
+приближается гиперболоидом:
+\begin{equation}
+  \label{eq:sqr-approx}
+  f(x) \approx \frac{1}{2}\scalmult{G_k x, x} - \scalmult{a_k,x} + b_k \approx \frac{1}{2}\scalmult{G_k x, x}
+\end{equation}
+
+Ставится задача построения таких матричных функций $H_k$, при которых
+выполняется \neword{условие релаксации} процесса
+\begin{equation}
+  \label{eq:relax-cond}
+  f(x^{k+1}) < f(x^k)
+\end{equation}
+При этом требуется, чтобы величина нормы $\norm{x^{k+1}-x^{k}}$ была
+ограничена сверху лишь параметром $\epsilon_k$, который характеризует
+область справедливости локальной квадратичной модели
+\eqref{eq:sqr-approx}.
+
+\subsubsection{Функция релаксации}
+
+\begin{dfn}
+  \neword{Функцией релаксации} называется скалярная функция
+  \begin{equation}
+    \label{eq:relax-fun}
+    R_h(\lambda) = 1 - H(\lambda, h)\lambda,\quad \lambda,h \in \set{R}
+  \end{equation}
+  где $H(\lambda, h)$ — скалярный аналог матричной функции $H(G, h)$
+  из формулы \eqref{eq:grad-methods}.
+\end{dfn}
+В дальнейшем индекс $h$ у функции релаксации $R_h(\lambda)$ иногда
+будем опускать.
+
+\begin{dfn}
+  \neword{Множителями релаксации} для точки $x^k$ называются значения
+  функции релаксации на спектре матрицы Гессе:
+  \begin{equation}
+    \label{eq:relax-fac}
+    R_h(\lambda_i),\, \lambda_i \in \Sp{G_k}
+  \end{equation}
+\end{dfn}
+
+Благодаря следующей теореме, функция релаксации используется для
+анализа различных градиентных методов.
+
+\begin{thm}
+  \label{thm:relax-thm}
+  При любых $x^k$ для выполнения условия релаксации
+  \eqref{eq:relax-cond} необходимо и достаточно, чтобы
+  \begin{equation}
+    \label{eq:relax-thm}
+    \begin{aligned}
+      & \abs{R(\lambda_i)} \geq 1 & \lambda_i& < 0 \\
+      & \abs{R(\lambda_i)} \leq 1 & \lambda_i& > 0\\
+      &&i& = \overline{1, n}
+    \end{aligned}
+  \end{equation}
+\end{thm}
+
+\input{relax-thm.tkz}
+
+Скорость релаксации может быть оценена с использованием следующего
+соотношения:
+\begin{equation}
+  \label{eq:relax-speed}
+  2\abs{f(x^{k+1})-f(x^k)}=\sum_{\lambda_i^+>0} \left\{\xi_{i,k}^2
+    \lambda_i^+ [1-R^2(\lambda_i^+)]\right\} + \sum_{\lambda_i^-<0} \left\{\xi_{i,k}^2
+    \abs{\lambda_i^-} [R^2(\lambda_i^-)-1]\right\}
+\end{equation}
+здесь $\lambda_i^+$ и $\lambda_i^-$ — положительные и отрицательные
+собственные значения матрицы $G_k$. Коэффициенты $\xi_{i,k}$
+происходят из разложения $x^k=\sum_i{\xi_{i,k}u^i}$ по собственным
+векторам $u^i$ матрицы Гессе.
+
+Таким образом, эффективными оказываются методы, функция релаксации
+которых в положительной области значений $\lambda$ как можно
+\emph{меньше} уклоняется от нуля, а при отрицательных $\lambda$ —
+становится как можно большей по модулю.
+
+\paragraph{Пример: метод ПГС}
+
+В качестве примера рассмотрим метод \neword{простого градиентного
+  спуска} (ПГС), рабочая формула которого имеет вид:
+\begin{equation*}
+  x^{k+1}=x^k-hg_k,\, h\in\set{R}
+\end{equation*}
+Рассмотрим функцию релаксации метода ПГС:
+\begin{equation}
+  \label{eq:gd-relax}
+  R(\lambda) = 1 - \lambda h
+\end{equation}
+
+\input{gd-relax.tkz}
+
+Из её графика на рисунке \ref{fig:gd-relax} видно, что метод применим
+лишь в том случае, когда собственные значения матрицы Гессе
+оптимизируемой функции не превосходят некоторого критического значения
+$M*=\frac{2}{h}$. Кроме того, в области значений $\lambda$, близких к
+нулю или $M*$, согласно \eqref{eq:relax-speed} скорость релаксации
+сильно снижается.
+
+\subsection{Описание метода}
+
+\subsubsection{Использование полиномов Чебышёва\\
+  в функции релаксации}
+
+Рассмотрим смещённые полиномы Чебышёва второго рода, которые
+определяются согласно рекуррентному соотношению:
+\begin{align*}
+  \label{eq:chebyshev}
+  P_0(\lambda) &= 0 \\
+  P_1(\lambda) &= 1 \\
+  P_k(\lambda) &= 2(1-2\lambda)P_{k-1}(\lambda) - P_{k-2}(\lambda),\, k
+  \geq 2
+\end{align*}
+
+Функциональная последовательность таких полиномов обладает важным
+свойством, а именно: при $s\to\infty$, $\frac{P_s(\lambda)}{s}$
+равномерно стремится к нулю на $(0;1)$.
+
+Предположим, что собственные числа матрицы Гессе целевой функции
+$f(x)$ задачи \eqref{eq:optim-problem-form} в положительной области
+спектра не превосходят 1 (для этого достаточно в рассмотрении считать
+градиент и матрицу Гессе нормированными). Тогда использование
+следующей функции в качестве релаксационной:
+\begin{equation}
+  \label{eq:cheb-relax}
+  R_s(\lambda) = \frac{P_s(\lambda)}{s}
+\end{equation}
+позволяет обеспечить, согласно \eqref{eq:relax-speed}, сколь угодно
+быструю релаксацию. На иллюстрации \ref{fig:cheb-relax} приведены
+графики функции $R_s(\lambda)$ вблизи $[0;1]$ для нескольких значений
+$s$.
+
+\input{cheb-relax.tkz}
+
+Уже при $s=8$ значение $R_s(\lambda)$ не превосходит по модулю $0.23$
+на отрезке $[0.025; 0.975]$, обеспечивая хорошее подавление слагаемых
+\eqref{eq:relax-speed}, соответствующих большому диапазону
+положительных собственных чисел.
+
+При этом стремление $R_s(\lambda)$ к $+\infty$ в
+отрицательной части спектра также соответствует требованиям к хорошей
+функции релаксации.
+
+\subsubsection{Реализация метода}
+Согласно \eqref{eq:relax-fun}, выбранной функции релаксации
+соответствует зависимость
+\begin{equation*}
+  H(\lambda) = \frac{1-\frac{P_s(\lambda)}{s}}{\lambda}
+\end{equation*}
+откуда с учётом \eqref{eq:chebyshev} получим следующие рекуррентные
+соотношения уже для функции $H(\lambda)$:
+\begin{equation}
+  \label{eq:cheb-scalarfun}
+  \begin{aligned}
+    H_1 &= 0 \\
+    H_2 &= 2 \\
+    H_{s+1} \mul (s+1) &= 2s\mul(1-2\lambda)\mul H_s-(s-1)\mul
+    H_{s-1}+4s
+  \end{aligned}
+\end{equation}
+где $s$ — параметр метода, равный степени используемых полиномов
+Чебышёва. Соображения по выбору $s$ приведены ниже.
+
+Подстановка полученного соотношения \eqref{eq:cheb-scalarfun}
+в \eqref{eq:grad-methods} даёт следующую рабочую форумулу
+\begin{multline}
+  x^{k+1} = x^k - H_{s+1}g_k =\\=
+  x^k-\frac{2s}{s+1}(E-2G_k)H_sg_k+\frac{s-1}{s+1}H_{s-1}g_k-\frac{4s}{s+1}g_k
+\end{multline}
+
+Таким образом, вектор смещения $d_{s+1} = x^{k+1} - x^k$ при выбранном
+значении параметра $s$ на каждом шаге $k$ вычисляется по следующей
+рекуррентной формуле:
+\begin{equation}
+  \label{eq:cheb-workhorse}
+  \begin{aligned}
+    d_1 &= 0\\
+    d_2 &= -2g_k \\
+    d_{s+1} &=
+    \frac{2s}{s+1}(E-2G_k)d_{s}-\frac{s-1}{s+1}d_{s-1}-\frac{4s}{s+1}g_k
+  \end{aligned}
+\end{equation}
+
+
+\clearpage
+\subsection{Примеры работы}
+
+В данном разделе приведены результаты работы градиентного метода
+оптимизации с чебышёвскими функциями релаксации с рядом типовых
+тестов.
+
+\subsubsection{Функция Розенброка}
+
+Одним из классических тестов для различных алгоритмов оптимизации
+является тест Розенброка, заключающийся в минимизации следующей
+функции:
+\begin{equation}
+  \label{eq:rosenbrock}
+  f(x, y) = 100(y - x²)² + (1 - x)²
+\end{equation}
+Функция Розенброка имеет глубокую впадину вдоль кривой $y=x^2$, что
+обуславливает плохую сходимость простых методов. Минимум этой функции
+находится в точке $A=(1,1)$.
+
+\pgfplotsset{every axis/.append style={xlabel=$x$, ylabel=$y$,grid}}
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}[scale=1]
+    \begin{axis}
+      \input{rosenbrock-contours.tkz.tex}
+      \input{rosenbrock_relch_-1.2,1_40_14-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.25,label=right:$A$] at (axis cs:1,1) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Работа алгоритма с функцией Розенброка
+    \eqref{eq:rosenbrock}}
+\end{figure}
+
+\subsubsection{Экспоненциальная функция}
+
+Теперь рассмотрим функцию
+\begin{equation}
+  \label{eq:exptest}
+  f(x, y) = \sum\limits_{a=\overline{0.1, 1.0}}\left [
+    e^{-xa}-e^{-ya}-(e^{-a}-e^{-10a})\right ]^2
+\end{equation}
+Здесь суммирование происходит по значениям $a = 0.1, 0.2, \dotsc, 1$.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=1cm,y=1cm]
+      \input{exptest-contours.tkz.tex}
+      \input{exptest_relch_-0.5,1.5_20-trace.tkz.tex}
+      \input{exptest_relch_5,5_20-trace.tkz.tex}
+      \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Линии уровня и трассировка процесса минимизации функции
+    \eqref{eq:exptest}}
+\end{figure}
+
+\subsubsection{Функция Химмельблау}
+
+В следующем примере рассмотрим функцию Химмельблау, которая задаётся
+следующим образом:
+\begin{equation}
+  \label{eq:himmelblau}
+  f(x, y) = (x² + y - 11)² + (x + y² - 7)²
+\end{equation}
+Известно, что локальные минимумы функции \eqref{eq:himmelblau}
+расположены в точках $A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58,
+-1.85)$, $D=(3.00, 2.00)$, и в каждой из них достигается значение $0$.
+Этим обусловлена следующая особенность работы алгоритма — результат
+значительно зависит от выбора начального приближения, что
+продемонстрировано на рисунке \ref{fig:himmelblau}.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=.8cm,y=.8cm]
+      \input{himmelblau-contours.tkz.tex}
+      \input{himmelblau_relch_0.1,0.1_10-trace.tkz.tex}
+      \input{himmelblau_relch_0.5,-0.5_10-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,0.5_10-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,-0.5_10-trace.tkz.tex}
+
+      \node[circle,fill=black,scale=0.5,label=above left:$A$] at (axis cs:-3.78,-3.28) {};
+      \node[circle,fill=black,scale=0.5,label=below left:$B$] at (axis cs:-2.8,3.13) {};
+      \node[circle,fill=black,scale=0.5,label=below right:$C$] at (axis cs:3.58,-1.85) {};
+      \node[circle,fill=black,scale=0.5,label=above right:$D$] at (axis cs:3,2) {};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Результаты работы алгоритма с функцией Химмельблау
+    \eqref{eq:himmelblau} в зависимости от выбора начальной точки}
+  \label{fig:himmelblau}
+\end{figure}
