@@ -40,7 +40,7 @@ include ${DOCNAME}-deps.mk
 
 doc: ${DOCNAME}.pdf
 
-${DOCNAME}-deps.mk: ${INCLUDES} ${DOCNAME}.tex
+${DOCNAME}-deps.mk: ${DOCNAME}.tex
 	texdepend -o $@ -print=if $<
 
 ${DOCNAME}.aux: ${INCLUDES} ${DOCNAME}.tex ${DOCNAME}.bib
