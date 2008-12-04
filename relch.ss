@@ -7,7 +7,8 @@
          pyani-lib/vector
          pyani-lib/generic-ops)
 
-(provide relch-optimize)
+(provide relch-optimize
+         gd-optimize)
 
 (define @ at-vector)
 
@@ -35,6 +36,14 @@
 (define (better-minimum? f x-new x)
   (< (@ f x-new) (@ f x)))
 
+;; Decrease shift factor until it leads to a better minimum
+(define (regulate-shift shift f x-start)
+  (let ((x-new (+ x-start shift)))
+    (if (better-minimum? f x-new x-start)
+        shift
+        (regulate-shift (decrease-shift shift) f x-start))))
+
+;; Simple RELCH implementation as proposed by Chernorutsky
 (define (relch-optimize f x-start
                         eps
                         iterations
@@ -54,14 +63,19 @@
                       (relch-shift (sub2 L) G g)
                       (* -1 (/ (sub2 L) L)))
                      (* g (/ (* -4 (sub1 L)) L)))))))
-    (define (regulate-shift shift)
-      (let ((x-new (+ x-start shift)))
-        (if (better-minimum? f x-new x-start)
-            shift
-            (regulate-shift (decrease-shift shift)))))
     (let* ((G (normalize-matrix G))
            (g (normalize-vector g))
            (shift (relch-shift degree G g)))
-      (regulate-shift shift)))
+      (regulate-shift shift f x-start)))
+  ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
+   f x-start iterations listen-proc))
+
+;; Gradient descend
+(define (gd-optimize f x-start
+                     eps
+                     iterations [unused #f]
+                     [listen-proc #f])
+  (define (choose-shift x-start G g)
+    (regulate-shift (/ (* g -1) (p-vector-norm g)) f x-start))
   ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
    f x-start iterations listen-proc))
