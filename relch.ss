@@ -5,12 +5,11 @@
 (require "shared.ss"
          pyani-lib/matrix
          pyani-lib/vector
-         pyani-lib/generic-ops)
+         pyani-lib/generic-ops
+         pyani-lib/function-ops)
 
 (provide relch-optimize
          gd-optimize)
-
-(define @ at-vector)
 
 (define (gradient-method choose-shift stop-condition)
   (define (optimize function x-start iterations [listen-proc #f])
