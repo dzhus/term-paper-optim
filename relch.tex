@@ -240,19 +240,39 @@ $s$.
 обуславливает плохую сходимость простых методов. Минимум этой функции
 находится в точке $A=(1,1)$.
 
+Матрица Гессе этой функции имеет вид:
+\begin{equation*}
+  \begin{pmatrix}
+    1200x^2-400y+2 & -400x \\
+    -400x & \phm200\ph{x}
+  \end{pmatrix}
+\end{equation*}
+и в точке минимума функции $(1, 1)$ равна
+\begin{equation*}
+  \begin{pmatrix}
+    \phm 802 & -400 \\ -400 & \phm 200
+  \end{pmatrix}
+\end{equation*}
+Собственные значения матрицы Гессе в этой точке равны ${\approx}0.3994$ и
+${\approx}1001.6006$, так что овражность целевой функции равна
+\begin{equation*}
+  \eta = \frac{1001.6006}{0.3994} \approx 2507.7631
+\end{equation*}
+
 \pgfplotsset{every axis/.append style={xlabel=$x$, ylabel=$y$,grid}}
 \begin{figure}[!thb]
   \centering
-  \begin{tikzpicture}[scale=1]
-    \begin{axis}
+  \begin{tikzpicture}
+    \begin{axis}[x=2.7cm, y=2.2cm]
       \input{rosenbrock-contours.tkz.tex}
-      \input{rosenbrock_relch_-1.2,1_40_14-trace.tkz.tex}
+      \input{rosenbrock_relch_-1.2,1_40_12-trace.tkz.tex}
       \node[circle,fill=black,scale=0.25,label=right:$A$] at (axis cs:1,1) {};
     \end{axis}
   \end{tikzpicture}
-  \caption{Работа алгоритма с функцией Розенброка
+  \caption[Функция Розенброка]{Работа алгоритма с функцией Розенброка
     \eqref{eq:rosenbrock}}
 \end{figure}
+\clearpage
 
 \subsubsection{Экспоненциальная функция}
 
@@ -272,11 +292,14 @@ $s$.
       \input{exptest_relch_-0.5,1.5_20-trace.tkz.tex}
       \input{exptest_relch_5,5_20-trace.tkz.tex}
       \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
-  \caption{Линии уровня и трассировка процесса минимизации функции
+  \caption[Экспоненциальная функция]{Линии уровня и трассировка процесса минимизации функции
     \eqref{eq:exptest}}
 \end{figure}
+
+Алгоритм стабильно определяет минимум в точке $(1, 10)$.
 
 \subsubsection{Функция Химмельблау}
 
@@ -309,7 +332,8 @@ $s$.
       \node[circle,fill=black,scale=0.5,label=above right:$D$] at (axis cs:3,2) {};
     \end{axis}      
   \end{tikzpicture}
-  \caption{Результаты работы алгоритма с функцией Химмельблау
-    \eqref{eq:himmelblau} в зависимости от выбора начальной точки}
+  \caption[Функция Химмельблау]{Результаты работы алгоритма с функцией
+    Химмельблау \eqref{eq:himmelblau} в зависимости от выбора
+    начальной точки}
   \label{fig:himmelblau}
 \end{figure}
