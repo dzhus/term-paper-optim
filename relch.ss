@@ -10,6 +10,7 @@
 
 (provide relch-optimize
          relchf-optimize
+         relcho-optimize
          gd-optimize)
 
 (define (gradient-method choose-shift stop-condition)
