@@ -76,18 +76,27 @@
         [listen-proc #f])
     (define (choose-shift x-start G g)
       (define (relch-shift L G g)
-        (define (sub2 x) (sub1 (sub1 x)))
         (let ((n (matrix-size G)))
-          (cond ((= L 1) (zero-vector n))
-                ((= L 2) (* g -2))
-                (else (+
-                       (* (* (+ (identity-matrix n) (* G -2))
-                             (relch-shift (sub1 L) G g))
-                          (/ (* 2 (sub1 L)) L))
-                       (*
-                        (relch-shift (sub2 L) G g)
-                        (* -1 (/ (sub2 L) L)))
-                       (* g (/ (* -4 (sub1 L)) L)))))))
+          (define (sub2 x) (sub1 (sub1 x)))
+          ;; Calculate next degrees of shift given shifts for two
+          ;; previous degrees
+          (define (target-degree-shift times prev preprev)
+            (let ((current-degree-shift
+                   (+
+                    (* (* (+ (identity-matrix n) (* G -2))
+                          prev)
+                       (/ (* 2 (sub1 L)) L))
+                    (* preprev
+                       (* -1 (/ (sub2 L) L)))
+                    (* g (/ (* -4 (sub1 L)) L)))))
+              (if (= times 1)
+                  current-degree-shift
+                  (target-degree-shift (sub1 times) current-degree-shift prev))))
+          (let ((d1 (zero-vector n))
+                (d2 (* g -2)))
+            (cond ((= L 1) d1)
+                  ((= L 2) d2)
+                  (else (target-degree-shift (sub2 L) d2 d1))))))
       (let* ((G (normalize-matrix G))
              (g (normalize-vector g))
              (shift (relch-shift degree G g)))
