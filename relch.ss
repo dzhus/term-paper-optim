@@ -9,6 +9,7 @@
          pyani-lib/function-ops)
 
 (provide relch-optimize
+         relchf-optimize
          gd-optimize)
 
 (define (gradient-method choose-shift stop-condition)
@@ -42,32 +43,15 @@
         shift
         (regulate-shift (decrease-shift shift) f x-start))))
 
-;; Simple RELCH implementation as proposed by Chernorutsky
-(define (relch-optimize f x-start
-                        eps
-                        iterations
-                        degree
-                        [listen-proc #f])
-  (define (choose-shift x-start G g)
-    (define (relch-shift L G g)
-      (define (sub2 x) (sub1 (sub1 x)))
-      (let ((n (matrix-size G)))
-        (cond ((= L 1) (zero-vector n))
-              ((= L 2) (* g -2))
-              (else (+
-                     (* (* (+ (identity-matrix n) (* G -2))
-                           (relch-shift (sub1 L) G g))
-                        (/ (* 2 (sub1 L)) L))
-                     (*
-                      (relch-shift (sub2 L) G g)
-                      (* -1 (/ (sub2 L) L)))
-                     (* g (/ (* -4 (sub1 L)) L)))))))
-    (let* ((G (normalize-matrix G))
-           (g (normalize-vector g))
-           (shift (relch-shift degree G g)))
-      (regulate-shift shift f x-start)))
-  ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
-   f x-start iterations listen-proc))
+;; Decrease shift factor until it leads to a better minimum with
+;; foreseeing
+(define (regulate-shift-foresee shift f x-start)
+  (let ((x-new (+ x-start shift))
+        (x-new-foresee (+ x-start (decrease-shift shift))))
+    (if (or (not (better-minimum? f x-new x-start))
+            (better-minimum? f x-new-foresee x-new))
+        (regulate-shift-foresee (decrease-shift shift) f x-start)
+        shift)))
 
 ;; Gradient descend
 (define (gd-optimize f x-start
@@ -78,3 +62,39 @@
     (regulate-shift (/ (* g -1) (p-vector-norm g)) f x-start))
   ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
    f x-start iterations listen-proc))
+
+(define (regulate-shift-optimize shift f x-start)
+  (let ((g (lambda (s) (@ f (+ x-start (* shift s))))))
+    (* shift (vector-ref (gd-optimize g '#(1) 0.0001 100) 0))))
+
+(define (make-relch-optimize regulate-shift)
+  (lambda (f x-start
+        eps
+        iterations
+        degree
+        [listen-proc #f])
+    (define (choose-shift x-start G g)
+      (define (relch-shift L G g)
+        (define (sub2 x) (sub1 (sub1 x)))
+        (let ((n (matrix-size G)))
+          (cond ((= L 1) (zero-vector n))
+                ((= L 2) (* g -2))
+                (else (+
+                       (* (* (+ (identity-matrix n) (* G -2))
+                             (relch-shift (sub1 L) G g))
+                          (/ (* 2 (sub1 L)) L))
+                       (*
+                        (relch-shift (sub2 L) G g)
+                        (* -1 (/ (sub2 L) L)))
+                       (* g (/ (* -4 (sub1 L)) L)))))))
+      (let* ((G (normalize-matrix G))
+             (g (normalize-vector g))
+             (shift (relch-shift degree G g)))
+        (regulate-shift shift f x-start)))
+    ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
+     f x-start iterations listen-proc)))
+
+;; Different RELCH implementations
+(define relch-optimize (make-relch-optimize regulate-shift))
+(define relchf-optimize (make-relch-optimize regulate-shift-foresee))
+(define relcho-optimize (make-relch-optimize regulate-shift-optimize))
