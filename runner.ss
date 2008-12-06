@@ -19,13 +19,6 @@
          "test-functions.ss"
          "relch.ss")
 
-(define (point-poster point [nl #t])
-  (vector-for-each
-   (lambda (i p)
-     (display (format "~0,6F " p)))
-   point)
-  (when nl (display "\n")))
-
 (define (make-defaulting-parameter v)
   (make-parameter v (lambda (x) (if x x v))))
 
@@ -54,6 +47,13 @@
  ["-s" s "Starting point (default 0.0,0.0)"
   (start-point (list->vector (map string->number (regexp-split #rx"," s))))]
  #:args (f) (function-id f))
+
+(define (point-poster point [nl #t])
+  (vector-for-each
+   (lambda (i p)
+     (display (format (string-append "~0," (number->string (prec)) "F ") p)))
+   point)
+  (when nl (display "\n")))
 
 (let ((function (cdr (assoc (function-id) test-functions))))
   (exit ((method)
