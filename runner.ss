@@ -8,7 +8,7 @@
 ;;
 ;; Usage:
 ;;
-;;     mzscheme runner.ss -m relch -s -1,5.7 -p 3 -i 100 -L 10 rosenbrock
+;;     mzscheme runner.ss -m relch -s -1,5.7 -i 100 -L 10 -p 3 rosenbrock
 ;;
 ;; Specifying empty string as an option value, e. g. `-i ""`, is the
 ;; same as specifying its default value. Typing `mzscheme runner.ss
@@ -36,9 +36,6 @@
 (command-line
  #:program "runner"
  #:once-each
- ["-i" i "Maximum iterations count (default 100)" (iter (string->number i))]
- ["-p" p "Precision (default 3)" (prec (string->number p))]
- ["-L" L "Chebyshev polynomial degree (default 8)" (deg (string->number L))]
  ;; Vulnerability follows :-)
  ["-m" m "Method (default relch)" (method
                                    (eval (string->symbol
@@ -46,6 +43,9 @@
                                          ons))]
  ["-s" s "Starting point (default 0.0,0.0)"
   (start-point (list->vector (map string->number (regexp-split #rx"," s))))]
+ ["-i" i "Maximum iterations count (default 100)" (iter (string->number i))]
+ ["-L" L "Chebyshev polynomial degree (default 8)" (deg (string->number L))]
+ ["-p" p "Precision (default 3)" (prec (string->number p))]
  #:args (f) (function-id f))
 
 (define (point-poster point [nl #t])
