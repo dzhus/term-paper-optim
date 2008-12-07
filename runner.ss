@@ -51,7 +51,7 @@
 (define (point-poster point [nl #t])
   (vector-for-each
    (lambda (i p)
-     (display (format (string-append "~0," (number->string (prec)) "F ") p)))
+     (display (format (string-append "~0," (number->string (add1 (prec))) "F ") p)))
    point)
   (when nl (display "\n")))
 
