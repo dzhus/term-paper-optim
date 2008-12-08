@@ -41,22 +41,29 @@
 
 (define degree
   (new slider%
-       [label "Степень функции релакации L"]
+       [label "Степень функции релаксации L"]
        [parent control-pane]
        [min-value 5]
-       [max-value 20]))
+       [max-value 200]))
 
-(define (log-poster msg [nl #t])
-  (let ((insert (lambda (msg) (send
-                          (send log get-editor) insert msg)))
-        (msg (if (string? msg) msg (format "~a" msg))))
-    (insert msg)
+;; Post a string or clear log area
+(define (log-poster raw-msg [nl #t])
+  (let* ((editor (send log get-editor))
+         (insert (lambda (string) (send editor insert string))))
+    (if (eq? raw-msg 'clear)
+        (insert (if (string? raw-msg) raw-msg (format "~a" raw-msg)))
+        ;; Finally I have something really gay in mah beautiful Scheme
+        ;; source:
+        (begin
+          (send editor select-all)
+          (send editor clear)))
     (when nl (insert "\n"))))
 
 (define (run-optimization function-idx)
   (let* ((f (cdr (list-ref test-functions function-idx)))
          (name (test-function-name f))
          (comment (test-function-comment f)))
+    (log-poster 'clear)
     (log-poster (format "Оптимизируется ~a" name))
     (when comment (log-poster (format "Комментарий: ~a" comment)))
     (log-poster "Протокол работы:")
@@ -66,7 +73,7 @@
                              (send iterations get-value)
                              (send degree get-value)
                              log-poster)))
-      (log-poster (format "Ответ: ~a; известное значение минимума: ~a\n"
+      (log-poster (format "Ответ: ~a; Известные точки минимума: ~a\n"
                           x (test-function-target-x f))))))
 
 (define start
