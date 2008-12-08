@@ -15,20 +15,20 @@
 (define (gradient-method choose-shift stop-condition)
   (define (optimize function x-start iterations [listen-proc #f])
     (when listen-proc (listen-proc x-start))
-    (if (or (<= iterations 1)
-            (stop-condition function x-start))
-        x-start
-        (let* ((G (@ (hessian function) x-start))
-               (g (@ (gradient function) x-start))
-               (shift (choose-shift x-start g G))
-               (x-new (+ x-start shift)))
-          (optimize function x-new
-                    (sub1 iterations)
-                    listen-proc))))
+    (let ((g (@ (gradient function) x-start))
+          (G (@ (hessian function) x-start)))
+      (if (or (<= iterations 1)
+              (stop-condition function x-start g G))
+          x-start
+          (let* ((shift (choose-shift x-start g G))
+                 (x-new (+ x-start shift)))
+            (optimize function x-new
+                      (sub1 iterations)
+                      listen-proc)))))
   optimize)
 
-(define (zero-gradient? f x eps)
-  (<= (p-vector-norm (@ (gradient f) x)) eps))
+(define (zero-gradient? g eps)
+  (<= (p-vector-norm g) eps))
 
 (define (decrease-shift shift)
   (/ shift 2))
@@ -51,8 +51,8 @@
         [listen-proc #f])
     (define (choose-shift x-start g G)
       (regulate-shift (* g -1) f x-start))
-  ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
-   f x-start iterations listen-proc)))
+    ((gradient-method choose-shift (lambda (f x g G) (zero-gradient? g eps)))
+     f x-start iterations listen-proc)))
 
 (define (make-relch-optimize regulate-shift)
   (lambda (f x-start
@@ -87,7 +87,7 @@
              (g (normalize-vector g))
              (shift (relch-shift degree g G)))
         (regulate-shift shift f x-start)))
-    ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
+    ((gradient-method choose-shift (lambda (f x g G) (zero-gradient? f x eps)))
      f x-start iterations listen-proc)))
 
 ;; Different RELCH implementations
