@@ -82,12 +82,12 @@
                   (approach-target-degree current-degree-shift prev (add1 degree)))))
           (cond ((= L 1) d1)
                 ((= L 2) d2)
-                (else (next-degree-shift d2 d1)))))
+                (else (approach-target-degree d2 d1)))))
       (let* ((G (normalize-matrix G))
              (g (normalize-vector g))
              (shift (relch-shift degree g G)))
         (regulate-shift shift f x-start)))
-    ((gradient-method choose-shift (lambda (f x g G) (zero-gradient? f x eps)))
+    ((gradient-method choose-shift (lambda (f x g G) (zero-gradient? g eps)))
      f x-start iterations listen-proc)))
 
 ;; Different RELCH implementations
