@@ -50,7 +50,7 @@
 (define (log-poster raw-msg [nl #t])
   (let* ((editor (send log get-editor))
          (insert (lambda (string) (send editor insert string))))
-    (if (eq? raw-msg 'clear)
+    (if (not (eq? raw-msg 'clear))
         (insert (if (string? raw-msg) raw-msg (format "~a" raw-msg)))
         ;; Finally I have something really gay in mah beautiful Scheme
         ;; source:
