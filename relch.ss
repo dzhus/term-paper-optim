@@ -20,7 +20,7 @@
         x-start
         (let* ((G (@ (hessian function) x-start))
                (g (@ (gradient function) x-start))
-               (shift (choose-shift x-start G g))
+               (shift (choose-shift x-start g G))
                (x-new (+ x-start shift)))
           (optimize function x-new
                     (sub1 iterations)
@@ -49,7 +49,7 @@
         eps
         iterations [unused #f]
         [listen-proc #f])
-    (define (choose-shift x-start G g)
+    (define (choose-shift x-start g G)
       (regulate-shift (* g -1) f x-start))
   ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
    f x-start iterations listen-proc)))
@@ -60,15 +60,15 @@
         iterations
         degree
         [listen-proc #f])
-    (define (choose-shift x-start G g)
-      (define (relch-shift L G g)
+    (define (choose-shift x-start g G)
+      (define (relch-shift L g G)
         (let* ((n (matrix-size G))
                (d1 (zero-vector n))
                (d2 (* g -2)))
           (define (sub2 x) (sub1 (sub1 x)))
           ;; Calculate next degree of shift given shifts for two
           ;; previous degrees until degree reaches L
-          (define (next-degree-shift [prev d2] [preprev d1] [degree 3])
+          (define (approach-target-degree [prev d2] [preprev d1] [degree 3])
             (let ((current-degree-shift
                    (+
                     (* (* (+ (identity-matrix n) (* G -2))
@@ -79,13 +79,13 @@
                     (* g (/ (* -4 (sub1 degree)) degree)))))
               (if (= degree L)
                   current-degree-shift
-                  (next-degree-shift current-degree-shift prev (add1 degree)))))
+                  (approach-target-degree current-degree-shift prev (add1 degree)))))
           (cond ((= L 1) d1)
                 ((= L 2) d2)
                 (else (next-degree-shift d2 d1)))))
       (let* ((G (normalize-matrix G))
              (g (normalize-vector g))
-             (shift (relch-shift degree G g)))
+             (shift (relch-shift degree g G)))
         (regulate-shift shift f x-start)))
     ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
      f x-start iterations listen-proc)))
