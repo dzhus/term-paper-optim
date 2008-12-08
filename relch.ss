@@ -9,9 +9,8 @@
          pyani-lib/function-ops)
 
 (provide relch-optimize
-         relchf-optimize
-         relcho-optimize
-         gd-optimize)
+         gd-optimize
+         gdn-optimize)
 
 (define (gradient-method choose-shift stop-condition)
   (define (optimize function x-start iterations [listen-proc #f])
@@ -44,29 +43,16 @@
         shift
         (regulate-shift (decrease-shift shift) f x-start))))
 
-;; Decrease shift factor until it leads to a better minimum with
-;; foreseeing
-(define (regulate-shift-foresee shift f x-start)
-  (let ((x-new (+ x-start shift))
-        (x-new-foresee (+ x-start (decrease-shift shift))))
-    (if (or (not (better-minimum? f x-new x-start))
-            (better-minimum? f x-new-foresee x-new))
-        (regulate-shift-foresee (decrease-shift shift) f x-start)
-        shift)))
-
 ;; Gradient descend
-(define (gd-optimize f x-start
-                     eps
-                     iterations [unused #f]
-                     [listen-proc #f])
-  (define (choose-shift x-start G g)
-    (regulate-shift (/ (* g -1) (p-vector-norm g)) f x-start))
+(define (make-gd-optimize regulate-shift)
+  (lambda (f x-start
+        eps
+        iterations [unused #f]
+        [listen-proc #f])
+    (define (choose-shift x-start G g)
+      (regulate-shift (* g -1) f x-start))
   ((gradient-method choose-shift (lambda (f x) (zero-gradient? f x eps)))
-   f x-start iterations listen-proc))
-
-(define (regulate-shift-optimize shift f x-start)
-  (let ((g (lambda (s) (@ f (+ x-start (* shift s))))))
-    (* shift (vector-ref (gd-optimize g '#(1) 0.0001 100) 0))))
+   f x-start iterations listen-proc)))
 
 (define (make-relch-optimize regulate-shift)
   (lambda (f x-start
@@ -106,5 +92,7 @@
 
 ;; Different RELCH implementations
 (define relch-optimize (make-relch-optimize regulate-shift))
-(define relchf-optimize (make-relch-optimize regulate-shift-foresee))
-(define relcho-optimize (make-relch-optimize regulate-shift-optimize))
+(define gd-optimize (make-gd-optimize regulate-shift))
+(define gdn-optimize (make-gd-optimize
+                      (lambda (shift f x-start)
+                        (regulate-shift (/ shift (p-vector-norm shift)) f x-start))))
