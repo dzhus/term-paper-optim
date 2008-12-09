@@ -57,7 +57,7 @@
 
 (let ((function (cdr (assoc (function-id) test-problems))))
   (exit ((method)
-         (test-problem-def function)
+         (test-problem-function function)
          (start-point)
          (expt 10 (- (prec))) (iter) (deg)
          point-poster)))
