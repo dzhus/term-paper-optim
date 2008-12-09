@@ -6,34 +6,33 @@
 (require srfi/1
          "shared.ss")
 
-(provide (rename-out [d:make-test-function make-test-function])
-         test-function-name
-         test-function-def
-         test-function-x-start
-         test-function-target-x
-         test-function-target-value
-         test-function-comment
-         test-functions)
+(provide (rename-out [d:make-test-problem make-test-problem])
+         test-problem-name
+         test-problem-function
+         test-problem-x-start
+         test-problem-target-x
+         test-problem-target-value
+         test-problem-comment
+         test-problems)
 
-;; TODO Support several extremal points
-(define-struct test-function (name def
-                                   x-start
-                                   target-x target-value
-                                   comment))
+(define-struct test-problem (name function
+                                  x-start
+                                  target-x target-value
+                                  comment))
 
-(define (d:make-test-function name def x-start
+(define (d:make-test-problem name function x-start
                               target-x target-value
                               [comment #f])
-  (make-test-function name def x-start
+  (make-test-problem name function x-start
                       target-x target-value
                       comment))
 
-(define test-functions
+(define test-problems
   (list
    ;; Rosenbrock function
    (cons
     "rosenbrock"
-    (d:make-test-function
+    (d:make-test-problem
      "100(x₂ - x₁²)² + (1 - x₁)²"
      (lambda (x1 x2)
        (+ (* 100 (sqr (- x2 (sqr x1))))
@@ -43,7 +42,7 @@
 
    (cons
     "rosenbrock-mini"
-    (d:make-test-function
+    (d:make-test-problem
      "(x₂ - x₁²)² + (1 - x₁)²"
      (lambda (x1 x2)
        (+ (sqr (- x2 (sqr x1)))
@@ -53,7 +52,7 @@
 
    (cons
     "rosenbrock-maxi"
-    (d:make-test-function
+    (d:make-test-problem
      "(x₂ - x₁³)² + 100(1 - x₁)²"
      (lambda (x1 x2)
        (+ (sqr (- x2 (expt x1 3)))
@@ -63,7 +62,7 @@
    
    (cons
     "exptest"
-    (d:make-test-function
+    (d:make-test-problem
      "∑[exp(-xa)-exp(-ya)-(exp(-a)-exp(-10a))]²"
      (lambda (x y)
        (apply +
@@ -76,7 +75,7 @@
 
    (cons
     "hess-singular"
-    (d:make-test-function
+    (d:make-test-problem
      "(x₁ + 10x₂)² + 5(x₃ - x₄)² + (x₂-2x₃)⁴+10(x₁-x₄)⁴"
      (lambda (x1 x2 x3 x4)
        (+ (sqr (+ x1 (* 10 x2)))
@@ -88,7 +87,7 @@
 
    (cons
     "himmelblau"
-    (d:make-test-function
+    (d:make-test-problem
      "(x₁² + x₂ - 11)² + (x₁ + x₂² - 7)²"
      (lambda (x1 x2)
        (+ (sqr (- (+ (sqr x1) x2) 11))
@@ -98,7 +97,7 @@
    
    (cons
     "penalty"
-    (d:make-test-function
+    (d:make-test-problem
      "(x₁+4)² + (x₂ - 4)² → min"
      (let ((f (lambda (x1 x2) (+ (sqr (+ x1 4)) (sqr (- x2 4)))))
            (g1 (lambda (x1 x2) (- (- (* 2 x1) x2) 2)))

@@ -55,9 +55,9 @@
    point)
   (when nl (display "\n")))
 
-(let ((function (cdr (assoc (function-id) test-functions))))
+(let ((function (cdr (assoc (function-id) test-problems))))
   (exit ((method)
-         (test-function-def function)
+         (test-problem-def function)
          (start-point)
          (expt 10 (- (prec))) (iter) (deg)
          point-poster)))
