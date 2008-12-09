@@ -4,6 +4,7 @@ GNUPLOT := gnuplot
 MZSCHEME := mzscheme
 
 DOCNAME := paper
+TESTFILE := tests.ss
 
 # select fields 1, 2, 3 etc. from 1_2_3-trace.tkz.tex
 define get-field
@@ -32,7 +33,7 @@ endef
 
 .SECONDEXPANSION:
 
-.PHONY: doc clean
+.PHONY: doc check clean
 
 .PRECIOUS: %-trace
 
@@ -75,6 +76,9 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                  plot-trace.sh \
                  trace-path.tpl.tkz.tex
 	${SHELL} plot-trace.sh $* > $@
+
+check:
+	@${MZSCHEME} ${TESTFILE} | sed -e 's/: */:/'
 
 clean:
 	@rm -frv `hg status --unknown --no-status`
