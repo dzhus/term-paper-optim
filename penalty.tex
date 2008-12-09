@@ -1,0 +1,193 @@
+\subsection{Метод штрафных функций}
+\label{sec:penalty}
+
+\subsubsection{Общие сведения}
+
+Методы, построенные на применении штрафных функций, позволяют решать
+задачи на поиск минимума при наличии ограничений \emph{численно}.
+
+Общая схема таких методов заключается в замене задачи условной
+минимизации в некоторой области $D$, заданной ограничениями типа
+неравенств
+\begin{equation*}
+  \begin{cases}
+    f(x) \to \min \\
+    g_j(x) \leq 0,\, j=\overline{1,m} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation*}
+на задачу безусловной минимизации
+\begin{equation}
+  \label{eq:penalty-problem-form}
+  P(x, r) = f(x) + \phi(x, p) \to \min
+\end{equation}
+где \neword{штраф} $\phi(x, p)$ удовлетворяет свойству
+\begin{align*}
+  \phi(x, p) &= 0 \quad x \in D\\
+  \phi(x, p) &\gg 0 \quad x \notin D
+\end{align*}
+Таким образом, штрафная часть значительно возрастает при выходе за
+пределы допустимого множества $D$.
+
+Один из подходов к использованию штрафных функций заключается в
+последовательном решении задач вида \ref{eq:penalty-problem-form},
+параметризованных номером итерации $k$:
+\begin{equation}
+  \label{eq:penalty-iter}
+  P_k(x, r) = f(x) + \phi(x, p_k) \to \min  
+\end{equation}
+где функция $\phi(x, p_k)$ масштабируется на каждой итерации в сторону
+увеличения или уменьшения.
+
+\subsubsection{Метод внешних штрафных функций}
+
+Методами внешних штрафных функций называют методы, использующие схему
+\eqref{eq:penalty-iter} таким образом, что $\phi(x, p_k)$ с каждой
+итерацией увеличивается, и положения вне допустимой области с ростом
+$k$ становятся всё менее «выгодными». При этом начальное приближение
+$x^1$ к точке минимума выбирается \emph{вне} $D$.
+
+Один из таких методов, изложенный в \cite{himmelblau75} и
+\cite{gill81}, предусматривает построение штрафной функции для задачи
+\eqref{eq:cond-optim-problem-form} в виде:
+\begin{equation}
+  \label{eq:weisman}
+  \phi(x, p_k) = p_k \sum_{j=1}^m{ \left [ g_j^+(x) \right ]^2}
+\end{equation}
+где $g_j^+(x) = \max\{0, g_j(x)\}$, так что штрафная часть отлична от
+нуля вне границ, заданных ограничениями $g_j(x)$, а
+$\lim\limits_{k\to\infty}{p_k} = +\infty$.
+
+В качестве критерия останова процесса \eqref{eq:penalty-iter} можно
+выбрать условие
+\begin{equation*}
+  \phi(x^k, p_k) < \epsilon
+\end{equation*}
+где $x^k$ — приближение к точке минимума на $k$-ом шаге.
+
+\subsubsection{Пример}
+\label{sec:penalty-usage}
+
+В разделе \ref{sec:kuhn-tucker} была решена задача условной
+оптимизации \eqref{eq:cond-optim-problem}:
+\begin{equation*}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \extr \\
+    g_1(x) = 2x_1 - x_2 - 2 \leq 0 \\
+    g_2(x) = -x_1 \leq 0 \\
+    g_3(x) = -x_2 \leq 0
+  \end{cases}
+\end{equation*}
+Среди условных экстремумов функции был найден минимум в точке $A = (0,
+4)$. Найдём его с помощью штрафных функций. Преобразуем задачу к виду
+\label{eq:penalty-iter}, выбирая штрафную часть в виде
+\eqref{eq:weisman}:
+\begin{equation}
+  \label{eq:penalty-problem}
+  P(x) = f(x) + p \sum_{j=1}^3{ \left [ g_j^+(x) \right ]^2} \to \min
+\end{equation}
+
+На рисунках \ref{fig:pen-contours1}--\ref{fig:pen-contours4}
+представлены линии уровня функции $P(x)$ задачи
+\eqref{eq:penalty-problem} при различных значениях $p$ (при $p=0$
+получается исходная функция $f(x)$ задачи
+\eqref{eq:cond-optim-problem}). Видно, что с ростом $p$ влияние
+штрафной части вне $D$ (\ref{plot:pen-boundaries}) значительно
+возрастает, тогда как в допустимой области оптимизируемая функция не
+претерпевает никаких изменений.
+
+\pgfplotsset{every axis/.append style={xmin=-5,xmax=5,ymin=-5,ymax=5}}
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{condextr_full-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+      \label{plot:pen-boundaries}
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=0$}
+  \label{fig:pen-contours1}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty_mini-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=5$}
+    \label{fig:pen-contours2}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=50$}
+  \label{fig:pen-contours3}
+\end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
+      \input{penalty_maxi-contours.tkz.tex}
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption{Линии уровня функции $P(x)$ при $p=150$}
+  \label{fig:pen-contours4}
+\end{figure}
+
+Для численного решения задачи \eqref{eq:penalty-problem} теперь уже
+безусловной минимизации воспользуемся описанным ранее градиентным
+методом с чебышёвскими функциями релаксации, выбирая в качестве
+начального приближения точку вне области $D$.
+
+Индекс $k$ в \eqref{eq:penalty-problem} опущен не случайно: опыт
+показывает, что при достаточно большом начальном значении параметра
+$p_0$ использование итерационного процесса \eqref{eq:penalty-iter}
+может и не понадобиться, поскольку точка минимума $A$ с достаточной
+точностью локализуется уже на первом шаге. Это проиллюстрировано на
+рисунке \ref{fig:penalty}.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$, x=1 cm, y=1 cm]
+      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
+        (0,0) (1,0) (3.5,5)};
+      \input{penalty-contours.tkz.tex}
+
+      \input{penalty_relch_-2,-3_20_14-trace.tkz.tex}
+      \input{penalty_relch_2,-4_20_10-trace.tkz.tex}
+
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption[Метод штрафных функций]{Ход процесса минимизации
+    \eqref{eq:penalty-problem} при $p=50$ и различном выборе начальной
+    точки}
+  \label{fig:penalty}
+\end{figure}
+
+\subsubsection{Использование метода}
+
+Метод штрафных функций позволяет сводить задачи оптимизации при
+наличии ограничений к задачам безусловной оптимизации, снижая таким
+образом структурную сложность решаемой задачи. При этом, однако,
+оптимизация функций \eqref{eq:penalty-iter} может стать проблематичной
+ввиду высокой степени овражности вспомогательного функционала. В таком
+случае целесообразным может оказаться использование методов типа
+описанных в разделе \ref{sec:relch}.

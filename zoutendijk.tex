@@ -1,0 +1,358 @@
+
+\subsection{Метод возможных направлений Зойтендейка}
+\label{sec:zoutendijk}
+
+\subsubsection{Общая схема методов возможных направлений}
+
+Итерационные методы возможных направлений, к которым относится и метод
+Зойтендейка, реализуют решение задачи
+\eqref{eq:cond-optim-problem-form} по общей схеме, согласно которой
+поиск начинается в допустимой точке пространства решений и
+продолжается по траектории, обеспечивающей улучшение значения целевой
+функции, но не выходящей за границы допустимой области.
+
+На каждом шаге очередное приближение к точке минимума находится по
+формуле
+\begin{equation}
+  \label{eq:pd-iter}
+  x^{k+1} = x^k + s_k \mul d^k
+\end{equation}
+
+Различие между методами возможных направлений заключается в стратегии
+выбора направления $d^k$ и шага $s_k$.
+
+\subsubsection{Алгоритм метода Зойтендейка}
+
+В методе Зойтендейка на каждой итерации направление и шаг выбираются
+так, чтобы обеспечить наименьшую минимизирующую поправку к целевой
+функции без нарушения какого-либо ограничения.
+
+Пусть в \eqref{eq:cond-optim-problem-form} функции ограничений
+$g_j(x)$ линейны или линеаризованы (с помощью разложения в ряд
+Тейлора) так, что получена следующая задача (рассматривается случай
+минимизации):
+\begin{equation}
+  \label{eq:zoutendijk-problem-form}
+  \begin{cases}
+    f(x) \to \min \\
+    \scalmult{a^j,x} \leq b_j,\, j=\overline{1,m} \\
+    x_i \geq 0,\, i=\overline{1,n} \\
+    x \in \set{R}^n
+  \end{cases}
+\end{equation}
+
+Теперь сформулируем алгоритм метода Зойтендейка, описанный в
+\cite{himmelblau75}.
+
+Начальное приближение $x^1$ выбирается из числа точек, удовлетворяющих
+ограничениям задачи \eqref{eq:zoutendijk-problem-form}.
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{Шаг \arabic{enumi}.}}
+\item Определяются множества номеров активных ограничений $I^k$ — для
+  ограничений вида $x_i \geq 0$ и $J^k$ — для ограничений вида
+  $\scalmult{a^j,x} \leq b_j$.
+\item Если $I^k=J^k = \varnothing$, то $d^k=-f'(x^k)$. В противном
+  случае решают задачу линейного программирования по минимизации
+  скалярного произведения
+  \begin{equation*}
+    \scalmult{f'(x^k), d^k} \to \min
+  \end{equation*}
+  при наличии ограничений
+  \begin{equation*}
+    \scalmult{a^j, d^k} \leq 0
+  \end{equation*}
+  что соответствует поиску такого допустимого направления, вдоль
+  которого целевая функция убывает быстрее всего.
+
+  Для этого в векторе $d^k$ каждую $i$-ю координату
+  представляют\footnote{Верхние индексы у $d_i, d_{i+}, d_{i-}$
+    опущены для компактности} как $d_i$ для $i \in I^k$ и
+  $d_{i+}-d_{i-}$ для $i \notin I^k$, так что решаемая задача
+  приобретёт следующий вид:
+  \begin{equation}
+    \label{eq:zoutendijk-linprog}
+    \begin{cases}
+      \scalmult{f'(x^k), d^k} = 
+      \suml_{i\in I^k}{\pardiff{f(x^k)}{x_i}d_i} + 
+      \suml_{i \notin I^k}{\pardiff{f(x^k)}{x_i}(d_{i+}-d_{i-})}
+      \to \min\\
+      
+      \scalmult{a^j, d^k} = 
+      \suml_{i\in I^k}{a^j_id_i} +
+      \suml_{i \notin I^k}{a^j_i(d_{i+}-d_{i-})} \leq 0,
+      \, i\in J^k \\
+      
+      \suml_{i=1}^n\abs{d_i^k} = \suml_{i\in I^k}{d_i}+
+      \suml_{i \notin I^k}{\left( d_{i+} + d_{i-}\right)} \leq 1\\
+      
+      d_{i+} \geq 0,\, d_{i-} \geq 0,\,d_{i+}\mul d_{i-}=0,\, i\notin I^k
+    \end{cases}
+  \end{equation}
+\item Если выполняется условие
+  \begin{equation}
+    \label{eq:zoutendijk-halt}
+    \scalmult{f'(x^k), d^k} = 0
+  \end{equation}
+  то дальнейшее улучшение решения невозможно и процесс прерывается.
+
+  В противном случае определяют величину шага
+  \begin{equation}
+    \label{eq:zoutendijk-step}
+    s_k =
+    \min\{s_*,\hat{s}_1,\dotsc,\hat{s}_n,\bar{s}_1,\dotsc,\bar{s}_m\}
+  \end{equation}
+  где компоненты под $\min$ находятся по следующим правилам:
+  \begin{itemize}
+  \item $s_*$ — решение задачи безусловной одномерной оптимизации
+    \begin{equation} 
+      \label{eq:zoutendijk-1optim}
+      f(x^k+s_* \mul d^k) \to \min
+    \end{equation}
+
+  \item $\hat{s}_i$ — наибольший шаг, при котором ограничение
+    \begin{equation*}
+      x^k+\hat{s}_i d^k_i \geq 0
+    \end{equation*}
+    остаётся удовлетворённым. Если компонента найденного вектора
+    направления $d^k_i \geq 0$, то $\hat{s}_i = +\infty$ (так что
+    соответствующая компонента $\hat{s}_j$ согласно
+    \eqref{eq:zoutendijk-step} никак не ограничивает выбор $s_k$),
+    иначе
+    \begin{equation*}
+      \hat{s}_i = -\frac{x^k_i}{d^k_i}
+    \end{equation*}
+
+  \item $\bar{s}_j$ — наибольший шаг, при котором при движении из
+    $x^k$ по направлению $d_k$ ограничение
+    \begin{equation*}
+      \scalmult{a^j, x^k+\bar{s}_j d^k} \leq b_j
+    \end{equation*}
+    остаётся выполненным. Если $\scalmult{a^j, d^k} \leq 0$, то
+    ограничение будет удовлетворено при любом шаге, поэтому $\bar{s}_j
+    = +\infty$. В противном случае, $\bar{s}_j$ определяется как
+    \begin{equation*}
+      \bar{s}_j = \frac{b_j-\scalmult{a^j, x^k}}{\scalmult{a^j, d^k}}
+    \end{equation*}
+  \end{itemize}
+  Отметим, что $s_k>0$.
+\item С учётом шага $s_k$ и направления $d^k$ согласно
+  \eqref{eq:pd-iter} полагают новое приближение равным
+  \begin{equation*}
+    x^{k+1} = x^k + s_k \mul d^k
+  \end{equation*}
+  и переходят к следующей итерации.
+\end{enumerate}
+
+Таким образом, критерием останова процесса оптимизации $k$-й итерации
+является выполнение равенства \eqref{eq:zoutendijk-halt}, что
+равносильно невозможности дальнейшего уменьшения значения целевой
+функции при заданных ограничениях.
+
+\subsubsection{Применение метода Зойтендейка}
+
+Рассмотрим работу метода возможных направлений на примере задачи
+\eqref{eq:cond-optim-problem-raw}. Будем искать точку минимума.
+Ограничения уже линейны, поэтому дополнительная линеаризация не
+требуется. Задача уже приведена к виду
+\eqref{eq:zoutendijk-problem-form}:
+\begin{equation}
+  \label{eq:zoutendijk-problem}
+  \begin{cases}
+    f(x) = (x_1+4)^2 + (x_2-4)^2 \to \min \\
+    2x_1-x_2 \leq 2 \\
+    x_1 \geq 0 \\
+    x_2 \geq 0
+  \end{cases}
+\end{equation}
+
+\begin{enumerate}
+  \renewcommand{\labelenumi}{\textbf{Итерация \arabic{enumi}.}}
+  \renewcommand{\labelenumii}{\textbf{Шаг \arabic{enumii}.}}
+\item
+  В качестве первого приближения $x^1$ возьмём точку $(1, 1)$, очевидно
+  удовлетворяющую всем ограничениям.
+  \begin{enumerate}
+  \item Ни одно из ограничений не активно в данной точке, поэтому
+    множества $I^k = J^k = \varnothing$.
+  \item Направление движения определим как противоположное вектору
+    градиента:
+    \begin{equation*}
+      d^1 = -f(x^1) = \begin{pmatrix} -10 \\ \phm 6 \end{pmatrix}
+    \end{equation*}
+  \item Определим коэффициенты $s_*, \hat{s}_1, \hat{s}_2, \bar{s}_1$.
+    \begin{itemize}
+    \item Минимум функции $f(x^1+s_*\mul d^1) = (5-10s_*)^2+(6s_*-3)^2$
+      достигается при $s_*=\frac{1}{2}$.
+    \item $d^1_1 = -10 \ngeq 0 \implies \hat{s}_1 =
+      -\frac{x^1_1}{d^1_1} = -\frac{1}{-10} = \frac{1}{10}$
+    \item $d^1_2 = 6 \geq 0 \implies \hat{s}_2 = +\infty$
+    \item $\scalmult{a^1, d^1} = -26 \leq
+      0 \implies \bar{s}_1 = +\infty$
+    \end{itemize}
+    Находим величину шага: $s_1 = \min\{\frac{1}{2}, \frac{1}{10}\} =
+    \frac{1}{10}$.
+  \item Вычисляем новое приближение $x^2$:
+    \begin{equation*}
+      x^2 = \begin{pmatrix} 1 \\ 1 \end{pmatrix} +
+      \frac{1}{10} \begin{pmatrix} -10 \\ \phm 6 \end{pmatrix}
+      = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix}
+    \end{equation*}
+  \end{enumerate}
+\item Продолжим поиск минимума из точки
+  \begin{equation*}
+    x^2 = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix}
+  \end{equation*}
+  \begin{enumerate}
+  \item В $x^2$ активно лишь ограничение $x_1\geq 0$, поэтому $I^2 =
+    \varnothing, J^2 = \{1\}$.
+  \item Составим задачу линейного программирования:
+    \begin{equation*}
+      \begin{cases}
+        \scalmult{f'(x^2), d^2} = \tilde{f}_2 =
+        8d_1 - \frac{3}{5} (d_{2+}-d_{2-}) \to \min \\
+        d_1+(d_{2+}+d_{2-}) \leq 1 \\
+        d_1, d_{2+}, d_{2-} \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    Приведём её к каноническому виду, получив в первом ограничении
+    равенство путём добавления переменной $x_1$:
+    \begin{equation*}
+      \begin{cases}
+        \tilde{f}_2 = 8d_1-\frac{3}{5}(d_{2+}-d_{2-}) \to \min \\
+        d_1+(d_{2+}+d_{2-}) + x_1 = 1 \\
+        d_1, d_{2+}, d_{2-}, x_1 \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    Решим задачу симплекс-методом. Составим матрицу коэффициентов
+    ограничений и целевой функции, затем исключим $x_1$ из состава
+    базисных переменных:
+    \begin{equation}
+      \begin{gmatrix}[b]
+        \dagger & d_1 & d_{2+} & d_{2-} & x_1 & \diamond\\
+        x_1 & 1 & 1 & 1 & 1 & \mathbf{1} \\
+        \tilde{f}_2 & -8 & \mathbf{\frac{3}{5}} & -\frac{3}{5} & 0 & 0
+        \rowops \add[-\frac{3}{5}]{1}{2}
+      \end{gmatrix}
+    \end{equation}
+    Получим матрицу с одними отрицательными коэффициентами в нижнем
+    ряду:
+    \begin{equation*}
+      \begin{gmatrix}[b]
+        \dagger & d_1 & d_{2+} & d_{2-} & x_1 & \diamond\\
+        x_1 & 1 & 1 & 1 & 1 & 1 \\
+        \tilde{f}_2 & -\frac{43}{5} & 0 & -\frac{6}{5} & -\frac{3}{5}
+        & -\frac{3}{5}
+      \end{gmatrix}
+    \end{equation*}
+    При этом условие $d_{2+} \mul d_{2-} = 0$ выполнено. Итак, найдено
+    оптимальное решение задачи линейного программирования:
+    \begin{equation*}
+      \begin{cases}
+        d_{1\phantom{+}} = 0 \\
+        d_{2+} = 1 \\
+        d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    с учётом которого построим вектор $d^2$:
+    \begin{equation*}
+      d^2 = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+    \end{equation*}
+  \item Определим коэффициенты $s_*, \hat{s}_1, \hat{s}_2, \bar{s}_1$.
+    \begin{itemize}
+    \item Минимум $f(x^2+s_*\mul d^2) = 16+(s_*-\frac{32}{5})^2$
+      достигается при $s_* = \frac{32}{5}$.
+    \item $d^2_1 = 0 \geq 0 \implies \hat{s}_1 = +\infty$
+    \item $d^2_1 = 1 \geq 0 \implies \hat{s}_1 = +\infty$
+    \item $\scalmult{a^1, d^2} = -1 \leq 0 \implies \bar{s}_1 =
+      +\infty$ Итак, ограничения никак не влияют на величину шага,
+      поэтому $s_k = \frac{32}{5}$.
+    \end{itemize}
+  \item Найдём приближение $x^3$:
+    \begin{equation*}
+      x^3 = \begin{pmatrix} 0 \\ \frac{8}{5} \end{pmatrix} +
+      \frac{32}{5} \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+      = \begin{pmatrix} 0 \\ 4 \end{pmatrix}
+    \end{equation*}
+  \end{enumerate}
+\item Как известно из точного аналитического решения (см. раздел
+  \ref{sec:kuhn-tucker}), точка $(0, 4)$ является точным решением
+  задачи \eqref{eq:zoutendijk-problem}. Значит, удовлетворение
+  \eqref{eq:zoutendijk-halt} на этой итерации должно сигнализировать
+  об этом. Выполним первые два шага алгоритма, что убедиться в этом.
+  \begin{enumerate}
+  \item Как и на прошлой итерации, $I^2 = \varnothing, J^2 = \{1\}$.
+  \item Для нахождения компонент вектора $d^k$ решим задачу линейного
+    программирования:
+    \begin{equation*}
+      \begin{cases}
+        \scalmult{f'(x^3), d^3} = \tilde{f}_3 =
+        8d_1 \to \min \\
+        d_1+(d_{2+}+d_{2-}) + x_1 = 1 \\
+        d_1, d_{2+}, d_{2-}, x_1 \geq 0 \\
+        d_{2+} \mul d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+    оптимальным решением которой является тривиальный набор
+    \begin{equation*}
+      \begin{cases}
+        d_{1\phantom{+}} = 0 \\
+        d_{2+} = 0 \\
+        d_{2-} = 0
+      \end{cases}
+    \end{equation*}
+
+    Таким образом,
+    \begin{equation*}
+      d^3 = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+    \end{equation*}
+
+    Очевидно, что выполняется критерий останова
+    \eqref{eq:zoutendijk-halt}. Значит, далее уменьшать значение
+    $f(x)$ в \eqref{eq:zoutendijk-problem} не представляется
+    возможным.
+  \end{enumerate}
+\end{enumerate}
+
+Итак, с помощью метода возможных направлений Зойтендейка найдено
+решением задачи условной минимизации \eqref{eq:zoutendijk-problem},
+которое согласуется с решением, найденным в \ref{sec:kuhn-tucker}.
+
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      x=2.4 cm, y=1.3 cm,
+      xmin=0, ymin=0, xmax=2.5,
+      xlabel=$x_1$, ylabel=$x_2$,
+      enlargelimits=0.05]
+      \input{condextr-contours.tkz.tex}
+      \addplot[ultra thick, dashed, red!50!black] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
+      
+      \addplot[mark=*, only marks,
+               mark options={fill=blue!70!black}] coordinates{(1,1)
+                 (0,1) (0, 4)};
+      
+      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(1,1) (0,1)};
+      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(0,1) (0,4)};      
+    \end{axis}
+  \end{tikzpicture}
+  \caption[Метод Зойтендейка]{Ход решения задачи
+    \eqref{eq:zoutendijk-problem} методом Зойтендейка}
+  \label{fig:cond-optim}
+\end{figure}
+
+\subsubsection{Использование метода}
+
+Метод Зойтендейка подходит для реализации на компьютере, поскольку не
+содержит принципиально сложных шагов. Единственным проблемным этапом
+может быть одномерная минимизация \eqref{eq:zoutendijk-1optim} для
+нахождения значения $s_*$.
+
+Линеаризация ограничений может вносить определённую погрешность в
+решение.
+
+Основным же ограничением методом Зойтендейка является невозможность
+решения задач с ограничениями типа равенств.
