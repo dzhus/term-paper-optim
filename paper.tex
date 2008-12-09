@@ -49,11 +49,14 @@
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\Sp}{Sp}
 
-\newtheorem{thm}{Теорема}[section]
+% Theorems, remarks and definition all share the same numbering
+% sequence, which is also subordinate to sections
+\newtheorem{thm}[]{Теорема}
+\numberwithin{thm}{section}
 \theoremstyle{remark}
-\newtheorem{rem}{Замечание}[section]
+\newtheorem{rem}[thm]{Замечание}
 \theoremstyle{definition}
-\newtheorem{dfn}{Определение}[section]
+\newtheorem{dfn}[thm]{Определение}
 
 \numberwithin{equation}{section}
 
