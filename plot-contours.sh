@@ -25,9 +25,10 @@ do
     # Get current level
     level=$(echo "${contour}" | cut -d- -f 3)
 
-    # Calculate scale of current level, avoiding too small scales
-    s_level=$(echo "if (${level} >= sqrt(${max_level})) ${level} else sqrt(${max_level})" | bc)
-    scale=$(echo "scale=3; l(${s_level}+1)/l(${max_level}+1)*100" | bc -l)
+#     # Calculate scale of current level, avoiding too small scales
+#     s_level=$(echo "if (${level} >= sqrt(${max_level})) ${level} else sqrt(${max_level})" | bc)
+#     scale=$(echo "scale=3; l(${s_level}+1)/l(${max_level}+1)*100" | bc -l)
+    scale="100"
 
     # Remove comments from point lists
     tmp=$(mktemp /tmp/docXXXXXX)
