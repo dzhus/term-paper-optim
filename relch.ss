@@ -8,8 +8,19 @@
          pyani-lib/generic-ops
          pyani-lib/function-ops)
 
-(provide relch-optimize
-         gd-optimize
+(define iteration-count? integer?)
+(define epsilon? (and/c real? positive?))
+(define listener? (-> vector? any))
+
+(provide/contract [relch-optimize
+                   (->* (procedure?
+                         vector?
+                         epsilon?
+                         iteration-count?
+                         (and/c integer? positive?))
+                        (listener?)
+                        vector?)])
+(provide gd-optimize
          gdn-optimize)
 
 (define (gradient-method choose-shift stop-condition)
