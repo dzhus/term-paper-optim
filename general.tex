@@ -6,6 +6,7 @@
 \label{sec:convexity}
 
 \begin{dfn}
+  \label{dfn:convex-set}
   Множество $D \subset \set{R}^n$ называется \neword{выпуклым}, если
   для $\forall x, y \in D, \forall \alpha \in [0;1]$ выполняется
   \begin{equation*}
@@ -13,10 +14,22 @@
   \end{equation*}
 \end{dfn}
 \begin{dfn}
-  Множество называется \neword{вогнутым}, если оно не выпукло.
+  Если в определении \ref{dfn:convex-set} для $\forall \alpha \in
+  (0;1)$ условие выполняется в смысле принадлежности ко
+  \emph{внутренности} $D$, то есть
+  \begin{equation*}
+    \alpha x + (1-\alpha) y \in D \setminus \partial D,
+  \end{equation*}
+  то множество $D$ называется \neword{строго выпуклым}.
+\end{dfn}
+\begin{dfn}
+  Множество называется \neword{вогнутым}, если оно не является
+  выпукло.
 \end{dfn}
 Таким образом, отрезок, соединяющий две точки выпуклого множества,
-целиком принадлежит этому множеству (рис. \ref{fig:convex-sets}).
+целиком принадлежит этому множеству, а две точки строго выпуклого
+множества соединяются отрезком, внутренние точки которого не
+принадлежат границе множества (рис. \ref{fig:convex-sets}).
 
 \input{convex-sets.tkz.tex}
 
@@ -28,8 +41,11 @@
   \begin{equation*}
     f(\alpha x + (1-\alpha)y) \leq \alpha f(x) + (1-\alpha) f(y)
   \end{equation*}
-  Когда это неравенство $\forall \alpha \in (0;1)$ выполняется строго,
-  функцию $f(x)$ называют \neword{строго выпуклой}.
+\end{dfn}
+\begin{dfn}
+  Если в определении \ref{dfn:convex-f} для $\forall \alpha \in (0;1)$
+  неравенство выполняется строго, функция $f(x)$ называется
+  \neword{строго выпуклой}.
 \end{dfn}
 \begin{rem}
   \label{rem:lin-f-convex}
