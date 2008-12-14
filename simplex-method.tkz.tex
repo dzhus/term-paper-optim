@@ -2,7 +2,7 @@
   \centering
   \begin{tikzpicture}
     \begin{axis}[
-      x=1.5cm, y=2cm,
+      x=1.5cm, y=1.5cm,
       xlabel=$x_1$,
       ylabel=$x_2$,
       xtick={1, 2, 3, 4, 5, 6},
@@ -14,9 +14,13 @@
       pattern color=gray,
       area legend]
 
-      \addplot[draw=none,mark=none,pattern=dots] coordinates{
-        (0,0) (0,2) (2,3.5) (5,0)} \closedcycle;
+      \addplot[draw=none,mark=none,pattern=dots]
+      coordinates{(0,0) (0,2) (2,3.5) (5,0)} \closedcycle;
       \label{plot:simplex-feasible-space}
+
+      \draw[arrows=-triangle 60, dashed, ultra thick]
+      (axis cs:1.5, 0.75) -- (axis cs:2.25,2.25);
+      \label{plot:simplex-antigrow}
 
       \input{simplex_prob-contours.tkz.tex}
       
@@ -30,7 +34,7 @@
       \draw node[circle, fill=black, scale=0.5, 
                  pin={left:$(0, 2)$}] at (axis cs:0,2) {};
 
-      \addplot[ultra thick, arrows=-triangle 45, blue]  coordinates{(0, 0) (0, 2)};
+      \addplot[ultra thick, arrows=-triangle 45, blue] coordinates{(0, 0) (0, 2)};
       \addplot[ultra thick, arrows=-triangle 45, blue] coordinates{(0, 2) (2,3.5)};
     \end{axis}
   \end{tikzpicture}
