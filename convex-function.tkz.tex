@@ -1,0 +1,25 @@
+\begin{figure}[!h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      xlabel=$x$, ylabel=$y(x)$,
+      xtick={-2, -1, 1, 2},
+      xmin=-2.5, xmax=2.5,
+      ymin=-0.9, ymax=4.9,
+      axis x line=middle,
+      axis y line=middle,
+      axis on top,
+      pattern color=gray!50]
+      
+      
+      \draw[draw=none, pattern=north east lines] (axis cs:-1.9, 3.61) 
+                       parabola bend (axis cs:0, 0)
+                       (axis cs:1.9, 3.61) -- cycle;
+      \addplot[mark=none] plot[domain=-2:2] function{x**2};
+      \addplot[mark=none] plot[domain=0.25:2] function{2*x-1};
+    \end{axis}
+  \end{tikzpicture}
+  \caption[Выпуклость функции]{Выпуклая функция $y(x)=x^2$ и
+    касательная к ней в точке $(1, 1)$}
+  \label{fig:convex-function}
+\end{figure}
