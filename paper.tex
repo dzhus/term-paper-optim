@@ -15,6 +15,8 @@
 % Matrix operations
 \usepackage{gauss}
 
+\usepackage{tikz}
+\usetikzlibrary{calc}
 \usepackage{pgfplots}
 \usetikzlibrary{patterns,arrows}
 \pgfplotsset{every axis/.append style={enlargelimits=0.05}}
@@ -102,6 +104,9 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 Последний раздел посвящён поиск экстремальных значений целевой функции
 при наличии ограничений с использованием теоремы Куна—Таккера, метода
 штрафных функций и метода возможных направлений Зойтендейка.
+
+\clearpage
+\input{general.tex}
 
 \clearpage
 \input{simplex.tex}
