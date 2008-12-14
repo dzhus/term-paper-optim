@@ -8,6 +8,8 @@
 #
 # Output is a set of TikZ `\draw` commands for each contour produced
 # by FUNCTION.gp. See also `contour-path.tpl.tkz.tex` template.
+#
+# Limitation: does not work with negative level contours
 
 FUNCTION=$1
 
@@ -19,6 +21,7 @@ max_level=${LEVELS[$(( ${#LEVELS[@]} - 1))]}
 rm -fr ${FUNCTION}-contour-*
 
 gnuplot ${FUNCTION}-contours.gp
+
 
 for contour in ${FUNCTION}-contour-*
 do
@@ -38,9 +41,15 @@ do
     csplit -f ${contour} -b '-%02d' -qz ${tmp} "/^$/" "{*}"
     for part in ${contour}-*
     do
+        # Removing empty subparts
+        if grep -v '^#* *$' $part > /dev/null
+        then
         m4 --define="__LEVEL"=${level} \
             --define="__FILE"=${part} \
             --define="__COLORSCALE"=${scale} \
             contour-path.tpl.tkz.tex
+        else
+            rm ${part}
+        fi
     done
 done
