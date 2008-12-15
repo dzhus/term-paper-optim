@@ -25,7 +25,7 @@
 (define function-id (make-defaulting-parameter #f))
 (define prec (make-defaulting-parameter 3))
 (define iter (make-defaulting-parameter 100))
-(define deg (make-defaulting-parameter 8))
+(define param (make-defaulting-parameter 8))
 (define start-point (make-defaulting-parameter '#(0 0)))
 (define method (make-defaulting-parameter relch-optimize))
 
@@ -44,7 +44,7 @@
  ["-s" s "Starting point (default 0.0,0.0)"
   (start-point (list->vector (map string->number (regexp-split #rx"," s))))]
  ["-i" i "Maximum iterations count (default 100)" (iter (string->number i))]
- ["-L" L "Chebyshev polynomial degree (default 8)" (deg (string->number L))]
+ ["-L" L "Chebyshev polynomial degree (default 8)" (param (string->number L))]
  ["-p" p "Precision (default 3)" (prec (string->number p))]
  #:args (f) (function-id f))
 
@@ -58,5 +58,5 @@
   (exit ((method)
          (test-problem-function function)
          (start-point)
-         (expt 10 (- (prec))) (iter) (deg)
+         (expt 10 (- (prec))) (iter) (param)
          point-poster)))
