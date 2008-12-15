@@ -8,35 +8,54 @@
          pyani-lib/generic-ops
          pyani-lib/function-ops)
 
+;; Simple contracts for optimization parameters
+(define point? vector?)
 (define iteration-count? integer?)
 (define epsilon? (and/c real? positive?))
-(define listener? (-> vector? any))
+;; Used only for \relch{}
+(define parameter? (and/c integer? positive?))
+  
+;; Listener is a mean of providing insight to optimization process. If
+;; listener returns a vector, it's considered to be a new minimum
+;; point approximation
+(define listener? (vector? vector? vector? vector? matrix? . -> . (or/c void vector?)))
 
-(provide/contract [relch-optimize
-                   (->* (procedure?
-                         vector?
-                         epsilon?
-                         iteration-count?
-                         (and/c integer? positive?))
-                        (listener?)
-                        vector?)])
-(provide gd-optimize
-         gdn-optimize)
+;; All provided methods take five mandatory and one optional argument
+;; and return an approximation to minimum point (represented by
+;; vector)
+(define optimization-method? (->* (procedure?
+                                   vector?
+                                   epsilon?
+                                   iteration-count?
+                                   parameter?)
+                                  (listener?)
+                                  point?))
 
+(provide/contract [relch-optimize optimization-method?]
+                  [gd-optimize optimization-method?]
+                  [gdn-optimize optimization-method?])
+
+
 (define (gradient-method choose-shift stop-condition)
-  (define (optimize function x-start iterations [listen-proc #f])
-    (when listen-proc (listen-proc x-start))
+  (define (optimize function x-start iterations [listener void])
     (if (<= iterations 0)
         x-start
         (let* ((g (@ (gradient function) x-start))
                (G (@ (hessian function) x-start))
                (shift (choose-shift x-start g G))
-               (x-new (+ x-start shift)))
-          (if (stop-condition function x-start x-new g G)
-              x-new
-              (optimize function x-new
-                        (sub1 iterations)
-                        listen-proc)))))
+               (candidate-x-new (+ x-start shift))
+               (listener-result (listener x-start
+                                          shift
+                                          candidate-x-new
+                                          g G)))
+          (let ((x-new (if (vector? listener-result)
+                           listener-result
+                           candidate-x-new)))
+            (if (stop-condition function x-start x-new g G)
+                x-new
+                (optimize function x-new
+                          (sub1 iterations)
+                          listener))))))
   optimize)
 
 (define (zero-gradient-condition eps)
@@ -60,24 +79,25 @@
         shift
         (regulate-shift (decrease-shift shift) f x-start))))
 
+
 ;; Gradient descend
 (define (make-gd-optimize regulate-shift stop-condition)
   (lambda (f x-start
         eps
         iterations [unused #f]
-        [listen-proc #f])
+        [listener void])
     (define (choose-shift x-start g G)
       (let ((shift (* g -0.1)))
         (regulate-shift shift f x-start)))
     ((gradient-method choose-shift (stop-condition eps))
-     f x-start iterations listen-proc)))
+     f x-start iterations listener)))
 
 (define (make-relch-optimize regulate-shift stop-condition)
   (lambda (f x-start
         eps
         iterations
         degree
-        [listen-proc #f])
+        [listener void])
     (define (choose-shift x-start g G)
       (define (relch-shift L g G)
         (let* ((n (matrix-size G))
@@ -106,7 +126,7 @@
              (shift (relch-shift degree g G)))
         (regulate-shift shift f x-start)))
     ((gradient-method choose-shift (stop-condition eps))
-     f x-start iterations listen-proc)))
+     f x-start iterations listener)))
 
 ;; Different RELCH implementations
 (define relch-optimize (make-relch-optimize regulate-shift zero-gradient-condition))

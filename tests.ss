@@ -24,7 +24,7 @@
                         (test-problem-x-start problem)
                         max-iter eps parameter
                         ;; Show simple progress bars
-                        (lambda (x) (display ".") (flush-output))))
+                        (lambda (x-start shift x-new g G) (display ".") (flush-output))))
         (target-x (test-problem-target-x problem)))
     (if (list? target-x)
         (check-true (vector-in-list? result target-x test-epsilon))

@@ -48,12 +48,11 @@
  ["-p" p "Precision (default 3)" (prec (string->number p))]
  #:args (f) (function-id f))
 
-(define (point-poster point [nl #t])
+(define (point-poster x-start shift x-new g G)
   (vector-for-each
    (lambda (i p)
      (display (format (string-append "~0," (number->string (add1 (prec))) "F ") p)))
-   point)
-  (when nl (display "\n")))
+   x-start))
 
 (let ((function (cdr (assoc (function-id) test-problems))))
   (exit ((method)

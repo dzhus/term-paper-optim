@@ -72,7 +72,7 @@
                              (expt 10 (- (send eps get-value)))
                              (send iterations get-value)
                              (send degree get-value)
-                             log-poster)))
+                             (lambda (x s new g G) (log-poster x)))))
       (log-poster (format "Ответ: ~a; Известные точки минимума: ~a\n"
                           x (test-problem-target-x p))))))
 
