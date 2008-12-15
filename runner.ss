@@ -52,7 +52,8 @@
   (vector-for-each
    (lambda (i p)
      (display (format (string-append "~0," (number->string (add1 (prec))) "F ") p)))
-   x-start))
+   x-start)
+  (newline))
 
 (let ((function (cdr (assoc (function-id) test-problems))))
   (exit ((method)
