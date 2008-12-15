@@ -60,11 +60,18 @@
 
 % Theorems, remarks and definition all share the same numbering
 % sequence, which is also subordinate to sections
+\newtheoremstyle{ruthm}{3pt}{3pt}{\itshape}{}{\scshape}{.}{.5em}{}
+\newtheoremstyle{rudfn}{3pt}{3pt}{}{}{\scshape}{.}{.5em}{Теорема \thethm}
+\newtheoremstyle{rurem}{}{}{}{}{\scshape}{.}{.5em}{}
+
+\theoremstyle{ruthm}
 \newtheorem{thm}[]{Теорема}
 \numberwithin{thm}{section}
-\theoremstyle{remark}
+
+\theoremstyle{rurem}
 \newtheorem{rem}[thm]{Замечание}
-\theoremstyle{definition}
+
+\theoremstyle{rudfn}
 \newtheorem{dfn}[thm]{Определение}
 
 \numberwithin{equation}{section}
