@@ -72,12 +72,26 @@
 (define (better-minimum? f x-new x)
   (< (@ f x-new) (@ f x)))
 
-;; Decrease shift factor until it leads to a better minimum
-(define (regulate-shift shift f x-start)
+
+;; Shift regulations enforce relaxation condition enforcement for both
+;; RELCH and GD, they also provide basic fallback measure in case of
+;; infinite shifts
+
+;; Decrease shift factor until it leads to a better value
+(define (enforce-relaxation shift f x-start)
   (let ((x-new (+ x-start shift)))
     (if (better-minimum? f x-new x-start)
         shift
-        (regulate-shift (decrease-shift shift) f x-start))))
+        (enforce-relaxation (decrease-shift shift) f x-start))))
+
+;; Enforce relaxation only if it's possible; in case of numeric
+;; overflow leading to infinite shift, return semirandom shift
+(define (enforce-relaxation-filtered shift f x-start)
+  (define (random-vector length)
+    (build-vector length (lambda (x) (* 2 (- (random 2) 1/2)))))
+  (if (< (p-vector-norm shift) +inf.0)
+      (enforce-relaxation shift f x-start)
+      (random-vector (vector-length shift))))
 
 
 ;; Gradient descend
@@ -129,9 +143,11 @@
      f x-start iterations listener)))
 
 ;; Different RELCH implementations
-(define relch-optimize (make-relch-optimize regulate-shift zero-gradient-condition))
-(define gd-optimize (make-gd-optimize regulate-shift zero-gradient-condition))
+(define relch-optimize (make-relch-optimize enforce-relaxation-filtered zero-gradient-condition))
+
+(define gd-optimize (make-gd-optimize enforce-relaxation zero-gradient-condition))
+
 (define gdn-optimize (make-gd-optimize
                       (lambda (shift f x-start)
-                        (regulate-shift (/ shift (p-vector-norm shift)) f x-start))
+                        (enforce-relaxation (/ shift (p-vector-norm shift)) f x-start))
                       zero-gradient-condition))
