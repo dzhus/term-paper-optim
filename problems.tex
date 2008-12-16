@@ -42,17 +42,17 @@ $-f'(x)$ почти никак не позволяет приблизиться 
 метода \gd{} постоянно оказываются то по одну, то по другую сторону
 получившегося «оврага», а процесс поиска минимума сильно замедляется.
 
-\begin{figure}[!thb]
+\begin{wrapfigure}{r}{4cm}
   \centering
   \begin{tikzpicture}
-    \begin{axis}[x=1cm,y=5cm]
+    \begin{axis}[x=1cm,y=6cm]
       \input{gully-contours.tkz.tex}
       \input{gully_sgd_0.5,3_30_0.0000099-trace.tkz.tex}
     \end{axis}
   \end{tikzpicture}
   \caption[Овражная функция]{Зацикливание \gd{} на овражной функции}
   \label{fig:gd-works}
-\end{figure}
+\end{wrapfigure}
 
 В таком случае говорят об \neword{овражности} или \neword{плохой
   обусловленности} целевой функции. Аналогия с плохо обусловленной
