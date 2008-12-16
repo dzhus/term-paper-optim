@@ -39,7 +39,8 @@
     (after
      (check-optimization-method relch-optimize
                                 (cdr test-problem)
-                                (/ test-epsilon 100)
-                                max-iterations 250)
+                                max-iterations
+                                (/ test-epsilon 1000)
+                                250)
      (newline))))
  test-problems)

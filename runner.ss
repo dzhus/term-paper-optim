@@ -62,5 +62,6 @@
   (exit ((method)
          (test-problem-function function)
          (start-point)
-         (expt 10 (- (prec))) (iter) (param)
+         (iter)
+         (expt 10 (- (prec))) (param)
          point-poster)))

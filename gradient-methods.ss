@@ -9,14 +9,13 @@
          pyani-lib/function-ops)
 
 ;; Simple contracts for optimization parameters
-(define function? procedure?)
-(define point? vector?)
-(define shift? vector?)
-(define gradient? vector?)
-(define hessian? matrix?)
-(define iteration-count? integer?)
+(define function? (flat-contract procedure?))
+(define point? (flat-contract vector?))
+(define shift? (flat-contract vector?))
+(define gradient? (flat-contract vector?))
+(define hessian? (flat-contract matrix?))
+(define iteration-count? (flat-contract integer?))
 (define epsilon? (and/c real? positive?))
-(define parameter? (and/c integer? positive?))
   
 ;; Listener is a sight from optimization process to outer world. When
 ;; listener returns a vector, it's considered to be a new minimum
@@ -35,11 +34,11 @@
 ;; All provided methods take five mandatory and one optional argument
 ;; and return an approximation to minimum point (represented by
 ;; vector) or listener's reply
-(define optimization-method? (->* (procedure?
-                                   point?
-                                   iteration-count?)
-                                  (listener?)
-                                  (or/c point? listener-reply?)))
+(define gradient-method? (->* (procedure?
+                               point?
+                               iteration-count?)
+                              (listener?)
+                              (or/c point? listener-reply?)))
 
 ;; Algorithm used to choose shift on every iteration is the essential
 ;; difference between all gradient methods
@@ -51,12 +50,18 @@
 (define stop-condition? (function? point? point? gradient? hessian? . -> . boolean?))
 
 (provide/contract [gradient-method
-                   (shift-chooser? stop-condition? . -> . optimization-method?)]
+                   (shift-chooser? stop-condition? . -> . gradient-method?)]
                   [zero-gradient-condition
                    (epsilon? . -> . stop-condition?)]
                   [close-arguments-condition
-                   (epsilon? . -> . stop-condition?)]
-                  [optimization-method? contract?])
+                   (epsilon? . -> . stop-condition?)])
+
+(provide/contract [function? contract?]
+                  [point? contract?]
+                  [iteration-count? contract?]
+                  [epsilon? contract?]
+                  [listener? contract?]
+                  [listener-reply? contract?])
 
 
 (define (gradient-method choose-shift stop-condition)

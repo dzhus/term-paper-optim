@@ -69,8 +69,8 @@
     (log-poster "Протокол работы:")
     (let ((x (relch-optimize (test-problem-function p)
                              (test-problem-x-start p)
-                             (expt 10 (- (send eps get-value)))
                              (send iterations get-value)
+                             (expt 10 (- (send eps get-value)))
                              (send degree get-value)
                              (lambda (x s new g G) (log-poster x)))))
       (log-poster (format "Ответ: ~a; Известные точки минимума: ~a\n"

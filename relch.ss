@@ -9,9 +9,20 @@
          pyani-lib/generic-ops
          pyani-lib/function-ops)
 
-(provide relch-optimize
-         gd-optimize optimization-method?
-         sgd-optimize optimization-method?)
+(define parameter? (and/c integer? positive?))
+
+(define optimization-method? (->* (function?
+                                   point?
+                                   iteration-count?
+                                   epsilon?
+                                   parameter?)
+                                  (listener?)
+                                  (or/c point? listener-reply?)))
+
+(provide/contract [relch-optimize optimization-method?]
+                  [gd-optimize optimization-method?]
+;                  [gdrelch-optimize optimization-method?]
+                  [sgd-optimize optimization-method?])
 
 
 ;; Shift regulations enforce relaxation condition enforcement for both
@@ -46,8 +57,8 @@
 ;; Gradient descend
 (define (make-gd-optimize regulate-shift stop-condition)
   (lambda (f x-start
-        eps
-        iterations [unused #f]
+        iterations eps
+        [unused #f]
         [listener void])
     (define (choose-shift x-start g G)
       (let ((shift (* g -1)))
@@ -57,8 +68,7 @@
 
 (define (make-relch-optimize regulate-shift stop-condition)
   (lambda (f x-start
-        eps
-        iterations
+        iterations eps
         degree
         [listener void])
     (define (choose-shift x-start g G)
