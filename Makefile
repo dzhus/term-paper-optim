@@ -85,7 +85,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                  trace-path.tpl.tkz.tex
 	${SHELL} plot-trace.sh $* > $@
 
-check: ${RUNNER-SOURCES} ${TESTFILE}
+check: ${SOURCES} ${TESTFILE}
 	@${MZSCHEME} ${TESTFILE} | sed -e 's/: */:/'
 	@touch check
 
