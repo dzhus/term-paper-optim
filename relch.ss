@@ -94,7 +94,7 @@
       (enforce-relaxation shift f x-start)
       (random-vector (vector-length shift))))
 
-(define (sgd-regulate factor)
+(define (make-sgd-regulate factor)
   (lambda (shift f x-start)
     (* shift factor)))
 
