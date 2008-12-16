@@ -150,3 +150,17 @@ $1.3\sqrt{\eta}$ \emph{чётное} число (в ходе тестов алг
   \caption[\relch{} на функции Розенброка, $s=200$]{Минимизация
     функции Розенброка алгоритмом \relch{} при $s=200$}
 \end{figure}
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=2.2cm, y=1.8cm]
+      \input{rosenbrock-contours.tkz.tex}
+      \input{rosenbrock_gdrelch_-1.2,1__0.0019-trace.tkz.tex}
+        \node[circle,fill=black,scale=0.25,pin={below right:\contour{white}{$A$}}] at
+        (axis cs:1,1) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption[\gdrelch{} на функции Розенброка, $s=0.0019$]{Минимизация
+    функции Розенброка алгоритмом \gdrelch{} при $h=0.0019$}
+\end{figure}
