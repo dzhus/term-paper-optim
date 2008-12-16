@@ -15,10 +15,15 @@
 ;; Used only for \relch{}
 (define parameter? (and/c integer? positive?))
   
-;; Listener is a mean of providing insight to optimization process. If
+;; Listener is a sight from optimization process to outer world. When
 ;; listener returns a vector, it's considered to be a new minimum
-;; point approximation
-(define listener? (vector? vector? vector? vector? matrix? . -> . (or/c void vector?)))
+;; point approximation; if listener returns a cons cell, then the
+;; optimization stops with returned cell as a result. Listener may be
+;; used to provide a trace of optimization process or check particular
+;; conditions during optimization which may affect further
+;; calculations
+(define listener-reply? (or/c void point? cons?))
+(define listener? (point? vector? point? vector? matrix? . -> . listener-reply?))
 
 ;; All provided methods take five mandatory and one optional argument
 ;; and return an approximation to minimum point (represented by
