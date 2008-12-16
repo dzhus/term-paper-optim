@@ -331,14 +331,12 @@ $g_j(x)$ линейны или линеаризованы (с помощью р�
       xlabel=$x_1$, ylabel=$x_2$,
       enlargelimits=0.05]
       \input{condextr-contours.tkz.tex}
-      \addplot[ultra thick, dashed, red!50!black] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
+      \addplot[thick] coordinates{(0,5) (0,0) (1,0) (2.5,3)};
       
-      \addplot[mark=*, only marks,
-               mark options={fill=blue!70!black}] coordinates{(1,1)
-                 (0,1) (0, 4)};
+      \addplot[mark=o, only marks] coordinates{(1,1) (0,1) (0, 4)};
       
-      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(1,1) (0,1)};
-      \addplot[blue, thick, mark=none, arrows=-triangle 45] coordinates{(0,1) (0,4)};      
+      \addplot[line width=2pt, arrows=-triangle 45] coordinates{(1,1) (0,1)};
+      \addplot[line width=2pt, arrows=-triangle 45] coordinates{(0,1) (0,4)};      
     \end{axis}
   \end{tikzpicture}
   \caption[Метод Зойтендейка]{Ход решения задачи
