@@ -24,7 +24,11 @@
 ;; optimization stops with returned cell as a result. Listener may be
 ;; used to provide a trace of optimization process or check particular
 ;; conditions during optimization which may affect further
-;; calculations
+;; calculations.
+;;
+;; TODO Implement optimization methods in terms of streams, as what
+;; listener actually does is processing the stream of consequent sets
+;; of approximations
 (define listener-reply? (or/c void point? cons?))
 (define listener? (point? shift? point? gradient? matrix? . -> . listener-reply?))
 
