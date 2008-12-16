@@ -11,8 +11,7 @@
 
 (provide relch-optimize
          gd-optimize optimization-method?
-         sgd-optimize optimization-method?
-         gdn-optimize optimization-method?)
+         sgd-optimize optimization-method?)
 
 
 ;; Shift regulations enforce relaxation condition enforcement for both
@@ -105,7 +104,3 @@
 ;; GD with regulation (quickly gets to gully)
 (define gd-optimize (make-gd-optimize enforce-relaxation
                                       zero-gradient-condition))
-
-(define gdn-optimize (make-gd-optimize (lambda (shift f x-start)
-                                         (enforce-relaxation (/ shift (p-vector-norm shift)) f x-start))
-                                       zero-gradient-condition))
