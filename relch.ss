@@ -33,6 +33,7 @@
 
 (provide/contract [relch-optimize optimization-method?]
                   [gd-optimize optimization-method?]
+                  [sgd-optimize optimization-method?]
                   [gdn-optimize optimization-method?])
 
 
@@ -93,6 +94,10 @@
       (enforce-relaxation shift f x-start)
       (random-vector (vector-length shift))))
 
+(define (sgd-regulate factor)
+  (lambda (shift f x-start)
+    (* shift factor)))
+
 
 ;; Gradient descend
 (define (make-gd-optimize regulate-shift stop-condition)
@@ -142,12 +147,20 @@
     ((gradient-method choose-shift (stop-condition eps))
      f x-start iterations listener)))
 
-;; Different RELCH implementations
-(define relch-optimize (make-relch-optimize enforce-relaxation-filtered zero-gradient-condition))
+;; RELCH with infinite shift filtering and step regulation
+(define relch-optimize (make-relch-optimize enforce-relaxation-filtered
+                                            zero-gradient-condition))
 
-(define gd-optimize (make-gd-optimize enforce-relaxation zero-gradient-condition))
+;; Crude fixed step GD (used to measure gully)
+(define (sgd-optimize f x-start eps iterations step-factor [listener void])
+  (let ((optimize (make-gd-optimize (sgd-regulate step-factor)
+                                    zero-gradient-condition)))
+    (optimize f x-start eps iterations step-factor listener)))
 
-(define gdn-optimize (make-gd-optimize
-                      (lambda (shift f x-start)
-                        (enforce-relaxation (/ shift (p-vector-norm shift)) f x-start))
-                      zero-gradient-condition))
+;; GD with regulation (quickly gets to gully)
+(define gd-optimize (make-gd-optimize enforce-relaxation
+                                      zero-gradient-condition))
+
+(define gdn-optimize (make-gd-optimize (lambda (shift f x-start)
+                                         (enforce-relaxation (/ shift (p-vector-norm shift)) f x-start))
+                                       zero-gradient-condition))
