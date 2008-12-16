@@ -141,10 +141,8 @@
 (define (gdrelch-optimize f x-start iterations eps step-factor [listener void])
   (let ((sgd-result (sgd-optimize f x-start iterations eps step-factor
                                   (stabilization-listener eps 5 listener))))
-    (display (format "~a~n" sgd-result))
     (if (cons? sgd-result)
         (let ((relch-degree (make-relch-degree (car (cdr sgd-result))))
               (x-start (cdr (cdr sgd-result))))
-          (display (format "~a~n" relch-degree))
           (relch-optimize f x-start iterations eps relch-degree listener))
         sgd-result)))
