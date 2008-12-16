@@ -21,8 +21,8 @@
 
 (provide/contract [relch-optimize optimization-method?]
                   [gd-optimize optimization-method?]
-;                  [gdrelch-optimize optimization-method?]
-                  [sgd-optimize optimization-method?])
+                  [sgd-optimize optimization-method?]
+                  [gdrelch-optimize optimization-method?])
 
 
 ;; Shift regulations enforce relaxation condition enforcement for both
@@ -106,11 +106,45 @@
                                             zero-gradient-condition))
 
 ;; Crude fixed step GD (used to measure gully)
-(define (sgd-optimize f x-start eps iterations step-factor [listener void])
+(define (sgd-optimize f x-start iterations eps step-factor [listener void])
   (let ((optimize (make-gd-optimize (make-sgd-regulate step-factor)
                                     zero-gradient-condition)))
-    (optimize f x-start eps iterations step-factor listener)))
+    (optimize f x-start iterations eps step-factor listener)))
 
 ;; GD with regulation (quickly gets to gully)
 (define gd-optimize (make-gd-optimize enforce-relaxation
                                       zero-gradient-condition))
+
+(define (stabilization-listener eps max-count [printing-listener void])
+  (let ((prev-g #f)
+        (stable-ratio -1)
+        (count 0))
+    (lambda (x shift x-new g G)
+      (printing-listener x shift x-new g G)
+      (when prev-g
+        (let ((new-ratio (/ (p-vector-norm g) (p-vector-norm prev-g))))
+          (if (< (abs (- new-ratio stable-ratio)) eps)
+              (set! count (add1 count))
+              (begin
+                (set! count 0)
+                (set! stable-ratio new-ratio)))))
+      (set! prev-g g)
+      (when (>= count max-count) (cons 'stabilized (cons stable-ratio x))))))
+
+(define (make-relch-degree gradient-ratio)
+  (define (closest-even x)
+    (let ((n (round x)))
+      (- n (modulo n 2))))
+  (closest-even
+   (* 1.3 (sqrt (/ 2 (abs (- 1 gradient-ratio)))))))
+
+(define (gdrelch-optimize f x-start iterations eps step-factor [listener void])
+  (let ((sgd-result (sgd-optimize f x-start iterations eps step-factor
+                                  (stabilization-listener eps 5 listener))))
+    (display (format "~a~n" sgd-result))
+    (if (cons? sgd-result)
+        (let ((relch-degree (make-relch-degree (car (cdr sgd-result))))
+              (x-start (cdr (cdr sgd-result))))
+          (display (format "~a~n" relch-degree))
+          (relch-optimize f x-start iterations eps relch-degree listener))
+        sgd-result)))
