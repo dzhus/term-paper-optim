@@ -1,5 +1,5 @@
 \pgfplotsset{every axis/.append style={xmin=-5,xmax=5,ymin=-5,ymax=5,x=0.4cm,y=0.4cm}}
-\begin{figure}[!thb]
+\begin{figure}[p]
   \center
   \renewcommand{\thesubfigure}{\asbuk{subfigure})}
   \subfigure[$p=0$]{
@@ -11,7 +11,7 @@
         \label{plot:pen-boundaries}
       \end{axis}      
     \end{tikzpicture}}
-  \label{fig:pen-contours1}
+  \label{fig:pen-contours1}\hskip 0.5cm
   \subfigure[$p=5$]{
     \begin{tikzpicture}
       \begin{axis}[]
@@ -19,7 +19,7 @@
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
       \end{axis}      
-    \end{tikzpicture}}
+    \end{tikzpicture}}\\\vskip 0.5cm
   \subfigure[$p=50$]{
     \begin{tikzpicture}
       \begin{axis}[]
@@ -27,7 +27,7 @@
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
       \end{axis}      
-    \end{tikzpicture}}
+    \end{tikzpicture}}\hskip 0.5cm
   \subfigure[$p=150$]{
     \begin{tikzpicture}
       \begin{axis}[]
