@@ -108,4 +108,14 @@
                                 (sqr ((max-slice g2) x y))
                                 (sqr ((max-slice g3) x y)))))))
      '#(-1 -1)
-     #(0 4) 16))))
+     #(0 4) 16))
+
+   (cons
+    "gully"
+    (d:make-test-problem
+     "(x²+12y-1)²+(49x²+49y+84x-681)²"
+     (lambda (x y)
+       (+ (sqr (+ (sqr x) (* 12 y) -1))
+          (sqr (+ (* 49 (sqr x)) (* 49 y) (* 84 x) -681))))
+     '#(-1 2)
+     '#(0.2 0.9) 0))))
