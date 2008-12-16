@@ -16,14 +16,14 @@
 антиградиента. На рисунке \ref{fig:gd-works} демонстрируется, как
 \gd{} находит локальный минимум функции\footnote{Так называемая
   функция Химмельблау также рассмотрена в
-  разделе \ref{sec:himmelblau}}.
+  разделе \ref{sec:himmelblau}}, начиная движение из точки $(0, 0)$.
 
 \begin{figure}[!thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}[x=.5cm,y=.5cm]
       \input{himmelblau-contours.tkz.tex}
-      \input{himmelblau_sgd_0.1,0.1_20_0.01-trace.tkz.tex}
+      \input{himmelblau_sgd_0.0,0.0_20_0.01-trace.tkz.tex}
       
       \node[circle,fill=black,scale=0.5,label={above
         right:\contour{white}{$(3,2)$}}] at (axis cs:3,2) {};
