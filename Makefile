@@ -4,9 +4,12 @@ GNUPLOT := gnuplot
 MZSCHEME := mzscheme
 
 DOCNAME := paper
+SOURCES := runner.ss relch.ss gradient-methods.ss shared.ss
 TESTFILE := tests.ss
 
-# select fields 1, 2, 3 etc. from 1_2_3-trace.tkz.tex
+# Select fields 1, 2, 3 etc. from 1_2_3-trace.tkz.tex according to the
+# following scheme:
+# <TEST-NAME>_<METHOD-NAME>_<X.XX,Y.YY>_<MAX-ITERATIONS>_<PARAMETER>-<something>.tkz.tex
 define get-field
 $(shell echo $1 | sed -e 's/-\w\.tkz\.tex//' | cut -d_ -f $2)
 endef
@@ -37,7 +40,7 @@ endef
 
 .SECONDEXPANSION:
 
-.PHONY: doc check clean
+.PHONY: doc clean
 
 .PRECIOUS: %-trace
 
@@ -69,7 +72,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                     contour-path.tpl.tkz.tex
 	${SHELL} plot-contours.sh $* > $@
 
-%-trace: test-functions.ss runner.ss
+%-trace: check
 	${MZSCHEME} runner.ss \
 		-m "$(call get-method,$*)" \
 		-s "$(call get-start-point,$*)" \
@@ -82,8 +85,9 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                  trace-path.tpl.tkz.tex
 	${SHELL} plot-trace.sh $* > $@
 
-check:
+check: ${RUNNER-SOURCES} ${TESTFILE}
 	@${MZSCHEME} ${TESTFILE} | sed -e 's/: */:/'
+	@touch check
 
 clean:
 	@rm -frv `hg status --unknown --no-status`
