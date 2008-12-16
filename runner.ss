@@ -49,11 +49,12 @@
  #:args (f) (function-id f))
 
 (define (point-poster x-start shift x-new g G)
-  (vector-for-each
-   (lambda (i p)
-     (display (format (string-append "~0," (number->string (add1 (prec))) "F ") p)))
-   x-start)
-  (newline))
+  (let ((digits (string-append "~0," (number->string (add1 (prec))) "F ")))
+    (vector-for-each
+     (lambda (i p)
+       (display (format digits p)))
+     x-start)
+    (newline)))
 
 (let ((function (cdr (assoc (function-id) test-problems))))
   (exit ((method)
