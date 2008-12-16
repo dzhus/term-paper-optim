@@ -19,6 +19,8 @@
          "test-functions.ss"
          "relch.ss")
 
+;; Parameter which falls back to default value when given false new
+;; value
 (define (make-defaulting-parameter v)
   (make-parameter v (lambda (x) (if x x v))))
 
