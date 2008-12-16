@@ -3,74 +3,16 @@
 ;;; Multiparametric optimization with Chebyshev relaxation
 
 (require "shared.ss"
+         "gradient-methods.ss"
          pyani-lib/matrix
          pyani-lib/vector
          pyani-lib/generic-ops
          pyani-lib/function-ops)
 
-;; Simple contracts for optimization parameters
-(define point? vector?)
-(define iteration-count? integer?)
-(define epsilon? (and/c real? positive?))
-;; Used only for \relch{}
-(define parameter? (and/c integer? positive?))
-  
-;; Listener is a sight from optimization process to outer world. When
-;; listener returns a vector, it's considered to be a new minimum
-;; point approximation; if listener returns a cons cell, then the
-;; optimization stops with returned cell as a result. Listener may be
-;; used to provide a trace of optimization process or check particular
-;; conditions during optimization which may affect further
-;; calculations
-(define listener-reply? (or/c void point? cons?))
-(define listener? (point? vector? point? vector? matrix? . -> . listener-reply?))
-
-;; All provided methods take five mandatory and one optional argument
-;; and return an approximation to minimum point (represented by
-;; vector)
-(define optimization-method? (->* (procedure?
-                                   vector?
-                                   epsilon?
-                                   iteration-count?
-                                   parameter?)
-                                  (listener?)
-                                  point?))
-
-(provide/contract [relch-optimize optimization-method?]
-                  [gd-optimize optimization-method?]
-                  [sgd-optimize optimization-method?]
-                  [gdn-optimize optimization-method?])
-
-
-(define (gradient-method choose-shift stop-condition)
-  (define (optimize function x-start iterations [listener void])
-    (if (<= iterations 0)
-        x-start
-        (let* ((g (@ (gradient function) x-start))
-               (G (@ (hessian function) x-start))
-               (shift (choose-shift x-start g G))
-               (candidate-x-new (+ x-start shift))
-               (listener-result (listener x-start
-                                          shift
-                                          candidate-x-new
-                                          g G)))
-          (let ((x-new (if (vector? listener-result)
-                           listener-result
-                           candidate-x-new)))
-            (if (stop-condition function x-start x-new g G)
-                x-new
-                (optimize function x-new
-                          (sub1 iterations)
-                          listener))))))
-  optimize)
-
-(define (zero-gradient-condition eps)
-  (lambda (f x-start x-new g G)
-    (<= (p-vector-norm g) eps)))
-
-(define (close-arguments-condition eps)
-  (lambda (f x-start x-new g G)
-    (<= (p-vector-norm (- x-start x-new)) eps)))
+(provide relch-optimize
+         gd-optimize optimization-method?
+         sgd-optimize optimization-method?
+         gdn-optimize optimization-method?)
 
 
 ;; Shift regulations enforce relaxation condition enforcement for both
