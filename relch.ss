@@ -106,7 +106,7 @@
         iterations [unused #f]
         [listener void])
     (define (choose-shift x-start g G)
-      (let ((shift (* g -0.1)))
+      (let ((shift (* g -1)))
         (regulate-shift shift f x-start)))
     ((gradient-method choose-shift (stop-condition eps))
      f x-start iterations listener)))
