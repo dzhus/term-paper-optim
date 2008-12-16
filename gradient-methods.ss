@@ -34,12 +34,12 @@
 
 ;; All provided methods take five mandatory and one optional argument
 ;; and return an approximation to minimum point (represented by
-;; vector)
+;; vector) or listener's reply
 (define optimization-method? (->* (procedure?
                                    point?
                                    iteration-count?)
                                   (listener?)
-                                  point?))
+                                  (or/c point? listener-reply?)))
 
 ;; Algorithm used to choose shift on every iteration is the essential
 ;; difference between all gradient methods
@@ -71,14 +71,16 @@
                                           shift
                                           candidate-x-new
                                           g G)))
-          (let ((x-new (if (vector? listener-result)
-                           listener-result
-                           candidate-x-new)))
-            (if (stop-condition function x-start x-new g G)
-                x-new
-                (optimize function x-new
-                          (sub1 iterations)
-                          listener))))))
+          (if (cons? listener-result)
+              listener-result
+              (let ((x-new (if (vector? listener-result)
+                               listener-result
+                               candidate-x-new)))
+                (if (stop-condition function x-start x-new g G)
+                    x-new
+                    (optimize function x-new
+                              (sub1 iterations)
+                              listener)))))))
   optimize)
 
 
