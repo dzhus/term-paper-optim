@@ -158,7 +158,7 @@
 
 ;; Crude fixed step GD (used to measure gully)
 (define (sgd-optimize f x-start eps iterations step-factor [listener void])
-  (let ((optimize (make-gd-optimize (sgd-regulate step-factor)
+  (let ((optimize (make-gd-optimize (make-sgd-regulate step-factor)
                                     zero-gradient-condition)))
     (optimize f x-start eps iterations step-factor listener)))
 
