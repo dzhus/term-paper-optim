@@ -131,59 +131,7 @@ $\lim\limits_{k\to\infty}{p_k} = +\infty$.
 возрастает, тогда как в допустимой области оптимизируемая функция не
 претерпевает никаких изменений.
 
-\pgfplotsset{every axis/.append style={xmin=-5,xmax=5,ymin=-5,ymax=5}}
-\begin{figure}[!thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
-      \input{condextr_full-contours.tkz.tex}
-      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
-        (0,0) (1,0) (3.5,5)};
-      \label{plot:pen-boundaries}
-    \end{axis}      
-  \end{tikzpicture}
-  \caption{Линии уровня функции $P(x)$ при $p=0$}
-  \label{fig:pen-contours1}
-\end{figure}
-
-\begin{figure}[!thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
-      \input{penalty_mini-contours.tkz.tex}
-      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
-        (0,0) (1,0) (3.5,5)};
-    \end{axis}      
-  \end{tikzpicture}
-  \caption{Линии уровня функции $P(x)$ при $p=5$}
-    \label{fig:pen-contours2}
-\end{figure}
-
-\begin{figure}[!thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
-      \input{penalty-contours.tkz.tex}
-      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
-        (0,0) (1,0) (3.5,5)};
-    \end{axis}      
-  \end{tikzpicture}
-  \caption{Линии уровня функции $P(x)$ при $p=50$}
-  \label{fig:pen-contours3}
-\end{figure}
-
-\begin{figure}[!thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$]
-      \input{penalty_maxi-contours.tkz.tex}
-      \addplot[thick,densely dashed, red!50!black] coordinates{(0,5)
-        (0,0) (1,0) (3.5,5)};
-    \end{axis}      
-  \end{tikzpicture}
-  \caption{Линии уровня функции $P(x)$ при $p=150$}
-  \label{fig:pen-contours4}
-\end{figure}
+\input{penalty-plots.tex}
 
 Для численного решения задачи \eqref{eq:penalty-problem} теперь уже
 безусловной минимизации воспользуемся описанным ранее градиентным
