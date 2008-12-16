@@ -45,7 +45,9 @@ $-f'(x)$ почти никак не позволяет приблизиться 
 \begin{wrapfigure}{r}{4cm}
   \centering
   \begin{tikzpicture}
-    \begin{axis}[x=1cm,y=6cm]
+    \begin{axis}
+      [x=1cm,y=6cm,
+      yticklabel pos=right]
       \input{gully-contours.tkz.tex}
       \input{gully_sgd_0.5,3_30_0.0000099-trace.tkz.tex}
     \end{axis}
