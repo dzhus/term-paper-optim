@@ -27,7 +27,7 @@ define get-max-iterations
 $(call get-field,$1,4)
 endef
 
-define get-degree
+define get-parameter
 $(call get-field,$1,5)
 endef
 
@@ -69,7 +69,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 		-m "$(call get-method,$*)" \
 		-s "$(call get-start-point,$*)" \
 		-i "$(call get-max-iterations,$*)" \
-		-L "$(call get-degree,$*)" \
+		-L "$(call get-parameter,$*)" \
 	 $(call get-function,$*) > $@
 
 %-trace.tkz.tex: %-trace \
