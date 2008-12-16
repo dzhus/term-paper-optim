@@ -72,12 +72,6 @@
   (lambda (f x-start x-new g G)
     (<= (p-vector-norm (- x-start x-new)) eps)))
 
-(define (decrease-shift shift)
-  (/ shift 2))
-
-(define (better-minimum? f x-new x)
-  (< (@ f x-new) (@ f x)))
-
 
 ;; Shift regulations enforce relaxation condition enforcement for both
 ;; RELCH and GD, they also provide basic fallback measure in case of
@@ -85,6 +79,10 @@
 
 ;; Decrease shift factor until it leads to a better value
 (define (enforce-relaxation shift f x-start)
+  (define (decrease-shift shift)
+    (/ shift 2))
+  (define (better-minimum? f x-new x)
+    (< (@ f x-new) (@ f x)))
   (let ((x-new (+ x-start shift)))
     (if (better-minimum? f x-new x-start)
         shift
