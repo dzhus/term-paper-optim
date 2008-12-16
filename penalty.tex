@@ -162,16 +162,16 @@ $p_0$ использование итерационного процесса \eq
     \begin{axis}[xlabel=$x_1$, ylabel=$x_2$, x=1 cm, y=1 cm]
       \addplot[thick,draw=black] coordinates{(0,5)
         (0,0) (1,0) (3.5,5)};
-      \input{penalty-contours.tkz.tex}
+      \input{penalty_supermax-contours.tkz.tex}
 
-      \input{penalty_relch_-2,-3_20_14-trace.tkz.tex}
-      \input{penalty_relch_2,-4_20_10-trace.tkz.tex}
+      \input{penalty_relch_-2,-3_20_60-trace.tkz.tex}
+      \input{penalty_relch_2,-4_20_200-trace.tkz.tex}
 
       \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:0,4) {};
     \end{axis}      
   \end{tikzpicture}
-  \caption[Метод штрафных функций]{Ход процесса минимизации
-    \eqref{eq:penalty-problem} при $p=50$ и различном выборе начальной
+  \caption[Метод штрафных функций]{Ход процесса решения задачи
+    \eqref{eq:penalty-problem} при $p=100000$ и различном выборе начальной
     точки}
   \label{fig:penalty}
 \end{figure}
