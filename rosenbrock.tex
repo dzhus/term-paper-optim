@@ -107,7 +107,7 @@ $y=x^2$ за счёт близости перегиба и быстрого ро
 \eqref{eq:rosenbrock-gully-extr} можно утверждать, что в ходе работы
 алгоритму придётся бороться с сильной овражностью целевой функции.
 
-\begin{figure}[!thb]
+\begin{figure}[thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}
@@ -180,7 +180,16 @@ $s=10$ \relch{} быстро попадает в окрестность мини
 
 \paragraph{Тестирование \gdrelch{}}
 
-\begin{figure}[!thb]
+Описанный в разделе \ref{sec:cheb-param} двухэтапный метод \gdrelch{}
+применим к функции Розенброка. На иллюстрации
+\ref{fig:rosenbrock-gdrelch} показано, как сначала метод \gd{}
+зацикливается в овраге, что соответствует стабилизации
+\eqref{eq:gdrelch-stabilization}, после чего включается обычный
+\relch{} со значением параметра, определённым на первом этапе. В
+данном случае зацикливание \gd{} удалось обеспечить при шаге
+$h=0.0019$.
+
+\begin{figure}[thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}[x=2.2cm, y=1.8cm]
@@ -190,7 +199,7 @@ $s=10$ \relch{} быстро попадает в окрестность мини
         (axis cs:1,1) {};
     \end{axis}
   \end{tikzpicture}
-  \caption[\gdrelch{} на функции Розенброка, $s=0.0019$]{Минимизация
+  \caption[\gdrelch{} на функции Розенброка, $h=0.0019$]{Минимизация
     функции Розенброка алгоритмом \gdrelch{} при $h=0.0019$}
+  \label{fig:rosenbrock-gdrelch}
 \end{figure}
-
