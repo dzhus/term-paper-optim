@@ -1,0 +1,10 @@
+F="48*y**3+144*x**2*y**2-520*y**2-16*x*y-104*y+48*x**3-328*x**2-168*x+1092"
+
+X_MIN=-7
+Y_MIN=-5
+X_MAX=7
+Y_MAX=11
+
+LEVELS=(0.0)
+ISOSAMPLES=200
+STYLE="mark=none,black,solid"

@@ -1,38 +1,153 @@
 \subsubsection{Функция Химмельблау}
 \label{sec:himmelblau}
 
-В следующем примере рассмотрим уже виденную
+В этому рассмотрим уже виденную
 ранее\footnote{См. раздел \ref{sec:problems-ill}} функцию Химмельблау,
 которая задаётся следующим образом:
 \begin{equation}
   \label{eq:himmelblau}
+  \tag{$\chi$-\theequation}
   f(x, y) = (x² + y - 11)² + (x + y² - 7)²
 \end{equation}
+
+\paragraph{Выпуклость}
+
+Матрица Гессе функции Химмельблау имеет вид:
+\begin{equation}
+  \label{eq:himmelblau-hess}
+  \begin{pmatrix}
+    4y+12x^2-42 & 4y+4x\\
+    4y+4x & 12y^2+4x-26
+  \end{pmatrix}
+\end{equation}
+Исследуем её на определённость с помощью критерия Сильвестра, записав
+условие положительности угловых миноров:
+\begin{align}
+  \label{eq:himmelblau-conv}
+  &\Delta_1 = 4y+12x^2-42 > 0 \iff y > 10\frac{1}{2}-3x^2 \\
+  &\Delta_2 =
+  4\left(12y^3+(36x^2-130)y^2-(4x+26)y+12x^3-82x^2-42x+273\right) > 0
+\end{align}
+Первое условие имеет простой вид, в то время как границей решения
+второго является кривая четвёртого порядка. Геометрический образ
+условий \eqref{eq:himmelblau-conv} вместе с линиями уровня функции
+Химмельблау представлен на рисунке \ref{fig:himmelblau-conv}. 
+
+Во всей области под гиперболой $10\frac{1}{2}-3x^2$
+(\ref{plot:himmelblau-hyperbole}) функция вогнута, несмотря на то, что
+на графическом изображении второго условия вокруг начала координат
+виден скруглённый прямоугольник, внутри которого выполняется условие
+$\Delta_2>0$. В этом функция Химмельблау отличается от функции
+Розенброка, где условие $\Delta_1>0$ было безусловно слабее условия
+$\Delta_2>0$.
+
+\begin{figure}[thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}
+      [x=.7cm,y=.7cm]
+      \addplot[mark=none,black,thick, densely dashed]
+      plot[domain=-2.5:2.5] function{10.5-3*x**2};
+      \label{plot:himmelblau-hyperbole}
+      \input{himmelblau_max-contours.tkz.tex}
+      \input{himmelblau_conv-contours.tkz.tex}
+
+      \node[] at (axis cs:0,0)
+      {\contour{white}{$\underset{\cancel{\text{\scriptsize{Выпукла}}}}{\text{\footnotesize{Вогнута}}}$}};
+
+      % Concavity labels
+      \node[] at (axis cs:4,0)
+      {\contour{white}{\footnotesize{Вогнута}}};
+      \node[] at (axis cs:-4,0)
+      {\contour{white}{\footnotesize{Вогнута}}};
+      \node[] at (axis cs:0,4)
+      {\contour{white}{\footnotesize{Вогнута}}}; 
+      \node[] at (axis cs:0,-4)
+      {\footnotesize{Вогнута}};
+      
+      % Convexity labels
+      \node[] at (axis cs:5,-5)
+      {\contour{white}{\footnotesize{Выпукла}}};
+      \node[] at (axis cs:-5,-5)
+      {\contour{white}{\footnotesize{Выпукла}}};
+      \node[] at (axis cs:-5,5)
+      {\contour{white}{\footnotesize{Выпукла}}};
+      \node[] at (axis cs:5,5)
+      {\contour{white}{\footnotesize{Выпукла}}};
+      
+    \end{axis}      
+  \end{tikzpicture}
+  \caption[Функция Химмельблау]{Линии уровня функции Химмельблау
+    \eqref{eq:himmelblau} и границы областей выпуклости}
+  \label{fig:himmelblau-conv}
+\end{figure}
+
+\paragraph{Аналитическое решение}
 Известно, что локальные минимумы функции \eqref{eq:himmelblau}
 расположены в точках $A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58,
 -1.85)$, $D=(3.00, 2.00)$, и в каждой из них достигается значение $0$.
-Этим обусловлена следующая особенность работы алгоритма — результат
-значительно зависит от выбора начального приближения, что
-продемонстрировано на рисунке \ref{fig:himmelblau}.
+Все они находятся в областях выпуклости функции, чего и следует
+ожидать.
 
-\begin{figure}[!thb]
+\paragraph{Овражность}
+Как было продемонстрировано ещё в разделe \ref{sec:problems-ill}, даже
+метод \gd{} с фиксированным шагом может локализовать точку минимума
+функции Химмельблау. Исходя из этого, можно предположить, что высокой
+степенью овражности эта функция не обладает.
+
+Действительно, даже в точках минимумов $\eta$ не превосходит
+\emph{четырёх}:
+\begin{equation}
+  \begin{aligned}
+    \eta(A) &= \frac{133.761}{70.561} \approx 1.9&\qquad
+    \eta(B) &= \frac{91.25}{28.67} \approx 3.18\\ 
+    \eta(C) &= \frac{105.03}{28.76} \approx 3.65&\qquad
+    \eta(D) &= \frac{82.28}{25.72} \approx 3.2
+\end{aligned}
+\end{equation}
+
+С учётом данных соображений можно заключить, что предпосылок для
+выбора очень большого значения $s$ при использовании \relch{} для
+оптимизации функции нет. Необходимость применения метода \gdrelch{} в
+данном случае также ничем не обоснована.
+
+\paragraph{Использование \relch{}}
+
+На рисунке \ref{fig:himmelblau} представлены результаты работы
+алгоритма \relch{} для решения задачи минимизации функции
+\eqref{eq:himmelblau}. Во всех случаях использовалось значение $s=50$.
+На иллюстрации также видно, что из-за многоэкстремальности целевой
+функции результат работы алгоритма зависит от выбора начального
+приближения.
+
+В отсутствие эталонных данных\footnote{Численные значения $A, B, C, D$
+  приведены в литературе, см. \cite{himmelblau75}. Аналитические
+  выражения для координат точек минимума $A,B,C,D$ имеют весьма
+  сложный вид.} о минимумах проверить найденные решения на
+единственность можно было бы, воспользовавшись информацией об областях
+выпуклости функции и теоремами из раздела \ref{sec:convexity}.
+
+\begin{figure}[thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}[x=.8cm,y=.8cm]
       \input{himmelblau-contours.tkz.tex}
-      \input{himmelblau_relch_0.1,0.1_10-trace.tkz.tex}
-      \input{himmelblau_relch_0.5,-0.5_10-trace.tkz.tex}
-      \input{himmelblau_relch_-0.5,0.5_10-trace.tkz.tex}
-      \input{himmelblau_relch_-0.5,-0.5_10-trace.tkz.tex}
+      \input{himmelblau_relch_0.1,0.1_50-trace.tkz.tex}
+      \input{himmelblau_relch_0.5,-0.5_50-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,0.5_50-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,-0.5_50-trace.tkz.tex}
 
-      \node[circle,fill=black,scale=0.5,label=above left:$A$] at (axis cs:-3.78,-3.28) {};
-      \node[circle,fill=black,scale=0.5,label=below left:$B$] at (axis cs:-2.8,3.13) {};
-      \node[circle,fill=black,scale=0.5,label=below right:$C$] at (axis cs:3.58,-1.85) {};
-      \node[circle,fill=black,scale=0.5,label=above right:$D$] at (axis cs:3,2) {};
+      \input{himmelblau_relch_0,8_50-trace.tkz.tex}
+      \input{himmelblau_relch_4,7.2_50-trace.tkz.tex}
+      
+      \node[circle,fill=black,scale=0.25,label=above left:$A$] at (axis cs:-3.78,-3.28) {};
+      \node[circle,fill=black,scale=0.25,label=below left:$B$] at (axis cs:-2.8,3.13) {};
+      \node[circle,fill=black,scale=0.25,label=below right:$C$] at (axis cs:3.58,-1.85) {};
+      \node[circle,fill=black,scale=0.25,label=above right:$D$] at (axis cs:3,2) {};
     \end{axis}      
   \end{tikzpicture}
-  \caption[Функция Химмельблау]{Результаты работы алгоритма с функцией
-    Химмельблау \eqref{eq:himmelblau} в зависимости от выбора
-    начальной точки}
+  \caption[\relch{} на функции Химмельблау]{Результаты работы
+    алгоритма с функцией Химмельблау \eqref{eq:himmelblau} в
+    зависимости от выбора начальной точки}
   \label{fig:himmelblau}
 \end{figure}
