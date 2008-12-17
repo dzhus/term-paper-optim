@@ -11,18 +11,20 @@
 
 (define parameter? (and/c integer? positive?))
 
-(define optimization-method? (->* (function?
-                                   point?
-                                   iteration-count?
-                                   epsilon?
-                                   parameter?)
-                                  (listener?)
-                                  (or/c point? listener-reply?)))
+(define optimization-method?
+  (->* (function?
+        point?
+        iteration-count?
+        epsilon?
+        parameter?)
+       (listener?)
+       (or/c point? listener-reply?)))
 
-(provide/contract [relch-optimize optimization-method?]
-                  [gd-optimize optimization-method?]
-                  [sgd-optimize optimization-method?]
-                  [gdrelch-optimize optimization-method?])
+(provide/contract
+ [relch-optimize optimization-method?]
+ [gd-optimize optimization-method?]
+ [sgd-optimize optimization-method?]
+ [gdrelch-optimize optimization-method?])
 
 
 ;; Shift regulations enforce relaxation condition enforcement for both
