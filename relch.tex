@@ -31,7 +31,7 @@
 При этом используются следующие критерии останова процесса
 \eqref{eq:iter-method} на $k$-м шаге:
 \begin{enumerate}
-\item Близость к нулю\footnote[1]{Здесь и в дальнейшем, $\epsilon>0$ —
+\item Близость к нулю\footnote{Здесь и в дальнейшем, $\epsilon>0$ —
     некоторое наперёд заданное малое число.} нормы градиента функции:
   \begin{equation*}
   \norm{f'(x^k)} < \epsilon
@@ -336,7 +336,7 @@ $s$.
 на выпуклость и овражность, а также приведены результаты применения
 метода \relch{} для решения задач их минимизации.
 
-\pgfplotsset{every axis/.append style={xlabel=$x$, ylabel=$y$,grid}}
+\pgfplotsset{every axis/.append style={xlabel=$x$, ylabel=$y$}}
 \input{rosenbrock.tex}
 
 \subsubsection{Экспоненциальная функция}
@@ -370,8 +370,9 @@ $s$.
 \subsubsection{Функция Химмельблау}
 \label{sec:himmelblau}
 
-В следующем примере рассмотрим функцию Химмельблау, которая задаётся
-следующим образом:
+В следующем примере рассмотрим уже виденную
+ранее\footnote{См. раздел \ref{sec:problems-ill}} функцию Химмельблау,
+которая задаётся следующим образом:
 \begin{equation}
   \label{eq:himmelblau}
   f(x, y) = (x² + y - 11)² + (x + y² - 7)²
