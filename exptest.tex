@@ -1,0 +1,27 @@
+\subsubsection{Экспоненциальная функция}
+\label{sec:exptest}
+
+Теперь рассмотрим функцию
+\begin{equation}
+  \label{eq:exptest}
+  f(x, y) = \sum\limits_{a=\overline{0.1, 1.0}}\left [
+    e^{-xa}-e^{-ya}-(e^{-a}-e^{-10a})\right ]^2
+\end{equation}
+Здесь суммирование происходит по значениям $a = 0.1, 0.2, \dotsc, 1$.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=1cm,y=1cm]
+      \input{exptest-contours.tkz.tex}
+      \input{exptest_relch_-0.5,1.5_20-trace.tkz.tex}
+      \input{exptest_relch_5,5_20-trace.tkz.tex}
+      \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:1,10) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption[Экспоненциальная функция]{Линии уровня и трассировка процесса минимизации функции
+    \eqref{eq:exptest}}
+\end{figure}
+
+Алгоритм стабильно определяет минимум в точке $(1, 10)$.

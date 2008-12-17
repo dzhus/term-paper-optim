@@ -1,0 +1,38 @@
+\subsubsection{Функция Химмельблау}
+\label{sec:himmelblau}
+
+В следующем примере рассмотрим уже виденную
+ранее\footnote{См. раздел \ref{sec:problems-ill}} функцию Химмельблау,
+которая задаётся следующим образом:
+\begin{equation}
+  \label{eq:himmelblau}
+  f(x, y) = (x² + y - 11)² + (x + y² - 7)²
+\end{equation}
+Известно, что локальные минимумы функции \eqref{eq:himmelblau}
+расположены в точках $A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58,
+-1.85)$, $D=(3.00, 2.00)$, и в каждой из них достигается значение $0$.
+Этим обусловлена следующая особенность работы алгоритма — результат
+значительно зависит от выбора начального приближения, что
+продемонстрировано на рисунке \ref{fig:himmelblau}.
+
+\begin{figure}[!thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=.8cm,y=.8cm]
+      \input{himmelblau-contours.tkz.tex}
+      \input{himmelblau_relch_0.1,0.1_10-trace.tkz.tex}
+      \input{himmelblau_relch_0.5,-0.5_10-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,0.5_10-trace.tkz.tex}
+      \input{himmelblau_relch_-0.5,-0.5_10-trace.tkz.tex}
+
+      \node[circle,fill=black,scale=0.5,label=above left:$A$] at (axis cs:-3.78,-3.28) {};
+      \node[circle,fill=black,scale=0.5,label=below left:$B$] at (axis cs:-2.8,3.13) {};
+      \node[circle,fill=black,scale=0.5,label=below right:$C$] at (axis cs:3.58,-1.85) {};
+      \node[circle,fill=black,scale=0.5,label=above right:$D$] at (axis cs:3,2) {};
+    \end{axis}      
+  \end{tikzpicture}
+  \caption[Функция Химмельблау]{Результаты работы алгоритма с функцией
+    Химмельблау \eqref{eq:himmelblau} в зависимости от выбора
+    начальной точки}
+  \label{fig:himmelblau}
+\end{figure}
