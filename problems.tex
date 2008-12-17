@@ -15,19 +15,19 @@
 осуществляется путём последовательного продвижения вдоль её
 антиградиента. На рисунке \ref{fig:gd-works} демонстрируется, как
 \gd{}, начиная движение из точки $(0, 0)$, находит локальный минимум
-функции.\footnote{В качестве целевой здесь взята так называемая
+функции\footnote{В качестве целевой здесь взята так называемая
   функция Химмельблау, которая рассматривается в
-  разделе \ref{sec:himmelblau}.}
+  разделе \ref{sec:himmelblau}.} в точке $(3,2)$.
 
 \begin{figure}[!thb]
   \centering
   \begin{tikzpicture}
-    \begin{axis}[x=.5cm,y=.5cm]
+    \begin{axis}[x=.5cm,y=.5cm,ymin=-4,ymax=4]
       \input{himmelblau-contours.tkz.tex}
       \input{himmelblau_sgd_0.0,0.0_20_0.01-trace.tkz.tex}
       
-      \node[circle,fill=black,scale=0.5,label={above
-        right:\contour{white}{$(3,2)$}}] at (axis cs:3,2) {};
+      \node[circle,fill=black,scale=0.25,label={right:\contour{white}{$(3,2)$}}]
+      at (axis cs:3,2) {};
     \end{axis}
   \end{tikzpicture}
   \caption{Процесс поиска минимума функции}
