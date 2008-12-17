@@ -54,10 +54,19 @@
   \neword{строго выпуклой}.
 \end{dfn}
 
-Таким образом, геометрический смысл определений \ref{dfn:convex-f} и
+\begin{dfn}
+  \label{dfn:concave}
+  Функция $f(x)$ называется \neword{вогнутой}, если $-f(x)$ является
+  выпуклой функцией.
+\end{dfn}
+
+Геометрический смысл определений \ref{dfn:convex-f} и
 \ref{dfn:strictly-convex-f} ясен: функция выпукла, если выпукла
 область над её графиком, и строго выпукла, если область над её
-графиком строго выпукла (рис. \ref{fig:convex-function}).
+графиком строго выпукла
+(рис. \ref{fig:convex-function}).\footnote{Мнемоническое правило:
+  выпуклые функции «улыбаются» $\smile$, а вогнутые
+  — «хмурятся» $\frown$.}
 
 \input{convex-function.tkz.tex}
 
@@ -65,11 +74,6 @@
   \label{rem:lin-f-convex}
   Линейные функции выпуклы, но не строго выпуклы.
 \end{rem}
-\begin{dfn}
-  \label{dfn:concave}
-  Функция $f(x)$ называется \neword{вогнутой}, если $-f(x)$ является
-  выпуклой функцией.
-\end{dfn}
 
 \subsubsection{Исследование функций и множеств на выпуклость}
 \label{sec:convex-analysis}
