@@ -45,6 +45,23 @@ $\Delta_2$ обращаются в ноль. В области ниже крив
 (\ref{plot:exptest-first-minor}) функция вогнутая, при этом в область
 вогнутости попадает
 
+\paragraph{Аналитическое решение}
+
+Найдём минимальное значение \eqref{eq:exptest} аналитически. Из
+условий стационарности имеем
+\begin{equation*}
+  \begin{aligned}
+    &\suml_{a\in A}\left[2ae^{-ay}(e^{-ax}-e^{-ay}-(e^{-a}-e^{-10a}))\right] = 0\\
+    -&\suml_{a\in A}\left[2ae^{-ay}(e^{-ax}-e^{-ay}-(e^{-a}-e^{-10a}))\right] = 0
+  \end{aligned}
+\end{equation*}
+откуда определяется единственное решение — точка $A (1,10)$. Точка $A$
+попадает в область выпуклости функции
+(см. рис. \ref{fig:exptest-convexity}), а потому является глобальным
+минимумом.
+
+\paragraph{Овражность}
+
 \begin{figure}[]
   \centering
   \begin{tikzpicture}
@@ -70,7 +87,7 @@ $\Delta_2$ обращаются в ноль. В области ниже крив
     функции \eqref{eq:exptest}, границы области выпуклости
     $\Delta_1=0$, $\Delta_2=0$ и глобальный минимум в точке $A(1,
     10)$}
-  \label{fig:rosenbrock-contours}
+  \label{fig:exptest-convexity}
 \end{figure}
 
 \begin{figure}[thb]
@@ -96,12 +113,12 @@ $\Delta_2$ обращаются в ноль. В области ниже крив
   \begin{tikzpicture}
     \begin{axis}[x=1cm,y=1cm]
       \input{exptest-contours.tkz.tex}
-      \input{exptest_gdrelch_2,5_30_0.001-trace.tkz.tex}
+      \input{exptest_gdrelch_2,6_30_0.0005-trace.tkz.tex}
 
       \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
       at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
   \caption[\gdrelch{} на экспоненциальной функции]{Минимизация функции
-    \eqref{eq:exptest} алгоритмом \gdrelch{} при $h=0.001$}
+    \eqref{eq:exptest} алгоритмом \gdrelch{} при $h=0.0005$}
 \end{figure}
