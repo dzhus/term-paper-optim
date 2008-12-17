@@ -88,7 +88,7 @@
 откуда $x = y = 1$. Найденная точка $A(1, 1)$ не принадлежит кривой
 перегиба $y = x^2+\frac{1}{200}$, а потому необходимые условия
 экстремума для неё оказываются достаточными. Таким образом, с учётом
-теорем \ref{th:convex-f-smin} и \ref{th:convex-f-nomax} точка $A(1, 1)$
+теорем \ref{th:convex-f-smin} и \ref{th:convex-f-nomax} точка $A(1,1)$
 является глобальным минимумом функции Розенброка.
 
 Вычисление значения $\eta$ в $A$ даёт
@@ -137,19 +137,48 @@ $y=x^2$ за счёт близости перегиба и быстрого ро
 $1.3\sqrt{\eta}$ \emph{чётное} число (в ходе тестов алгоритм
 демонстрировал наилучшую сходимость именно при чётных $s$).
 
-\begin{figure}[!thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[x=2.2cm, y=1.8cm]
-      \input{rosenbrock-contours.tkz.tex}
-      \input{rosenbrock_relch_-1.2,1_15_200-trace.tkz.tex}
-        \node[circle,fill=black,scale=0.25,pin={below right:\contour{white}{$A$}}] at
-        (axis cs:1,1) {};
-    \end{axis}
-  \end{tikzpicture}
-  \caption[\relch{} на функции Розенброка, $s=200$]{Минимизация
-    функции Розенброка алгоритмом \relch{} при $s=200$}
+На иллюстрации \ref{fig:rosenbrock-relch} представлены результаты
+работы \relch{} на функции Розенброка. Видно, что при малом значении
+$s=10$ \relch{} быстро попадает в окрестность минимума, но испытывает
+трудности при продвижении по дну оврага. С ростом $s$ до 66
+(рис. \ref{fig:rosenbrock-relch66}) алгоритм крупными шагами
+стремительно движется вдоль оврага к точке минимума. Протестирована
+также работа алгоритма с $s=200$. Высокая скорость сходимости с таким
+значением соответствует ожиданиям.
+
+\begin{figure}[p]
+  \center
+  \pgfplotsset{every axis/.append style={x=2cm,y=1.5cm}}
+  \subfigure[$s=10$]{
+    \begin{tikzpicture}
+      \begin{axis}[]
+        \input{rosenbrock-contours.tkz.tex}
+        \input{rosenbrock_relch_-1.2,1_40_10-trace.tkz.tex}
+      \end{axis}      
+    \end{tikzpicture}}
+  \hskip 0.5cm
+  \subfigure[$s=66$]{
+    \begin{tikzpicture}
+      \begin{axis}[]
+        \input{rosenbrock-contours.tkz.tex}
+        \input{rosenbrock_relch_-1.2,1_40_66-trace.tkz.tex}
+      \end{axis}      
+    \end{tikzpicture}}
+  \\\vskip 0.5cm
+  \subfigure[$s=200$]{
+    \begin{tikzpicture}
+      \begin{axis}[]
+        \input{rosenbrock-contours.tkz.tex}
+        \input{rosenbrock_relch_-1.2,1_20_200-trace.tkz.tex}
+      \end{axis}      
+    \end{tikzpicture}}
+  \caption[\relch{} на функции Розенброка]{Минимизация функции
+    Розенброка алгоритмом \relch{} при различных значениях параметра
+    $s$}
+  \label{fig:rosenbrock-relch}
 \end{figure}
+
+\paragraph{Тестирование \gdrelch{}}
 
 \begin{figure}[!thb]
   \centering
@@ -164,3 +193,4 @@ $1.3\sqrt{\eta}$ \emph{чётное} число (в ходе тестов алг
   \caption[\gdrelch{} на функции Розенброка, $s=0.0019$]{Минимизация
     функции Розенброка алгоритмом \gdrelch{} при $h=0.0019$}
 \end{figure}
+
