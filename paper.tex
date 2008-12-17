@@ -43,6 +43,11 @@
 \newcommand{\suml}{\sum\limits}
 \usepackage{misccorr}
 
+% Better \paragraph command with small caps and line skip
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{0em}{-\baselineskip}{0.25\baselineskip}{\scshape}}
+\makeatother
+
 \usepackage{wrapfig}
 
 % Subfigures
@@ -136,16 +141,16 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 штрафных функций и метода возможных направлений Зойтендейка.
 
 \clearpage
-\input{general.tex}
+%\input{general.tex}
 
 \clearpage
-\input{simplex.tex}
+%\input{simplex.tex}
 
 \clearpage
 \input{relch.tex}
 
 \clearpage
-\input{condoptim.tex}
+%\input{condoptim.tex}
 
 \clearpage
 \appendix
