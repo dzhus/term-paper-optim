@@ -1,5 +1,5 @@
 #lang scheme
-
+(require errortrace)
 ;;; Command line interface to optimization algorithms
 
 ;; This script provides a way to trace optimization process using
@@ -16,6 +16,8 @@
 
 (require srfi/43
          srfi/48
+         pyani-lib/vector
+         pyani-lib/function-ops
          "test-functions.ss"
          "relch.ss")
 
@@ -25,7 +27,7 @@
   (make-parameter v (lambda (x) (if x x v))))
 
 (define function-id (make-defaulting-parameter #f))
-(define prec (make-defaulting-parameter 3))
+(define prec (make-defaulting-parameter 4))
 (define iter (make-defaulting-parameter 100))
 (define param (make-defaulting-parameter 8))
 (define start-point (make-defaulting-parameter '#(0 0)))
@@ -50,18 +52,21 @@
  ["-p" p "Precision (default 3)" (prec (string->number p))]
  #:args (f) (function-id f))
 
-(define (point-poster x-start shift x-new g G)
+(define (point-poster f)
   (let ((digits (string-append "~0," (number->string (add1 (prec))) "F ")))
-    (vector-for-each
-     (lambda (i p)
-       (display (format digits p)))
-     x-start)
-    (newline)))
+    (lambda (x-start shift x-new g G)
+      (vector-for-each
+       (lambda (i p)
+         (display (format digits p)))
+       x-start)
+      (display (format "~a " (@ f x-start)))
+      (display (format digits (p-vector-norm g)))
+      (display (format "\n")))))
 
-(let ((function (cdr (assoc (function-id) test-problems))))
-  (exit ((method)
-         (test-problem-function function)
-         (start-point)
-         (iter)
-         (expt 10 (- (prec))) (param)
-         point-poster)))
+  (let ((function (cdr (assoc (function-id) test-problems))))
+    (exit ((method)
+           (test-problem-function function)
+           (start-point)
+           (iter)
+           (expt 10 (- (prec))) (param)
+           (point-poster (test-problem-function function)))))
