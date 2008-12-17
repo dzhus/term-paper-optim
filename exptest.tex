@@ -1,27 +1,107 @@
 \subsubsection{Экспоненциальная функция}
 \label{sec:exptest}
 
-Теперь рассмотрим функцию
+Рассмотрим функцию
 \begin{equation}
   \label{eq:exptest}
-  f(x, y) = \sum\limits_{a=\overline{0.1, 1.0}}\left [
+  \tag{$\Xi$-\theequation}
+  f(x, y) = \suml_{a\in A}\left [
     e^{-xa}-e^{-ya}-(e^{-a}-e^{-10a})\right ]^2
 \end{equation}
-Здесь суммирование происходит по значениям $a = 0.1, 0.2, \dotsc, 1$.
+Здесь суммирование происходит по значениям $a \in A =\{0.1, 0.2, \dotsc, 1\}$.
+
+\paragraph{Выпуклость}
+
+Сложность функции \eqref{eq:exptest} не позволяет провести анализ её
+выпуклости так легко, как это было сделано для функции Розенброка.
+Матрица Гессе в точке $(x, y)$ имеет вид:
+\begin{equation}
+  \label{eq:exptest-hess}
+  \suml_{a\in A}\left[2a^2×
+  \begin{pmatrix}
+    e^{-ax}(2e^{-ax}-e^{-ay}-c_a) & -e^{-a(x+y)} \\
+    -2a^2e^{-a(x+y)} & e^{-ay}(e^{-ax}-c_a)
+  \end{pmatrix}\right]
+\end{equation}
+где $c_a = e^{-a}-e^{-10a}$. В силу положительности $a$, $c_a>0$.
+
+Попробуем использовать для исследования её на определённость критерий
+Сильвестра. Угловые миноры должны быть положительны:
+\begin{align*}
+  \Delta_1 &= \suml_{a\in A}
+  \left[ 2a^2e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right] > 0\\
+  \Delta_2 &= \suml_{a\in A}
+  \left[ e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right]×
+  \suml_{a\in A}
+  \left[ 2a^2e^{-ay}(e^{-ax}-c_a) \right]-\\
+  &-\left(\suml_{a\in A}
+  \left[ 2a^2e^{-ax-ay} \right] \right)^2
+  > 0
+\end{align*}
+Решить это неравенства аналитически нелегко. Обратимся к численным
+методам. На рисунке \ref{fig:exptest-convexity} изображены найденные
+численно границы областей выпуклости, в которых миноры $\Delta_1$ и
+$\Delta_2$ обращаются в ноль. В области ниже кривой $\Delta_1=0$
+(\ref{plot:exptest-first-minor}) функция вогнутая, при этом в область
+вогнутости попадает
+
+\begin{figure}[]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}
+      [x=1cm, y=1cm,
+      ymin=-1]
+      \input{exptest_conv-contours.tkz.tex}
+      \label{plot:exptest-first-minor}
+
+      \input{exptest-contours.tkz.tex}
+      \input{exptest_conv2-contours.tkz.tex}
+      
+      \node[] at (axis cs:2.5,5.5)
+      {\contour{white}{\large{Вогнута}}};
+      \node[] at (axis cs:-0.25,6.5)
+      {\contour{white}{\scriptsize{Выпукла}}};
+
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      at (axis cs:1,10) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption[Экспоненциальная функция]{Линии уровней $0.01,\dotsc,2$
+    функции \eqref{eq:exptest}, границы области выпуклости
+    $\Delta_1=0$, $\Delta_2=0$ и глобальный минимум в точке $A(1,
+    10)$}
+  \label{fig:rosenbrock-contours}
+\end{figure}
+
+\begin{figure}[thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[x=1cm,y=1cm]
+      \input{exptest-contours.tkz.tex}
+      \input{exptest_relch_-0.5,1.5_20_12-trace.tkz.tex}
+      \input{exptest_relch_5,5_20_12-trace.tkz.tex}
+      \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      at (axis cs:1,10) {};
+    \end{axis}
+  \end{tikzpicture}
+  \caption[\relch{} на экспоненциальной функции]{Трассировка процесса
+    минимизации функции \eqref{eq:exptest}}
+\end{figure}
+
+Алгоритм стабильно определяет минимум в точке $(1, 10)$.
 
 \begin{figure}[!thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}[x=1cm,y=1cm]
       \input{exptest-contours.tkz.tex}
-      \input{exptest_relch_-0.5,1.5_20-trace.tkz.tex}
-      \input{exptest_relch_5,5_20-trace.tkz.tex}
-      \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
-      \node[circle,fill=black,scale=0.5,label=right:$A$] at (axis cs:1,10) {};
+      \input{exptest_gdrelch_2,5_30_0.001-trace.tkz.tex}
+
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
-  \caption[Экспоненциальная функция]{Линии уровня и трассировка процесса минимизации функции
-    \eqref{eq:exptest}}
+  \caption[\gdrelch{} на экспоненциальной функции]{Минимизация функции
+    \eqref{eq:exptest} алгоритмом \gdrelch{} при $h=0.001$}
 \end{figure}
-
-Алгоритм стабильно определяет минимум в точке $(1, 10)$.
