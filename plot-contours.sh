@@ -22,6 +22,13 @@ rm -fr ${FUNCTION}-contour-*
 
 gnuplot ${FUNCTION}-contours.gp
 
+# Prepend style with comma, if it is set
+if [ "${STYLE}" = "" ]
+then
+    style=""
+else
+    style=",${STYLE}"
+fi
 
 for contour in ${FUNCTION}-contour-*
 do
@@ -46,6 +53,7 @@ do
         then
         m4 --define="__LEVEL"=${level} \
             --define="__FILE"=${part} \
+            --define="__STYLE"="${style}" \
             --define="__COLORSCALE"=${scale} \
             contour-path.tpl.tkz.tex
         else
