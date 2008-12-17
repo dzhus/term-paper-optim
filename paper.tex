@@ -26,6 +26,11 @@
 \pgfplotsset{every axis grid/.append style={densely dotted}}
 \pgfplotsset{every tick/.append style={black}}
 
+% Tables
+\usepackage{pgfplotstable}
+\pgfkeys{/pgf/number format/.cd, set thousands separator={\,}}
+\usepackage{booktabs}
+
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\phi}{\varphi}
