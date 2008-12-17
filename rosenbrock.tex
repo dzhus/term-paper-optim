@@ -97,7 +97,7 @@
   \eta = \frac{1001.6006}{0.3994} \approx 2507.7631
 \end{equation}
 
-\paragraph{Ручной выбор параметра алгоритма \relch{}}
+\paragraph{Минимазация с помощью \relch{} при ручном выборе параметра}
 
 На иллюстрации \ref{fig:rosenbrock-contours} представлены линии уровня
 функции Розенброка, которые сильно вытягиваются вдоль всей кривой
@@ -115,7 +115,7 @@ $y=x^2$ за счёт близости перегиба и быстрого ро
       xmin=-1.5, xmax=1.5,
       ymin=-1,ymax=2]
       \input{rosenbrock_hq-contours.tkz.tex}
-      \addplot[mark=none,black,densely dashed] plot[domain=-1.41:1.41] function{x**2};
+      \addplot[mark=none,thick,black,densely dashed] plot[domain=-1.41:1.41] function{x**2};
       \node[circle,fill=black,scale=0.5,label={right:\contour{white}{$A$}}] at
       (axis cs:1,1) {};
     \end{axis}
