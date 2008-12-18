@@ -33,7 +33,7 @@
   \Delta_2 &= \suml_{a\in A}
   \left[ e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right]×
   \suml_{a\in A}
-  \left[ 2a^2e^{-ay}(e^{-ax}-c_a) \right]-\\
+  \left[ 2a^2e^{-ay}(2e^{-ay}-e^{-ax}+c_a) \right]-\\
   &-\left(\suml_{a\in A}
   \left[ 2a^2e^{-ax-ay} \right] \right)^2
   > 0
@@ -43,7 +43,8 @@
 численно границы областей выпуклости, в которых миноры $\Delta_1$ и
 $\Delta_2$ обращаются в ноль. В области ниже кривой $\Delta_1=0$
 (\ref{plot:exptest-first-minor}) функция вогнутая, при этом в область
-вогнутости попадает
+вогнутости попадает одно из множеств, удовлетворяющих условию
+$\Delta_2 > 0$, как было в случае с функцией Химмельблау.
 
 \paragraph{Аналитическое решение}
 
@@ -62,31 +63,65 @@ $\Delta_2$ обращаются в ноль. В области ниже крив
 
 \paragraph{Овражность}
 
-\begin{figure}[]
+Несмотря на видимую вытянутость линий уровня и быстрое стремление к
+бесконечности при $x<0,y<0$, рассматриваемая функция не обладает
+высокой степенью овражности даже в окрестности точки минимума:
+
+\begin{equation}
+  \begin{aligned}
+    \eta(0,1) &= \frac{9.84}{0.07} \approx 140.57&\qquad
+    \eta(1,5) &= \frac{1.62}{0.04} \approx 40.5\\
+    \eta(1,9) &= \frac{1.74}{0.0067} \approx 257.93&\qquad
+    \eta(1.5,11.5) &= \frac{0.57}{0.004} \approx 142.5
+\end{aligned}
+\end{equation}
+
+Как оказывается, и в точке $A$ степень овражности невысока:
+\begin{equation*}
+  \eta(A) = \frac{1.75}{0.004} \approx 437.5
+\end{equation*}
+
+Поэтому использование высоких $s$ в \relch{} не обязательно.
+
+\paragraph{Минимизация с помощью \relch{}}
+
+На рисунке \ref{fig:exptest-relch} представлены результаты работы
+\relch{} с рассматриваемой функцией при $s=20$. Алгоритм стабильно
+определяет минимум в точке $(1, 10)$.
+
+\paragraph{Применение \gdrelch{}}
+
+Как видно из таблицы \ref{tab:exptest-gdrelch}, при начальной точке в
+$(2,6)$ и шаге $h=0.006$ метод \gdrelch{} стабилизируется уже в
+окрестности \emph{начальной точки} с $\norm{f'(x)} = 0.86$, после чего
+быстро минимизирует функцию до порядка $10^{-10}$.
+
+\begin{figure}[thb]
   \centering
   \begin{tikzpicture}
     \begin{axis}
-      [x=1cm, y=1cm,
-      ymin=-1]
+      [x=1cm, y=1cm]
       \input{exptest_conv-contours.tkz.tex}
       \label{plot:exptest-first-minor}
 
       \input{exptest-contours.tkz.tex}
       \input{exptest_conv2-contours.tkz.tex}
       
-      \node[] at (axis cs:2.5,5.5)
+      \node[] at (axis cs:1.2,6.5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:-0.5,6)
+      {\contour{white}{\small{Вогнута}}};
+      \node[] at (axis cs:3.5,5)
       {\contour{white}{\large{Вогнута}}};
-      \node[] at (axis cs:-0.25,6.5)
-      {\contour{white}{\scriptsize{Выпукла}}};
 
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      \node[circle,fill=black,scale=0.25,label={above:\contour{white}{$A(1,10)$}}]
       at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
   \caption[Экспоненциальная функция]{Линии уровней $0.01,\dotsc,2$
     функции \eqref{eq:exptest}, границы области выпуклости
     $\Delta_1=0$, $\Delta_2=0$ и глобальный минимум в точке $A(1,
-    10)$}
+    10)$.}
   \label{fig:exptest-convexity}
 \end{figure}
 
@@ -95,30 +130,44 @@ $\Delta_2$ обращаются в ноль. В области ниже крив
   \begin{tikzpicture}
     \begin{axis}[x=1cm,y=1cm]
       \input{exptest-contours.tkz.tex}
-      \input{exptest_relch_-0.5,1.5_20_12-trace.tkz.tex}
-      \input{exptest_relch_5,5_20_12-trace.tkz.tex}
-      \input{exptest_relch_3,-1_25_12-trace.tkz.tex}
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      \input{exptest_relch_-0.5,1.5_20_20-trace.tkz.tex}
+      \input{exptest_relch_5,5_20_20-trace.tkz.tex}
+      \input{exptest_relch_3,-1_25_20-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
+      at (axis cs:1,10) {};
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
+      at (axis cs:1,10) {};
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
       at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
-  \caption[\relch{} на экспоненциальной функции]{Трассировка процесса
-    минимизации функции \eqref{eq:exptest}}
+  \caption[\relch{} на экспоненциальной функции]{Минимизации функции
+    \eqref{eq:exptest} алгоритмом \relch{} при $s=20$ и различных
+    значениях начального приближения: $(-0.5,1.5)$, $(5,5)$ и
+    $(3,-1)$.}
+  \label{fig:exptest-relch}
 \end{figure}
-
-Алгоритм стабильно определяет минимум в точке $(1, 10)$.
 
 \begin{figure}[!thb]
   \centering
   \begin{tikzpicture}
-    \begin{axis}[x=1cm,y=1cm]
+    \begin{axis}[x=1cm,y=1cm,ymin=4]
       \input{exptest-contours.tkz.tex}
-      \input{exptest_gdrelch_2,6_30_0.0005-trace.tkz.tex}
-
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A$}}]
+      \input{exptest_gdrelch_2,6_30_0.006-trace.tkz.tex}
+      \node[circle,scale=3,draw=black,densely dashed] at (axis
+      cs:2,6) {};
+      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
       at (axis cs:1,10) {};
     \end{axis}
   \end{tikzpicture}
   \caption[\gdrelch{} на экспоненциальной функции]{Минимизация функции
-    \eqref{eq:exptest} алгоритмом \gdrelch{} при $h=0.0005$}
+    \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.006$.}
 \end{figure}
+
+\begin{table}[hpb]
+  \centering
+  \input{exptest_gdrelch_2,6_30_0.006-trace.tbl.tex}
+  \caption{Минимизация
+    функции \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.006$.}
+  \label{tab:exptest-gdrelch}
+\end{table}
