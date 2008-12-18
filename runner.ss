@@ -59,9 +59,9 @@
        (lambda (i p)
          (display (format digits p)))
        x-start)
-      (display (format "~a " (@ f x-start)))
-      (display (format digits (p-vector-norm g)))
-      (display (format "\n")))))
+      (display (@ f x-new)) (display " ")
+      (display (p-vector-norm g))
+      (display "\n"))))
 
   (let ((function (cdr (assoc (function-id) test-problems))))
     (exit ((method)
