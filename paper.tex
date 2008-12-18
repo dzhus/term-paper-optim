@@ -3,16 +3,16 @@
 \usepackage[english,russian]{babel}
 \usepackage{amsmath,amsthm,amssymb}
 
+% Save trees
+\usepackage[top=2.5cm, bottom=3cm, left=6cm, right=3.5cm]{geometry}
+
+% Rich title
+\usepackage{titling}
+
 % Contours for plot labels
 \usepackage[auto]{contour}
 \contourlength{1pt}
 \contournumber{8}
-
-% Save trees
-\usepackage[top=2.5cm, bottom=3cm, left=5cm, right=5cm]{geometry}
-
-% Rich title
-\usepackage{titling}
 
 % Matrix operations
 \usepackage{gauss}
@@ -43,7 +43,6 @@
 \lstset{basicstyle=\footnotesize\sffamily}
 \lstset{breakautoindent=true}
 
-
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\phi}{\varphi}
@@ -53,6 +52,7 @@
 \renewcommand{\ngeq}{\ngeqslant}
 \newcommand{\intl}{\int\limits}
 \newcommand{\suml}{\sum\limits}
+% Provides `\asbuk` etc.
 \usepackage{misccorr}
 
 % Better \paragraph command with small caps and line skip
@@ -101,12 +101,13 @@
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\Sp}{Sp}
 
-% Theorems, remarks and definition all share the same numbering
-% sequence, which is also subordinate to sections
+% Using small caps to typeset theorem titles
 \newtheoremstyle{ruthm}{3pt}{3pt}{\itshape}{}{\scshape}{.}{.5em}{}
 \newtheoremstyle{rudfn}{3pt}{3pt}{}{}{\scshape}{.}{.5em}{}
 \newtheoremstyle{rurem}{}{}{}{}{\scshape}{.}{.5em}{}
 
+% Theorems, remarks and definition all share the same numbering
+% sequence, which is also subordinate to sections
 \theoremstyle{ruthm}
 \newtheorem{thm}[]{Теорема}
 \numberwithin{thm}{section}
