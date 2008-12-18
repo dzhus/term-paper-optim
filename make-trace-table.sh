@@ -12,7 +12,7 @@
 # $x_2$, …` headerlabels. See also `trace-table-var-colname.tpl`
 # tempate.
 
-NON_VAR_FIELDS=1
+NON_VAR_FIELDS=2
 
 prefix=$1
 file="${prefix}-trace"
@@ -22,11 +22,17 @@ arity=$(( total_fields - NON_VAR_FIELDS))
 
 for index in $(seq ${arity})
 do
-    new_column=$(m4 --define="__INDEX"="$index"\
+    new_column=$(m4 --define="__INDEX"="x_$index"\
                     --define="__SINDEX"="$(( index - 1 ))"\
                     trace-table-var-colname.tpl)
     col_names="${col_names} ${new_column}"
 done
+col_names="${col_names} "$(m4 --define="__INDEX"="f(x)"\
+                              --define="__SINDEX"="$(( arity ))"\
+                              trace-table-var-colname.tpl)
+col_names="${col_names} "$(m4 --define="__INDEX"="\norm{f'(x)}"\
+                              --define="__SINDEX"="$(( arity + 1 ))"\
+                              trace-table-var-colname.tpl)
 
 m4 --define="__COLUMNS"="${col_names}" \
     --define="__FILE"="${file}" \

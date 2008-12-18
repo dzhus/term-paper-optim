@@ -1,1 +1,1 @@
-columns/__SINDEX/`.style={column name='$x_{__INDEX}$},
+columns/__SINDEX/`.style={column name='$__INDEX$},
