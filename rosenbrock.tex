@@ -94,8 +94,8 @@ $y=x^2$ за счёт близости перегиба и быстрого ро
       (axis cs:1,1) {};
     \end{axis}
   \end{tikzpicture}
-  \caption[Функция Розенброка]{Линии уровней $1, 2, 2.5, 4, 5, 50,
-    100$ функции Розенброка \eqref{eq:rosenbrock}, её кривая перегиба
+  \caption[Функция Розенброка]{Линии уровней $1, \dotsc 100$ функции
+    Розенброка \eqref{eq:rosenbrock}, её кривая перегиба
     $y=x^2+\frac{1}{200}$ и глобальный минимум в точке $A(1, 1)$}
   \label{fig:rosenbrock-contours}
 \end{figure}
@@ -135,23 +135,40 @@ $s=10$ \relch{} быстро попадает в окрестность мини
 зацикливается в овраге, что соответствует стабилизации
 \eqref{eq:gdrelch-stabilization}, после чего включается обычный
 \relch{} со значением параметра, определённым на первом этапе. В
-данном случае зацикливание \gd{} удалось обеспечить при шаге
-$h=0.0019$.
+данном случае стабилизацию \eqref{eq:gdrelch-stabilization} удалось
+обеспечить при шаге $h=0.003$. В таблице \ref{tab:rosenbrock-gdrelch},
+содержащей информацию о ходе вычисления, заметен участок в окрестности
+точки $(-0.48, 0.23)$, у которой происходит стабилизация нормы
+градиента целевой функции на уровне $\approx 2.13$. После этого по формуле
+\eqref{eq:gdrelch-param} определяется $s$ и включается алгоритм
+\relch{}, который быстро сводит значение функции до уровня порядка
+$10^{-13}$.
 
 \begin{figure}[thb]
   \centering
   \begin{tikzpicture}
-    \begin{axis}[x=3cm, y=2.7cm]
+    \begin{axis}[x=2.7cm, y=2cm]
       \input{rosenbrock-contours.tkz.tex}
-      \input{rosenbrock_gdrelch_-1.2,1__0.0019-trace.tkz.tex}
-        \node[circle,fill=black,scale=0.25,pin={below right:\contour{white}{$A$}}] at
-        (axis cs:1,1) {};
+      \input{rosenbrock_gdrelch_-1.2,1__0.003-trace.tkz.tex}
+      \node[circle,fill=black,scale=0.25,pin={below
+        right:\contour{white}{$A$}}] at (axis cs:1,1) {};
+      \node[circle,scale=3,draw=black,densely dashed] at (axis
+      cs:-0.48,0.23) {};
     \end{axis}
   \end{tikzpicture}
-  \caption[\gdrelch{} на функции Розенброка, $h=0.0019$]{Минимизация
-    функции Розенброка алгоритмом \gdrelch{} при $h=0.0019$}
+  \caption[\gdrelch{} на функции Розенброка, $h=0.003$]{Минимизация
+    функции Розенброка алгоритмом \gdrelch{} при шаге $h=0.003$.}
   \label{fig:rosenbrock-gdrelch}
 \end{figure}
+
+\begin{table}[hpb]
+  \centering
+  \input{rosenbrock_gdrelch_-1.2,1_50_0.003-trace.tbl.tex}
+  \caption{Минимизация
+    функции Розенброка алгоритмом \gdrelch{} при $h=0.003$.
+    Зацикливание \gd{} происходит в окрестности точки $(-0.48, 0.23)$.}
+  \label{tab:rosenbrock-gdrelch}
+\end{table}
 
 \begin{figure}[p]
   \center
