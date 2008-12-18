@@ -41,53 +41,15 @@ $\Delta_2>0$. В этом функция Химмельблау отличает
 Розенброка, где условие $\Delta_1>0$ было безусловно слабее условия
 $\Delta_2>0$.
 
-\begin{figure}[thb]
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}
-      [x=.7cm,y=.7cm]
-      \addplot[mark=none,black,thick, densely dashed]
-      plot[domain=-2.5:2.5] function{10.5-3*x**2};
-      \label{plot:himmelblau-hyperbole}
-      \input{himmelblau_max-contours.tkz.tex}
-      \input{himmelblau_conv-contours.tkz.tex}
-
-      \node[] at (axis cs:0,0)
-      {\contour{white}{$\underset{\cancel{\text{\scriptsize{Выпукла}}}}{\text{\footnotesize{Вогнута}}}$}};
-
-      % Concavity labels
-      \node[] at (axis cs:4,0)
-      {\contour{white}{\small{Вогнута}}};
-      \node[] at (axis cs:-4,0)
-      {\contour{white}{\small{Вогнута}}};
-      \node[] at (axis cs:0,4)
-      {\contour{white}{\small{Вогнута}}}; 
-      \node[] at (axis cs:0,-4)
-      {\small{Вогнута}};
-      
-      % Convexity labels
-      \node[] at (axis cs:5,-5)
-      {\contour{white}{\small{Выпукла}}};
-      \node[] at (axis cs:-5,-5)
-      {\contour{white}{\small{Выпукла}}};
-      \node[] at (axis cs:-5,5)
-      {\contour{white}{\small{Выпукла}}};
-      \node[] at (axis cs:5,5)
-      {\contour{white}{\small{Выпукла}}};
-      
-    \end{axis}      
-  \end{tikzpicture}
-  \caption[Функция Химмельблау]{Линии уровня функции Химмельблау
-    \eqref{eq:himmelblau} и границы областей выпуклости}
-  \label{fig:himmelblau-conv}
-\end{figure}
-
 \paragraph{Аналитическое решение}
-Известно, что локальные минимумы функции \eqref{eq:himmelblau}
-расположены в точках $A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58,
--1.85)$, \mbox{$D=(3.00, 2.00)$}, и в каждой из них достигается
-значение $0$. Все они находятся в областях выпуклости функции, чего и
-следует ожидать.
+Известно, что локальные минимумы\footnote{Численные значения $A, B, C,
+  D$ приведены в литературе, см. \cite{himmelblau75}. Аналитические
+  выражения для координат точек минимума $A,B,C,D$ имеют весьма
+  сложный вид.} функции \eqref{eq:himmelblau} расположены в точках
+$A=(-3.78, -3.28)$, $B=(-2.80, 3.13)$, $C=(3.58, -1.85)$,
+\mbox{$D=(3.00, 2.00)$}, и в каждой из них достигается значение $0$.
+Все они находятся в областях выпуклости функции, чего и следует
+ожидать.
 
 \paragraph{Овражность}
 Как было продемонстрировано ещё в разделe \ref{sec:problems-ill}, даже
@@ -120,12 +82,10 @@ $\Delta_2>0$.
 функции результат работы алгоритма зависит от выбора начального
 приближения.
 
-В отсутствие эталонных данных\footnote{Численные значения $A, B, C, D$
-  приведены в литературе, см. \cite{himmelblau75}. Аналитические
-  выражения для координат точек минимума $A,B,C,D$ имеют весьма
-  сложный вид.} о минимумах проверить найденные решения на
-единственность можно было бы, воспользовавшись информацией об областях
-выпуклости функции и теоремами из раздела \ref{sec:convexity}.
+В отсутствие эталонных данных о минимумах проверить найденные решения
+на единственность можно было бы, воспользовавшись информацией об
+областях выпуклости функции и теоремами из раздела
+\ref{sec:convexity}.
 
 \begin{figure}[thb]
   \centering
@@ -140,14 +100,62 @@ $\Delta_2>0$.
       \input{himmelblau_relch_0,8_50-trace.tkz.tex}
       \input{himmelblau_relch_4,7.2_50-trace.tkz.tex}
       
-      \node[circle,fill=black,scale=0.25,label=above left:$A$] at (axis cs:-3.78,-3.28) {};
-      \node[circle,fill=black,scale=0.25,label=below left:$B$] at (axis cs:-2.8,3.13) {};
-      \node[circle,fill=black,scale=0.25,label=below right:$C$] at (axis cs:3.58,-1.85) {};
-      \node[circle,fill=black,scale=0.25,label=above right:$D$] at (axis cs:3,2) {};
+      \node[circle,fill=black,scale=0.25,
+      label={above left:\contour{white}{$A$}}] at (axis cs:-3.78,-3.28) {};
+        
+      \node[circle,fill=black,scale=0.25,
+      label={below left:\contour{white}{$B$}}] at (axis cs:-2.8,3.13) {};
+      
+      \node[circle,fill=black,scale=0.25,
+      label={below right:\contour{white}{$C$}}] at (axis cs:3.58,-1.85) {};
+
+      \node[circle,fill=black,scale=0.25,
+      label={above right:\contour{white}{$D$}}] at (axis cs:3,2) {};
     \end{axis}      
   \end{tikzpicture}
   \caption[\relch{} на функции Химмельблау]{Результаты работы
     алгоритма с функцией Химмельблау \eqref{eq:himmelblau} в
     зависимости от выбора начальной точки}
   \label{fig:himmelblau}
+\end{figure}
+
+\begin{figure}[thb]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}
+      [x=.7cm,y=.7cm]
+      \addplot[mark=none,black,thick, densely dashed]
+      plot[domain=-2.5:2.5] function{10.5-3*x**2};
+      \label{plot:himmelblau-hyperbole}
+      \input{himmelblau_max-contours.tkz.tex}
+      \input{himmelblau_conv-contours.tkz.tex}
+
+      \node[] at (axis cs:0,0)
+      {\contour{white}{$\underset{\cancel{\text{\scriptsize{Выпукла}}}}{\text{\small{Вогнута}}}$}};
+
+      % Concavity labels
+      \node[] at (axis cs:4,0)
+      {\contour{white}{\small{Вогнута}}};
+      \node[] at (axis cs:-4,0)
+      {\contour{white}{\small{Вогнута}}};
+      \node[] at (axis cs:0,4)
+      {\contour{white}{\small{Вогнута}}}; 
+      \node[] at (axis cs:0,-4)
+      {\small{Вогнута}};
+      
+      % Convexity labels
+      \node[] at (axis cs:5,-5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:-5,-5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:-5,5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:5,5)
+      {\contour{white}{\small{Выпукла}}};
+      
+    \end{axis}      
+  \end{tikzpicture}
+  \caption[Функция Химмельблау]{Линии уровня функции Химмельблау
+    \eqref{eq:himmelblau} и границы областей выпуклости}
+  \label{fig:himmelblau-conv}
 \end{figure}
