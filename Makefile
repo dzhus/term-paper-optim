@@ -91,6 +91,9 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
                  trace-table-var-colname.tpl
 	${SHELL} make-trace-table.sh $* > $@
 
+%-full-listing.tex: % source-full-listing.sh source-full-listing.tpl.tex
+	$(SHELL) source-full-listing.sh $< > $@
+
 check: ${SOURCES} ${TESTFILE}
 	@${MZSCHEME} ${TESTFILE} | sed -e 's/: */:/'
 	@touch check

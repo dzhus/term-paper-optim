@@ -32,6 +32,18 @@
 \pgfkeys{/pgf/number format/.cd, set thousands separator={\,}}
 \usepackage{booktabs}
 
+% Listings
+\usepackage{listings}
+\lstdefinelanguage[plt]{Scheme}
+        {morekeywords={define,let,map,lambda,if,cond,or,and,else},
+         morecomment=[l]{;},
+         morestring=[b]{"}}
+\lstset{mathescape=true}
+\lstset{language=[plt]Scheme}
+\lstset{basicstyle=\footnotesize\sffamily}
+\lstset{breaklines=true,breakautoindent=true}
+
+
 % Russian traditions
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\phi}{\varphi}
@@ -64,7 +76,8 @@
 \usepackage{cancel}
 
 % Custom commands
-\newcommand{\program}[1]{{\tt #1}}
+\newcommand{\program}[1]{{\sf #1}}
+\newcommand{\filename}[1]{{\tt #1}}
 \newcommand{\relch}{\textsc{relch}}
 \newcommand{\gdrelch}{\textsc{gdrelch}}
 \newcommand{\xrelch}{\textsc{xrelch2}}
@@ -158,6 +171,15 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 
 \clearpage
 \appendix
+\section{Исходные тексты}
+
+\subsection{Общая схема градиентных методов}
+\input{gradient-methods.ss-full-listing.tex}
+
+\clearpage
+\subsection{Алгоритмы \relch{}, \gdrelch{}, \gd{} и \rgd{}}
+\input{relch.ss-full-listing.tex}
+
 \bibliographystyle{gost71s}
 \bibliography{paper}
 
