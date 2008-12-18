@@ -41,7 +41,7 @@
 \lstset{mathescape=true}
 \lstset{language=[plt]Scheme}
 \lstset{basicstyle=\footnotesize\sffamily}
-\lstset{breaklines=true,breakautoindent=true}
+\lstset{breakautoindent=true}
 
 
 % Russian traditions
@@ -158,27 +158,43 @@ pdfauthor=Dmitry Dzhus]{hyperref}
 штрафных функций и метода возможных направлений Зойтендейка.
 
 \clearpage
-%\input{general.tex}
+\input{general.tex}
 
 \clearpage
-%\input{simplex.tex}
+\input{simplex.tex}
 
 \clearpage
 \input{relch.tex}
 
 \clearpage
-%\input{condoptim.tex}
+\input{condoptim.tex}
 
 \clearpage
 \appendix
 \section{Исходные тексты}
+\label{sec:sources}
 
 \subsection{Общая схема градиентных методов}
 \input{gradient-methods.ss-full-listing.tex}
 
-\clearpage
 \subsection{Алгоритмы \relch{}, \gdrelch{}, \gd{} и \rgd{}}
 \input{relch.ss-full-listing.tex}
+
+\section{Информация о документе}
+
+Данный документ был подготовлен с использованием \LaTeX{}. В качестве
+реализации языка Scheme использовалась \program{PLT Scheme}.
+Иллюстрации созданы с помощью пакета \program{pgfplots} и
+\program{gnuplot}.
+
+Автоматизация процесса сборки обеспечивалась утилитами
+\program{GNU Make} и \program{texdepend}.
+
+Представленная работа выполнена в рамках программы пятого семестра
+обучения по специальности «Вычислительная математика и математическая
+физика» в МГТУ им. Н. Э. Баумана.
+
+Дата компиляции настоящего документа: \today
 
 \bibliographystyle{gost71s}
 \bibliography{paper}
