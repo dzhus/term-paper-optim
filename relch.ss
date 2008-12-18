@@ -12,11 +12,7 @@
 (define parameter? (and/c integer? positive?))
 
 (define optimization-method?
-  (->* (function?
-        point?
-        iteration-count?
-        epsilon?
-        parameter?)
+  (->* (function? point? iteration-count? epsilon? parameter?)
        (listener?)
        (or/c point? listener-reply?)))
 
@@ -26,12 +22,12 @@
  [sgd-optimize optimization-method?]
  [gdrelch-optimize optimization-method?])
 
-
 ;; Shift regulations enforce relaxation condition enforcement for both
 ;; RELCH and GD, they also provide basic fallback measure in case of
 ;; infinite shifts
 
 ;; Decrease shift factor until it leads to a better value
+;;@ $d \gets \frac{d}{2}$,\eqref{eq:cheb-regulation}
 (define (enforce-relaxation shift f x-start)
   (define (decrease-shift shift)
     (/ shift 2))
@@ -55,7 +51,6 @@
   (lambda (shift f x-start)
     (* shift factor)))
 
-
 ;; Gradient descend
 (define (make-gd-optimize regulate-shift stop-condition)
   (lambda (f x-start
@@ -104,8 +99,9 @@
      f x-start iterations listener)))
 
 ;; RELCH with infinite shift filtering and step regulation
-(define relch-optimize (make-relch-optimize enforce-relaxation-filtered
-                                            zero-gradient-condition))
+(define relch-optimize
+  (make-relch-optimize enforce-relaxation-filtered
+                       zero-gradient-condition))
 
 ;; Crude fixed step GD (used to measure gully)
 (define (sgd-optimize f x-start iterations eps step-factor [listener void])
@@ -114,8 +110,9 @@
     (optimize f x-start iterations eps step-factor listener)))
 
 ;; GD with regulation (quickly gets to gully)
-(define gd-optimize (make-gd-optimize enforce-relaxation
-                                      zero-gradient-condition))
+(define gd-optimize
+  (make-gd-optimize enforce-relaxation-filtered
+                    zero-gradient-condition))
 
 (define (stabilization-listener eps max-count [printing-listener void])
   (let ((prev-g #f)
@@ -133,6 +130,7 @@
       (set! prev-g g)
       (when (>= count max-count) (cons 'stabilized (cons stable-ratio x))))))
 
+;;@ $s = 1.3\sqrt{\frac{2}{\abs{1-\mu}}}$
 (define (make-relch-degree gradient-ratio)
   (define (closest-even x)
     (let ((n (round x)))

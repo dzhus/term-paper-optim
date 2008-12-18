@@ -24,7 +24,7 @@
 ;; used to provide a trace of optimization process or check particular
 ;; conditions during optimization which may affect further
 ;; calculations.
-;;
+;; 
 ;; TODO Implement optimization methods in terms of streams, as what
 ;; listener actually does is processing the stream of consequent sets
 ;; of approximations
@@ -34,11 +34,10 @@
 ;; All provided methods take five mandatory and one optional argument
 ;; and return an approximation to minimum point (represented by
 ;; vector) or listener's reply
-(define gradient-method? (->* (procedure?
-                               point?
-                               iteration-count?)
-                              (listener?)
-                              (or/c point? listener-reply?)))
+(define gradient-method?
+  (->* (procedure? point? iteration-count?)
+       (listener?)
+       (or/c point? listener-reply?)))
 
 ;; Algorithm used to choose shift on every iteration is the essential
 ;; difference between all gradient methods
@@ -52,8 +51,6 @@
 (provide/contract [gradient-method
                    (shift-chooser? stop-condition? . -> . gradient-method?)]
                   [zero-gradient-condition
-                   (epsilon? . -> . stop-condition?)]
-                  [close-arguments-condition
                    (epsilon? . -> . stop-condition?)])
 
 (provide/contract [function? contract?]
@@ -63,7 +60,7 @@
                   [listener? contract?]
                   [listener-reply? contract?])
 
-
+;;@ $x^{k+1} = x^k - H_k\left(G_k, h_k\right) g_k$
 (define (gradient-method choose-shift stop-condition)
   (define (optimize function x-start iterations [listener void])
     (if (<= iterations 0)
@@ -88,12 +85,7 @@
                               listener)))))))
   optimize)
 
-
-;; Standard conditions
+;;@ $\norm{f'(x)} < \epsilon$
 (define (zero-gradient-condition eps)
   (lambda (f x-start x-new g G)
     (<= (p-vector-norm g) eps)))
-
-(define (close-arguments-condition eps)
-  (lambda (f x-start x-new g G)
-    (<= (p-vector-norm (- x-start x-new)) eps)))
