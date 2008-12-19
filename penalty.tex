@@ -24,8 +24,8 @@
 \end{equation}
 где \neword{штраф} $\phi(x, p)$ удовлетворяет свойству
 \begin{align*}
-  \phi(x, p) &= 0 \quad x \in D\\
-  \phi(x, p) &\gg 0 \quad x \notin D
+  \phi(x, p) = 0 &\quad x \in D\\
+  \phi(x, p) \gg 0 &\quad x \notin D
 \end{align*}
 Таким образом, штрафная часть значительно возрастает при выходе за
 пределы допустимого множества $D$.
@@ -88,7 +88,7 @@ $\lim\limits_{k\to\infty}{p_k} = +\infty$.
 \begin{rem}
   \label{rem:penalty-convex-is-good}
   Теорема \eqref{th:penalty-converge}, вообще говоря, не гарантирует
-  возможности определения \emph{глобального} минимума задачи
+  возможность определения \emph{глобального} минимума задачи
   \eqref{eq:penalty-problem-form-initial}.
 \end{rem}
 
@@ -105,14 +105,13 @@ $\lim\limits_{k\to\infty}{p_k} = +\infty$.
     g_3(x) = -x_2 \leq 0
   \end{cases}
 \end{equation*}
-Среди условных экстремумов функции был найден минимум в точке $A = (0,
-4)$. Найдём его с помощью штрафных функций.
+Среди условных экстремумов функции был найден минимум в точке \mbox{$A
+  = (0, 4)$}. Найдём его с помощью штрафных функций.
 
 \paragraph{Построение новой целевой функции}
 
-Преобразуем задачу к виду
-\label{eq:penalty-iter}, выбирая штрафную часть в виде
-\eqref{eq:weisman}:
+Преобразуем задачу к виду \eqref{eq:penalty-iter}, выбирая штрафную
+часть в виде \eqref{eq:weisman}:
 \begin{equation}
   \label{eq:penalty-problem}
   P(x) = f(x) + p \sum_{j=1}^3{ \left [ g_j^+(x) \right ]^2} \to \min
@@ -163,12 +162,15 @@ $p_0$ использование итерационного процесса \eq
 \begin{figure}[p]
   \centering
   \begin{tikzpicture}
-    \begin{axis}[xlabel=$x_1$, ylabel=$x_2$, x=0.7 cm, y=0.7 cm]
+    \begin{axis}
+      [xlabel=$x_1$, ylabel=$x_2$, 
+      ymax=6,
+      x=0.7 cm, y=0.7 cm]
       \addplot[thick,draw=black] coordinates{(0,5)
         (0,0) (1,0) (3.5,5)};
       \input{penalty_supermax-contours.tkz.tex}
 
-      \input{penalty_relch_-2,-3_20_200-trace.tkz.tex}
+      \input{penalty_relch_-2,-1_20_200-trace.tkz.tex}
       \input{penalty_relch_2,-4_20_200-trace.tkz.tex}
 
       \node[circle,fill=black,scale=0.25,label={right:\contour{white}{$A$}}]
