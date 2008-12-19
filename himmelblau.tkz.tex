@@ -1,0 +1,40 @@
+\begin{figure}[p]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}
+      [x=.7cm,y=.7cm]
+      \addplot[mark=none,black,thick, densely dashed]
+      plot[domain=-2.5:2.5] function{10.5-3*x**2};
+      \label{plot:himmelblau-hyperbole}
+      \input{himmelblau_max-contours.tkz.tex}
+      \input{himmelblau_conv-contours.tkz.tex}
+
+      \node[] at (axis cs:0,0)
+      {\contour{white}{$\underset{\cancel{\text{\scriptsize{Выпукла}}}}{\text{\small{Вогнута}}}$}};
+
+      % Concavity labels
+      \node[] at (axis cs:4,0)
+      {\contour{white}{\small{Вогнута}}};
+      \node[] at (axis cs:-4,0)
+      {\contour{white}{\small{Вогнута}}};
+      \node[] at (axis cs:0,4)
+      {\contour{white}{\small{Вогнута}}}; 
+      \node[] at (axis cs:0,-4)
+      {\small{Вогнута}};
+      
+      % Convexity labels
+      \node[] at (axis cs:5,-5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:-5,-5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:-5,5)
+      {\contour{white}{\small{Выпукла}}};
+      \node[] at (axis cs:5,5)
+      {\contour{white}{\small{Выпукла}}};
+      
+    \end{axis}      
+  \end{tikzpicture}
+  \caption[Функция Химмельблау]{Линии уровня функции Химмельблау
+    \eqref{eq:himmelblau} и границы областей выпуклости}
+  \label{fig:himmelblau-conv}
+\end{figure}
