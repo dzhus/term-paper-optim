@@ -28,15 +28,17 @@
 Попробуем использовать для исследования её на определённость критерий
 Сильвестра. Угловые миноры должны быть положительны:
 \begin{align*}
-  \Delta_1 &= \suml_{a\in A}
+  &\Delta_1 = \suml_{a\in A}
   \left[ 2a^2e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right] > 0\\
-  \Delta_2 &= \suml_{a\in A}
-  \left[ e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right]×
-  \suml_{a\in A}
-  \left[ 2a^2e^{-ay}(2e^{-ay}-e^{-ax}+c_a) \right]-\\
-  &-\left(\suml_{a\in A}
-  \left[ 2a^2e^{-ax-ay} \right] \right)^2
-  > 0
+  \begin{split}
+    \Delta_2 = \suml_{a\in A}
+    \left[ e^{-ax}(2e^{-ax}-e^{-ay}-c_a) \right]×
+    \suml_{a\in A}
+    \left[ 2a^2e^{-ay}(2e^{-ay}-e^{-ax}+c_a) \right]-\\
+    -\left(\suml_{a\in A}
+      \left[ 2a^2e^{-ax-ay} \right] \right)^2
+    > 0
+  \end{split}
 \end{align*}
 Решить это неравенства аналитически нелегко. Обратимся к численным
 методам. На рисунке \ref{fig:exptest-convexity} изображены найденные
@@ -49,10 +51,7 @@ $\Delta_2$ обращаются в ноль. Оказывается, что фу
 Найдём минимальное значение \eqref{eq:exptest} аналитически. Из
 условий стационарности имеем
 \begin{equation*}
-  \begin{aligned}
-    \pardiff{f}{x} &=\phm\suml_{a\in A}\left[2ae^{-ay}(e^{-ax}-e^{-ay}-(e^{-a}-e^{-10a}))\right] = 0\\
-    \pardiff{f}{y} &=-\suml_{a\in A}\left[2ae^{-ay}(e^{-ax}-e^{-ay}-(e^{-a}-e^{-10a}))\right] = 0
-  \end{aligned}
+  \pardiff{f}{x} = -\pardiff{f}{y} =\suml_{a\in A}\left[2ae^{-ay}(e^{-ax}-e^{-ay}-(e^{-a}-e^{-10a}))\right] = 0
 \end{equation*}
 откуда определяется единственное решение — точка $A (1,10)$. Точка $A$
 попадает в область выпуклости функции
@@ -67,10 +66,10 @@ $\Delta_2$ обращаются в ноль. Оказывается, что фу
 
 \begin{equation}
   \begin{aligned}
-    \eta(0,1) &= \frac{9.84}{0.07} \approx 140.57&\qquad
-    \eta(1,5) &= \frac{1.62}{0.04} \approx 40.5\\
-    \eta(1,9) &= \frac{1.74}{0.0067} \approx 257.93&\qquad
-    \eta(1.5,11.5) &= \frac{0.57}{0.004} \approx 142.5
+    \eta(0,1) &\approx 140.57&\qquad
+    \eta(1,5) &\approx 40.5\\
+    \eta(1,9) &\approx 257.93&\qquad
+    \eta(1.5,11.5) &\approx 142.5
 \end{aligned}
 \end{equation}
 
