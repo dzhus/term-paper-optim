@@ -27,7 +27,7 @@
 ;; infinite shifts
 
 ;; Decrease shift factor until it leads to a better value
-;;@ $d \gets \frac{d}{2}$,\eqref{eq:cheb-regulation}
+;;@ $d \gets \frac{d}{2}$
 (define (enforce-relaxation shift f x-start)
   (define (decrease-shift shift)
     (/ shift 2))
