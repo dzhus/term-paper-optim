@@ -1,9 +1,10 @@
 \pgfplotsset{every axis/.append style={xmin=-5,xmax=5,ymin=-5,ymax=5,x=0.35cm,y=0.45cm}}
+\pgfplotsset{every axis/.append style={xlabel={},ylabel={}}}
 \begin{figure}[p]
   \center
   \subfigure[$p=0$]{
     \begin{tikzpicture}
-      \begin{axis}[]
+      \begin{axis}
         \input{condextr_full-contours.tkz.tex}
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
@@ -13,7 +14,7 @@
   \hskip 0.5cm
   \subfigure[$p=5$]{
     \begin{tikzpicture}
-      \begin{axis}[]
+      \begin{axis}[yticklabel pos=right]
         \input{penalty_mini-contours.tkz.tex}
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
@@ -21,21 +22,21 @@
     \end{tikzpicture}}\\\vskip 0.5cm
   \subfigure[$p=50$]{
     \begin{tikzpicture}
-      \begin{axis}[]
+      \begin{axis}
         \input{penalty-contours.tkz.tex}
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
       \end{axis}      
-    \end{tikzpicture}}\hskip 0.5cm
+    \end{tikzpicture}}\hskip 1cm
   \subfigure[$p=150$]{
     \begin{tikzpicture}
-      \begin{axis}[]
+      \begin{axis}[yticklabel pos=right]
         \input{penalty_maxi-contours.tkz.tex}
         \addplot[thick,densely dashed] coordinates{(0,5)
           (0,0) (1,0) (3.5,5)};
       \end{axis}      
     \end{tikzpicture}}
   \caption[Влияние коэффициента штрафа на вид целевой функции]{Линии
-    уровня функции $P(x)$ при различных значениях коэффициента штрафа $p$}
+    уровня функции $P(x)$ при различных значениях\\ коэффициента штрафа $p$}
   \label{fig:pen-contours}
 \end{figure}
