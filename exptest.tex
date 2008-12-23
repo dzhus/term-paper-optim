@@ -89,11 +89,14 @@ $\Delta_2$ обращаются в ноль. Оказывается, что фу
 \paragraph{Применение \gdrelch{}}
 
 Как видно из таблицы \ref{tab:exptest-gdrelch}, при начальной точке в
-$(2,6)$ и шаге $h=0.006$ метод \gdrelch{} стабилизируется уже в
+$(2,6)$ и шаге $h=0.0065$ метод \gdrelch{} стабилизируется уже в
 окрестности \emph{начальной точки} с $\norm{f'(x)} = 0.86$, после чего
-быстро минимизирует функцию до порядка $10^{-10}$.
+быстро минимизирует функцию до порядка $10^{-10}$. 
 
-\begin{figure}[thb]
+Аналогичная ситуация имеет место при другом выборе начального
+приближения, см. рис. \ref{fig:exptest-gdrelch}.
+
+\begin{figure}[p]
   \centering
   \begin{tikzpicture}
     \begin{axis}
@@ -122,48 +125,60 @@ $(2,6)$ и шаге $h=0.006$ метод \gdrelch{} стабилизируетс
   \label{fig:exptest-convexity}
 \end{figure}
 
-\begin{figure}[thb]
+\begin{figure}[p]
   \centering
-  \begin{tikzpicture}
-    \begin{axis}[x=1cm,y=1cm]
-      \input{exptest-contours.tkz.tex}
-      \input{exptest_relch_-0.5,1.5_20_20-trace.tkz.tex}
-      \input{exptest_relch_5,5_20_20-trace.tkz.tex}
-      \input{exptest_relch_3,-1_25_20-trace.tkz.tex}
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
-      at (axis cs:1,10) {};
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
-      at (axis cs:1,10) {};
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
-      at (axis cs:1,10) {};
-    \end{axis}
-  \end{tikzpicture}
+  \subfigure[$x^0=(5,6)$]{
+    \begin{tikzpicture}
+      \begin{axis}[x=.65cm,y=1cm,ymin=-1]
+        \input{exptest-contours.tkz.tex}
+        \input{exptest_relch_5,6_20_20-trace.tkz.tex}
+        \node[circle,fill=black,scale=0.25,label={above:\contour{white}{$A\,(1,10)$}}]
+        at (axis cs:1,10) {};
+      \end{axis}
+    \end{tikzpicture}}\hskip 0.5cm
+    \subfigure[$x^0=(0,1)$]{
+    \begin{tikzpicture}
+      \begin{axis}[x=.65cm,y=1cm,ymin=-1,yticklabel pos=right, ylabel={}]
+        \input{exptest-contours.tkz.tex}
+        \input{exptest_relch_0,1_20_20-trace.tkz.tex}
+      \end{axis}
+    \end{tikzpicture}}
   \caption[\relch{} на экспоненциальной функции]{Минимизация функции
-    \eqref{eq:exptest} алгоритмом \relch{} при $s=20$ и при начальном
-    приближении в $(-0.5,1.5)$, $(5,5)$ и $(3,-1)$.}
+    \eqref{eq:exptest} алгоритмом \relch{} при $s=20$.}
   \label{fig:exptest-relch}
 \end{figure}
 
-\begin{figure}[!thb]
+\begin{figure}[p]
   \centering
-  \begin{tikzpicture}
-    \begin{axis}[x=1cm,y=1cm,ymin=4]
-      \input{exptest-contours.tkz.tex}
-      \input{exptest_gdrelch_2,6_30_0.006-trace.tkz.tex}
-      \node[circle,scale=3,draw=black,densely dashed] at (axis
-      cs:2,6) {};
-      \node[circle,fill=black,scale=0.25,label={left:\contour{white}{$A(1,10)$}}]
-      at (axis cs:1,10) {};
-    \end{axis}
-  \end{tikzpicture}
+  \subfigure[$x^0=(2,6),\,h=0.0065$
+  (табл. \ref{tab:exptest-relch})]{
+    \begin{tikzpicture}
+      \begin{axis}[x=.65cm,y=1cm]
+        \input{exptest-contours.tkz.tex}
+        \input{exptest_gdrelch_2,6_30_0.0065-trace.tkz.tex}
+        \node[circle,scale=3,draw=black,densely dashed] at (axis cs:2,6) {};
+        \node[circle,fill=black,scale=0.25,label={below left:\contour{white}{$A(1,10)$}}]
+        at (axis cs:1,10) {};
+      \end{axis}
+    \end{tikzpicture}}\hskip 1cm
+  \subfigure[$x^0=(1,1),\,h=0.001$]{
+    \begin{tikzpicture}
+      \begin{axis}[x=.65cm,y=1cm,yticklabel pos=right,ylabel={}]
+        \input{exptest-contours.tkz.tex}
+        \input{exptest_gdrelch_1,1_50_0.001-trace.tkz.tex}
+        \node[circle,scale=3,draw=black,densely dashed] at (axis cs:1,1) {};
+        \node[circle,fill=black,scale=0.25] at (axis cs:1,10) {};
+      \end{axis}
+    \end{tikzpicture}}
   \caption[\gdrelch{} на экспоненциальной функции]{Минимизация функции
-    \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.006$.}
+    \eqref{eq:exptest} алгоритмом \gdrelch{}.}
+  \label{fig:exptest-gdrelch}
 \end{figure}
 
 \begin{table}[hpb]
   \centering
-  \input{exptest_gdrelch_2,6_30_0.006-trace.tbl.tex}
+  \input{exptest_gdrelch_2,6_30_0.0065-trace.tbl.tex}
   \caption{Минимизация
-    функции \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.006$.}
+    функции \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.0065$.}
   \label{tab:exptest-gdrelch}
 \end{table}
