@@ -136,6 +136,17 @@
 pdftex, colorlinks, linkcolor=black, citecolor=black,
 pdfauthor=Dmitry Dzhus]{hyperref}
 
+% New environment to mark up solutions or methods
+\newenvironment{steps}%
+{\begin{enumerate}%
+    \renewcommand{\labelenumi}{\textbf{Шаг \arabic{enumi}.}}}%
+{\end{enumerate}}
+
+\newenvironment{ssteps}%
+{\begin{enumerate}%
+    \renewcommand{\labelenumii}{\textbf{Шаг \arabic{enumii}.}}}%
+{\end{enumerate}}
+
 \begin{document}
 
 \author{Дмитрий Джус}
