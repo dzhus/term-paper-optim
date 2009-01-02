@@ -115,9 +115,26 @@
 \DeclareMathOperator{\Sp}{Sp}
 
 % Using small caps to typeset theorem titles
-\newtheoremstyle{ruthm}{3pt}{3pt}{\itshape}{}{\scshape}{.}{.5em}{}
-\newtheoremstyle{rudfn}{3pt}{3pt}{}{}{\scshape}{.}{.5em}{}
-\newtheoremstyle{rurem}{}{}{}{}{\scshape}{.}{.5em}{}
+\makeatletter
+\newcommand{\bthethm}{\arabic{section}.\arabic{thm}}
+
+% Curried version of \newtheoremstyle
+\newcommand{\mynewtheoremstyle}[2]{%
+  \newtheoremstyle%
+    {#1}% style name
+    {0.15\baselineskip}% space above
+    {0.15\baselineskip}% space below
+    {#2}% body font
+    {}% no indent
+    {\scshape}% small caps for theorem head
+    {.}% punctiation after head
+    {0.3em}% space after head
+  {\thmhead@plain{##1}{\bthethm}{##3}}}
+
+\mynewtheoremstyle{ruthm}{\itshape}
+\mynewtheoremstyle{rudfn}{}
+\mynewtheoremstyle{rurem}{}
+\makeatother
 
 % Theorems, remarks and definition all share the same numbering
 % sequence, which is also subordinate to sections
@@ -131,7 +148,11 @@
 \theoremstyle{rudfn}
 \newtheorem{dfn}[thm]{Определение}
 
+% Old style numerals for references to theorems
+\renewcommand{\thethm}{\oldstylenums{\arabic{section}}.\oldstylenums{\arabic{thm}}}
+
 \numberwithin{equation}{section}
+\renewcommand{\theequation}{\oldstylenums{\arabic{section}}.\oldstylenums{\arabic{equation}}}
 
 \usepackage[unicode,
 pdftex, colorlinks, linkcolor=black, citecolor=black,
