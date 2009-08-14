@@ -65,12 +65,12 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 %-contours.gp: %-contours.setup \
                make-contours-gp.sh \
                contours.tpl.gp contour-level.tpl.gp
-	${SHELL} make-contours-gp.sh $*-contours.setup > $@
+	PATH=${PATH}:. ${SHELL} make-contours-gp.sh $*-contours.setup > $@
 
 %-contours.tkz.tex: %-contours.gp \
                     plot-contours.sh \
                     contour-path.tpl.tkz.tex
-	${SHELL} plot-contours.sh $* > $@
+	PATH=${PATH}:. ${SHELL} plot-contours.sh $* > $@
 
 %-trace: check
 	${MZSCHEME} runner.ss \
