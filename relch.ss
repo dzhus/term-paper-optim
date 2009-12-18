@@ -28,6 +28,12 @@
 
 ;; Decrease shift factor until it leads to a better value, but try to
 ;; do so no more than 1000 times
+;;
+;; TODO Why the halt happens? Either there's a bug somewhere which
+;; breaks convergence (guaranteed by Chebyshev's polynomials) or we're
+;; dealing with floating point numbers so small that Scheme can't
+;; handle them.
+;;
 ;;@ $d \gets \frac{d}{2}$
 (define (enforce-relaxation shift f x-start [iter 1])
   (define (decrease-shift shift)
