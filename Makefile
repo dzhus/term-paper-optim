@@ -94,7 +94,7 @@ ${DOCNAME}.pdf: ${DOCNAME}.aux
 %-full-listing.tex: % source-full-listing.sh source-full-listing.tpl.tex
 	$(SHELL) source-full-listing.sh $< > $@
 
-check: ${SOURCES} ${TESTFILE}
+check: ${SOURCES} ${TESTFILE} test-functions.ss
 	@${MZSCHEME} ${TESTFILE} | sed -e 's/: */:/'
 	@touch check
 
