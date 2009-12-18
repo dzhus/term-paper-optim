@@ -1,5 +1,7 @@
 #lang scheme
 
+;;; Testsuite for RELCH implementation
+
 (require (planet schematics/schemeunit:3)
          (planet schematics/schemeunit:3/text-ui))
 
@@ -31,7 +33,7 @@
         (check-true (vector-in-list? result target-x test-epsilon))
         (check-vectors= result target-x test-epsilon))))
 
-(define max-iterations 20)
+(define max-iterations 75)
 
 (for-each
  (lambda (test-problem)
