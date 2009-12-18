@@ -39,7 +39,7 @@
 параметризованных номером итерации $k$:
 \begin{equation}
   \label{eq:penalty-iter}
-  P_k(x, r) = f(x) + \phi(x, p_k) \to \min  
+  P_k(x, r) = f(x) + \phi(x, p_k) \to \min
 \end{equation}
 где функция $\phi(x, p_k)$ масштабируется на каждой итерации в сторону
 увеличения или уменьшения.
@@ -163,7 +163,7 @@ $p_0$ использование итерационного процесса \eq
   \centering
   \begin{tikzpicture}
     \begin{axis}
-      [xlabel=$x_1$, ylabel=$x_2$, 
+      [xlabel=$x_1$, ylabel=$x_2$,
       ymax=6,
       x=0.7 cm, y=0.7 cm]
       \addplot[thick,draw=black] coordinates{(0,5)
@@ -175,7 +175,7 @@ $p_0$ использование итерационного процесса \eq
 
       \node[circle,fill=black,scale=0.25,label={right:\contour{white}{$A$}}]
       at (axis cs:0,4) {};
-    \end{axis}      
+    \end{axis}
   \end{tikzpicture}
   \caption[Метод штрафных функций]{Ход процесса решения задачи
     \eqref{eq:penalty-problem} с $p=10^5$ методом \relch{} с
