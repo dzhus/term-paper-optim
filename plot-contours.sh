@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Wrap contours plotted with gnuplot in TikZ commands
 #
@@ -13,8 +13,10 @@
 
 FUNCTION=$1
 
-# Get maximum level to calculate color scale factor later
+# . needs to be in PATH for this to work when running bash in POSIX
+# mode
 source ${FUNCTION}-contours.setup
+# Get maximum level to calculate color scale factor later
 max_level=${LEVELS[$(( ${#LEVELS[@]} - 1))]}
 
 # Remove old contours (possibly splitted)

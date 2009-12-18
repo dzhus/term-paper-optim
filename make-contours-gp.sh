@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Given a `.setup` file, write a set of Gnuplot commands to plot
 # contours for surface
@@ -18,6 +18,8 @@
 ISOSAMPLES=10
 SAMPLES=100
 
+# . needs to be in PATH for this to work when running bash in POSIX
+# mode
 source $1
 
 # extract `rosenbrock` from `rosenbrock-contours.setup`
