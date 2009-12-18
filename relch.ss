@@ -4,9 +4,9 @@
 
 (require "shared.ss"
          "gradient-methods.ss"
-         pyani-lib/matrix
+         (planet wmfarr/simple-matrix:1:0/matrix)
          pyani-lib/vector
-         pyani-lib/generic-ops
+         pyani-lib/matrix
          pyani-lib/function-ops)
 
 (define parameter? (and/c integer? positive?))
@@ -30,10 +30,10 @@
 ;;@ $d \gets \frac{d}{2}$
 (define (enforce-relaxation shift f x-start)
   (define (decrease-shift shift)
-    (/ shift 2))
+    (vector-scale shift 1/2))
   (define (better-minimum? f x-new x)
     (< (@ f x-new) (@ f x)))
-  (let ((x-new (+ x-start shift)))
+  (let ((x-new (vector-add x-start shift)))
     (if (better-minimum? f x-new x-start)
         shift
         (enforce-relaxation (decrease-shift shift) f x-start))))
@@ -49,7 +49,7 @@
 
 (define (make-sgd-regulate factor)
   (lambda (shift f x-start)
-    (* shift factor)))
+    (vector-scale shift factor)))
 
 ;; Gradient descend
 (define (make-gd-optimize regulate-shift stop-condition)
@@ -58,7 +58,7 @@
         [unused #f]
         [listener void])
     (define (choose-shift x-start g G)
-      (let ((shift (* g -1)))
+      (let ((shift (vector-scale g -1)))
         (regulate-shift shift f x-start)))
     ((gradient-method choose-shift (stop-condition eps))
      f x-start iterations listener)))
@@ -72,19 +72,23 @@
       (define (relch-shift L g G)
         (let* ((n (matrix-size G))
                (d1 (zero-vector n))
-               (d2 (* g -2)))
+               (d2 (vector-scale g -2)))
           (define (sub2 x) (sub1 (sub1 x)))
           ;; Calculate next degree of shift given shifts for two
           ;; previous degrees until degree reaches L
           (define (approach-target-degree [prev d2] [preprev d1] [degree 3])
             (let ((current-degree-shift
-                   (+
-                    (* (* (+ (identity-matrix n) (* G -2))
-                          prev)
-                       (/ (* 2 (sub1 degree)) degree))
-                    (* preprev
-                       (* -1 (/ (sub2 degree) degree)))
-                    (* g (/ (* -4 (sub1 degree)) degree)))))
+                   (vector-add
+                    (vector-add
+                     (vector-scale
+                      (matrix-vector-mul
+                       (matrix-add (identity-matrix n) (matrix-scale G -2))
+                       prev)
+                      (/ (* 2 (sub1 degree)) degree))
+                     (vector-scale preprev
+                                   (* -1 (/ (sub2 degree) degree))))
+                     (vector-scale g
+                                   (/ (* -4 (sub1 degree)) degree)))))
               (if (= degree L)
                   current-degree-shift
                   (approach-target-degree current-degree-shift prev (add1 degree)))))

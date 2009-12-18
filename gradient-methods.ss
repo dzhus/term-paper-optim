@@ -2,10 +2,10 @@
 
 ;;; Gradient methods
 
-(require "shared.ss"
+(require (planet wmfarr/simple-matrix:1:0/matrix)
+         "shared.ss"
          pyani-lib/matrix
          pyani-lib/vector
-         pyani-lib/vector-ops
          pyani-lib/function-ops)
 
 ;; Simple contracts for optimization parameters
@@ -68,7 +68,7 @@
         (let* ((g (@ (gradient function) x-start))
                (G (@ (hessian function) x-start))
                (shift (choose-shift x-start g G))
-               (candidate-x-new (vector-+-vector x-start shift))
+               (candidate-x-new (vector-add x-start shift))
                (listener-result (listener x-start
                                           shift
                                           candidate-x-new

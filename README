@@ -12,6 +12,7 @@ December 2008, Christian Feuersänger introduced a fix for the bug in
 CVS version of pgfplots.
 
 Scheme pyani-lib for PLT is available here:
-http://sphinx.net.ru/hg/scheme-pyani-lib/
+http://sphinx.net.ru/hg/scheme-pyani-lib/. PLT package
+`wmfarr/simple-matrix` is also used (fetched automatically).
 
 Feel free to mail author: dima@sphinx.net.ru
