@@ -26,17 +26,20 @@
 ;; RELCH and GD, they also provide basic fallback measure in case of
 ;; infinite shifts
 
-;; Decrease shift factor until it leads to a better value
+;; Decrease shift factor until it leads to a better value, but try to
+;; do so no more than 1000 times
 ;;@ $d \gets \frac{d}{2}$
-(define (enforce-relaxation shift f x-start)
+(define (enforce-relaxation shift f x-start [iter 1])
   (define (decrease-shift shift)
     (vector-scale shift 1/2))
   (define (better-minimum? f x-new x)
     (< (@ f x-new) (@ f x)))
   (let ((x-new (vector-add x-start shift)))
-    (if (better-minimum? f x-new x-start)
+    (if (or (better-minimum? f x-new x-start)
+            (> iter 1000))
         shift
-        (enforce-relaxation (decrease-shift shift) f x-start))))
+        (enforce-relaxation (decrease-shift shift) f x-start
+                            (add1 iter)))))
 
 ;; Enforce relaxation only if it's possible; in case of numeric
 ;; overflow leading to infinite shift, return semirandom shift
