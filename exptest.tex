@@ -89,7 +89,7 @@ $\Delta_2$ обращаются в ноль. Оказывается, что фу
 \paragraph{Применение \gdrelch{}}
 
 Как видно из таблицы \ref{tab:exptest-gdrelch}, при начальной точке в
-$(2,6)$ и шаге $h=0.0065$ метод \gdrelch{} стабилизируется уже в
+$(2,6)$ и шаге $h=0.001$ метод \gdrelch{} стабилизируется уже в
 окрестности \emph{начальной точки} с $\norm{f'(x)} = 0.86$, после чего
 быстро минимизирует функцию до порядка $10^{-10}$. 
 
@@ -127,20 +127,20 @@ $(2,6)$ и шаге $h=0.0065$ метод \gdrelch{} стабилизирует�
 
 \begin{figure}[p]
   \centering
-  \subfigure[$x^0=(5,6)$]{
+  \subfigure[$x^0=(2,6)$]{
     \begin{tikzpicture}
       \begin{axis}[x=.65cm,y=1cm,ymin=-1]
         \input{exptest-contours.tkz.tex}
-        \input{exptest_relch_5,6_20_20-trace.tkz.tex}
+        \input{exptest_relch_2,6_20_20-trace.tkz.tex}
         \node[circle,fill=black,scale=0.25,label={above:\contour{white}{$A\,(1,10)$}}]
         at (axis cs:1,10) {};
       \end{axis}
     \end{tikzpicture}}\hskip 0.5cm
-    \subfigure[$x^0=(0,1)$]{
+    \subfigure[$x^0=(1,1)$]{
     \begin{tikzpicture}
       \begin{axis}[x=.65cm,y=1cm,ymin=-1,yticklabel pos=right, ylabel={}]
         \input{exptest-contours.tkz.tex}
-        \input{exptest_relch_0,1_20_20-trace.tkz.tex}
+        \input{exptest_relch_1,1_20_20-trace.tkz.tex}
       \end{axis}
     \end{tikzpicture}}
   \caption[\relch{} на экспоненциальной функции]{Минимизация функции
@@ -150,12 +150,12 @@ $(2,6)$ и шаге $h=0.0065$ метод \gdrelch{} стабилизирует�
 
 \begin{figure}[p]
   \centering
-  \subfigure[$x^0=(2,6),\,h=0.0065$
+  \subfigure[$x^0=(2,6),\,h=0.001$
   (табл. \ref{tab:exptest-gdrelch})]{
     \begin{tikzpicture}
       \begin{axis}[x=.65cm,y=1cm]
         \input{exptest-contours.tkz.tex}
-        \input{exptest_gdrelch_2,6_30_0.0065-trace.tkz.tex}
+        \input{exptest_gdrelch_2,6_10_0.001-trace.tkz.tex}
         \node[circle,scale=3,draw=black,densely dashed] at (axis cs:2,6) {};
         \node[circle,fill=black,scale=0.25,label={below left:\contour{white}{$A(1,10)$}}]
         at (axis cs:1,10) {};
@@ -177,8 +177,8 @@ $(2,6)$ и шаге $h=0.0065$ метод \gdrelch{} стабилизирует�
 
 \begin{table}[hpb]
   \centering
-  \input{exptest_gdrelch_2,6_30_0.0065-trace.tbl.tex}
+  \input{exptest_gdrelch_2,6_30_0.001-trace.tbl.tex}
   \caption{Минимизация
-    функции \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.0065$.}
+    функции \eqref{eq:exptest} алгоритмом \gdrelch{} при шаге $h=0.001$.}
   \label{tab:exptest-gdrelch}
 \end{table}
